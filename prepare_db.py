@@ -1,6 +1,8 @@
 from app import create_app
-from app.models import User, db
+
 from sqlalchemy.exc import IntegrityError
+
+from app.models import db, User
 
 app = create_app()
 
