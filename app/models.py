@@ -46,7 +46,7 @@ class Profile(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), unique=True)
     user: Mapped["User"] = relationship("User", back_populates="profile")
     name: Mapped[str] = mapped_column(String(100), nullable=False)
-    gender: Mapped[str] = mapped_column(String(50), nullable=False)
+    gender: Mapped[Gender] = mapped_column(Enum(Gender), nullable=False)
     year_of_birth: Mapped[int] = mapped_column(Integer, nullable=False)
     description: Mapped[str] = mapped_column(String(500), nullable=True)
     photo_id: Mapped[int] = mapped_column(ForeignKey('photo.id'))
