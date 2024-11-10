@@ -24,11 +24,27 @@ user_gender_preferences = Table(
     Column('gender', Enum(Gender), primary_key=True)
 )
 
+class Interests(db.Model):
+    __tablename__ = 'interests'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f"<Interest(name={self.name})>"
+
+profile_interests_table = Table(
+    'profile_interests',
+    db.metadata,
+    db.Column('profile_id', db.Integer, ForeignKey('profile.id'), primary_key=True),
+    db.Column('interest_id', db.Integer, ForeignKey('interests.id'), primary_key=True)
+)
+
+
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
-    username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)  # Added username attribute
+    username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
     profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="user")
     matching_preferences: Mapped["MatchingPreferences"] = relationship("MatchingPreferences", uselist=False, back_populates="user")
@@ -51,6 +67,8 @@ class Profile(db.Model):
     description: Mapped[str] = mapped_column(String(500), nullable=True)
     photo_id: Mapped[int] = mapped_column(ForeignKey('photo.id'))
     photo: Mapped[Optional["Photo"]] = relationship("Photo", foreign_keys=[photo_id], uselist=False, backref="profile")
+    interests = relationship("Interests", secondary=profile_interests_table, backref="profiles")
+
 
 class Photo(db.Model):
     __tablename__ = 'photo'
