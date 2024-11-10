@@ -1,14 +1,12 @@
 from app import create_app
-<<<<<<< HEAD
 
 from sqlalchemy.exc import IntegrityError
 
 from werkzeug.security import generate_password_hash
 
 from app.models import db, User
-=======
 from app.models import db, Interests
->>>>>>> e6010eba14b91dd79d2b3c1ba5cd011cb8055512
+
 
 app = create_app()
 
@@ -22,7 +20,6 @@ with app.app_context():
             new_interest = Interests(name=interest_name)
             db.session.add(new_interest)
 
-<<<<<<< HEAD
     username = 'admin'
     password = 'admin'  # Hash this in production
     email = 'admin'
@@ -41,7 +38,6 @@ with app.app_context():
             print(f"Failed to add user {username}: Duplicate username.")
     else:
         print(f"User {username} already exists.")
-=======
     db.session.commit()
     print("Default interests added.")
->>>>>>> e6010eba14b91dd79d2b3c1ba5cd011cb8055512
+
