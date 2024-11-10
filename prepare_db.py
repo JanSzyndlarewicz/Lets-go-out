@@ -1,33 +1,17 @@
 from app import create_app
-
-from sqlalchemy.exc import IntegrityError
-
-from app.models import db, User
+from app.models import db, Interests
 
 app = create_app()
 
-# Establish application context
 with app.app_context():
-    # Create all tables
     db.create_all()
 
-    if 'user' in db.metadata.tables:
-        print("User model is registered with the db instance.")
-    else:
-        print("User model is NOT registered with the db instance.")
+    # Adding default interests
+    default_interests = ['Cooking', 'Sports', 'Music', 'Travel', 'Reading', 'Gaming']
+    for interest_name in default_interests:
+        if not Interests.query.filter_by(name=interest_name).first():
+            new_interest = Interests(name=interest_name)
+            db.session.add(new_interest)
 
-    username = 'admin'
-    password = 'admin'  # Hash this in production
-
-    existing_user = User.query.filter_by(username=username).first()
-    if existing_user is None:
-        new_user = User(username=username, password=password)
-        db.session.add(new_user)
-        try:
-            db.session.commit()
-            print(f"User {username} added successfully.")
-        except IntegrityError:
-            db.session.rollback()
-            print(f"Failed to add user {username}: Duplicate username.")
-    else:
-        print(f"User {username} already exists.")
+    db.session.commit()
+    print("Default interests added.")
