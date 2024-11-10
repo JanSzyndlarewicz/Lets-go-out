@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <form action="{{ url_for('profile_manager_bp.profile_manager') }}" method="POST">
+        
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{current_user.profile.name}}" required>
+        <br>
+
+        <label for="username">Username:</label>
+       
+            {% for g in genders %}
+                    <input type="radio" name="gender" value="{{g}}" {{ "checked" if current_user.profile.gender.value == g }}>
+                    {{g}}
+            {% endfor %}
+        <br>
+
+        <textarea name="description">
+            {{current_user.profile.description}}
+        </textarea>
+
+        <input type="Submit" value="Change">
+
+    </form>
+</body>
+</html>

@@ -65,15 +65,15 @@ class Profile(db.Model):
     gender: Mapped[Gender] = mapped_column(Enum(Gender), nullable=False)
     year_of_birth: Mapped[int] = mapped_column(Integer, nullable=False)
     description: Mapped[str] = mapped_column(String(500), nullable=True)
-    photo_id: Mapped[int] = mapped_column(ForeignKey('photo.id'))
-    photo: Mapped[Optional["Photo"]] = relationship("Photo", foreign_keys=[photo_id], uselist=False, backref="profile")
+    photo_id: Mapped[Optional[int]] = mapped_column(ForeignKey('photo.id'))
+    photo: Mapped[Optional["Photo"]] = relationship("Photo", back_populates="profile")
     interests = relationship("Interests", secondary=profile_interests_table, backref="profiles")
 
 
 class Photo(db.Model):
     __tablename__ = 'photo'
     id: Mapped[int] = mapped_column(primary_key=True)
-    profile_id: Mapped[int] = mapped_column(ForeignKey("profile.id"))
+    profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="photo")
     file_extension: Mapped[str] = mapped_column(String(8))
 
 class ProposalStatus(enum.Enum):
