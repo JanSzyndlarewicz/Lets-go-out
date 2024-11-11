@@ -13,5 +13,5 @@ SQLAlchemy~=2.0.36
 pytest~=8.3.3
 
 # Formatting
-black~=22.0.0
-isort~=5.10.2
+black~=24.10.0
+isort~=5.13.2

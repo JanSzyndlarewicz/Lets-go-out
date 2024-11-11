@@ -10,7 +10,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 db = SQLAlchemy()
 
-
 class Gender(enum.Enum):
     male = "male"
     female = "female"
@@ -123,7 +122,6 @@ class Profile(db.Model):
 class Photo(db.Model):
     __tablename__ = "photo"
     id: Mapped[int] = mapped_column(primary_key=True)
-    profile_id: Mapped[int] = mapped_column(ForeignKey("profile.id"))
     file_extension: Mapped[str] = mapped_column(String(8))
 
 
