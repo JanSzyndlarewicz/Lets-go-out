@@ -9,10 +9,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relationship, Mapped, mapped_column, mapper
 
+from werkzeug.security import generate_password_hash, check_password_hash
+
 db = SQLAlchemy()
 Base = declarative_base()
 
 available_genders = ["male", "female", "non_binary", "other"]
+available_genders_display = ["Male", "Female", "Non binary", "Other"]
 
 Gender = Literal[*available_genders]
 
@@ -46,6 +49,12 @@ class User(db.Model, UserMixin):
     blockers: Mapped[list["User"]] = relationship("User", secondary="blocking_association", primaryjoin="User.id == BlockingAssociation.blocked_id", secondaryjoin="User.id == BlockingAssociation.blocker_id", back_populates="blocking")
     sent_proposals: Mapped[list["DateProposal"]] = relationship("DateProposal", back_populates="proposer", foreign_keys="DateProposal.proposer_id")
     received_proposals: Mapped[list["DateProposal"]] = relationship("DateProposal", back_populates="recipient", foreign_keys="DateProposal.recipient_id")
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
 
 class Profile(db.Model):

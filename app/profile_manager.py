@@ -4,31 +4,39 @@ from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 
 from . import db
-
-from .models import available_genders
+from .forms import ProfileManagerForm
+from .models import available_genders, available_genders_display
 
 profile_manager_bp = Blueprint('profile_manager_bp', __name__)
 
 #TODO
-#Input validation
-#Image uploading
-#Consider using wtf or something like that
+#Image uploading and maybe other fields
 
 @profile_manager_bp.route('/profile_manager', methods=['GET', 'POST'])
 @login_required
 def profile_manager():
-    if request.method == 'POST':
-        name = request.form.get("name")
-        gender = request.form.get("gender")
-        description = request.form.get("description")
-
+    form = ProfileManagerForm()
+    #dynamically pass the list of genders to appropriate inputs
+    form.gender_preferences.choices = list(zip(available_genders,available_genders_display))
+    form.gender.choices = list(zip(available_genders,available_genders_display))
+    
+    #setting some default values that cannot be easily set in jinja
+    if request.method == 'GET': 
+        form.description.data = current_user.profile.description
+     
+    if form.validate_on_submit():
+        
+        name = form.name.data
+        gender = form.gender.data
+        description = form.description.data.strip()
+        lower_difference = form.lower_difference.data
+        upper_difference = form.upper_difference.data
         gender_preferences = []
         for g in available_genders:
-            if request.form.get(g):
+            if g in form.gender_preferences.data:
                 gender_preferences.append(g)
-
-        lower_difference = request.form.get("lower_difference")
-        upper_difference = request.form.get("upper_difference")
+        
+        print(description)
 
         current_user.profile.name = name
         current_user.profile.gender = gender
@@ -37,8 +45,6 @@ def profile_manager():
         current_user.matching_preferences.lower_difference = lower_difference
         current_user.matching_preferences.upper_difference = upper_difference
 
-
-
         try:
             db.session.commit()
         except IntegrityError as e:
@@ -46,4 +52,4 @@ def profile_manager():
             print(e)
         return redirect(url_for("profile_manager_bp.profile_manager"))
 
-    return render_template('profile_manager.html', genders=available_genders)
+    return render_template('profile_manager.html', form=form)
