@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user
 
-from . import User, db
+from app import User, db
 
 auth_bp = Blueprint("auth_bp", __name__)
 
