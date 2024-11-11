@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 
 from werkzeug.security import generate_password_hash
 
-from app.models import db, User, Interests, Profile, Gender, Photo
+from app.models import db, User, Interests, Profile, Photo, MatchingPreferences, Gender, UserGenderPreference
 
 app = create_app()
 
@@ -23,7 +23,7 @@ with app.app_context():
     email = 'admin'
 
     name = "Admin"
-    gender = Gender.other
+    gender = "male"
     year_of_birth = 1999
     description = "this is admin"
     interests = []
@@ -32,20 +32,23 @@ with app.app_context():
 
     existing_user = User.query.filter_by(username=username).first()
     if existing_user is None:
+
         new_photo = Photo(file_extension="jpg")
         new_profile = Profile(name=name, gender=gender, year_of_birth=year_of_birth, description=description, interests=interests)
         new_profile.photo = new_photo
         new_user = User(username=username, password=password_hash, email=email)
         new_user.profile = new_profile
+        new_preferences = MatchingPreferences(user=new_user,gender_preferences=["male", "female"], lower_difference=10, upper_difference=8)
+         
         db.session.add(new_profile)
-        db.session.add(new_user)  
+        db.session.add(new_user) 
+
         try:
             db.session.commit()
             print(f"User {username} added successfully.")
         except IntegrityError as e:
             db.session.rollback()
             print(e)
-            #print(f"Failed to add user {username}: Duplicate username.")
     else:
         print(f"User {username} already exists.")
     db.session.commit()

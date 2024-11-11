@@ -11,10 +11,10 @@
         <input type="text" id="name" name="name" value="{{current_user.profile.name}}" required>
         <br>
 
-        <label for="username">Username:</label>
+        <label for="gender">Genders:</label>
        
             {% for g in genders %}
-                    <input type="radio" name="gender" value="{{g}}" {{ "checked" if current_user.profile.gender.value == g }}>
+                    <input type="radio" name="gender" value="{{g}}" {{ "checked" if current_user.profile.gender == g }}>
                     {{g}}
             {% endfor %}
         <br>
@@ -22,6 +22,22 @@
         <textarea name="description">
             {{current_user.profile.description}}
         </textarea>
+
+        <label>Gender preferences:</label>  
+        
+            {% for g in genders %}
+                    <input type="checkbox" name="{{g}}" {{ "checked" if g in current_user.matching_preferences.gender_preferences }}>
+                    {{g}}
+            {% endfor %}
+        <br>
+
+        <label>Age preferences:</label>  
+            <br>    
+            Lower difference:   
+            <input type="number" name="lower_difference" required value="{{current_user.matching_preferences.lower_difference}}">
+            <br>Upper difference:
+            <input type="number" name="upper_difference" required value="{{current_user.matching_preferences.upper_difference}}">
+        <br>
 
         <input type="Submit" value="Change">
 
