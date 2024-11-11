@@ -7,13 +7,28 @@
 <body>
     <h1>Login</h1>
     <form method="post" action="{{ url_for('auth_bp.login') }}">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        {{ form.csrf_token }}
+        
+        {{ form.username.label }}
+        {{ form.username() }}
+        {% if form.username.errors %}
+            <ul class="errors">
+            {% for error in form.username.errors %}
+                <li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+
         <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        {{ form.password.label }}
+        {{ form.password() }}
+        {% if form.password.errors %}
+            <ul class="errors">
+            {% for error in form.password.errors %}
+                <li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
         <br>
-        <button type="submit">Login</button>
+        {{ form.submit() }}
     </form>
 </body>
 </html>

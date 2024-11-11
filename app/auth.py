@@ -3,14 +3,19 @@ from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from . import db, User
+from .forms import LoginForm, RegisterForm
 
 auth_bp = Blueprint('auth_bp', __name__)
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = LoginForm()
+    if form.validate_on_submit():
+
+        username = form.username.data
+        password = form.password.data
+        
+        print(username)
 
         # Find user by username
         user = User.query.filter_by(username=username).first()
@@ -20,7 +25,7 @@ def login():
             return redirect(url_for('dashboard_bp.dashboard'))
         return "Invalid credentials", 401
 
-    return render_template('login.html')
+    return render_template('login.html', form=form)
 
 @auth_bp.route('/logout')
 @login_required
@@ -30,10 +35,13 @@ def logout():
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        email = request.form['email']
+    form = RegisterForm()
+    if form.validate_on_submit():
+
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+        
         password_hash = generate_password_hash(password)
 
         # Create new user
@@ -44,4 +52,4 @@ def register():
         login_user(new_user)
         return redirect(url_for('dashboard_bp.dashboard'))
 
-    return render_template('register.html')
+    return render_template('register.html', form=form)
