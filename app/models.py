@@ -120,10 +120,10 @@ class Profile(db.Model):
     photo: Mapped[Optional["Photo"]] = relationship("Photo", foreign_keys=[photo_id], uselist=False, backref="profile")
     interests = relationship("Interests", secondary=profile_interests, backref="profiles")
 
-
 class Photo(db.Model):
     __tablename__ = "photo"
     id: Mapped[int] = mapped_column(primary_key=True)
+    profile_id: Mapped[int] = mapped_column(ForeignKey("profile.id"))
     file_extension: Mapped[str] = mapped_column(String(8))
 
 

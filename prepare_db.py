@@ -58,3 +58,4 @@ with app.app_context():
         db.session.add(preferences)
 
     db.session.commit()
+    print("Default interests added.")
