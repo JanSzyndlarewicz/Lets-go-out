@@ -2,24 +2,29 @@ from flask import Blueprint, request, redirect, url_for, render_template
 from flask_login import login_user, login_required, logout_user, current_user
 
 from . import db, User
+from .forms import LoginForm, RegisterForm
 
 auth_bp = Blueprint('auth_bp', __name__)
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = LoginForm()
+    if form.validate_on_submit():
+
+        username = form.username.data
+        password = form.password.data
+        
+        print(username)
 
         # Find user by username
         user = User.query.filter_by(username=username).first()
 
-        if user and user.password == password:
+        if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('dashboard_bp.dashboard'))
         return "Invalid credentials", 401
 
-    return render_template('login.html')
+    return render_template('login.html', form=form)
 
 @auth_bp.route('/logout')
 @login_required
@@ -29,16 +34,20 @@ def logout():
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = RegisterForm()
+    if form.validate_on_submit():
+
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
 
         # Create new user
-        new_user = User(username=username, password=password)
+        new_user = User(username=username, email=email)
+        new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
 
         login_user(new_user)
         return redirect(url_for('dashboard_bp.dashboard'))
 
-    return render_template('register.html')
+    return render_template('register.html', form=form)

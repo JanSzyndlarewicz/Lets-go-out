@@ -3,26 +3,21 @@ from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 import enum
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Literal, get_args
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum, Table
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import relationship, Mapped, mapped_column, mapper
+
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 Base = declarative_base()
 
-class Gender(enum.Enum):
-    male = "male"
-    female = "female"
-    non_binary = "non_binary"
-    other = "other"
+available_genders = ["male", "female", "non_binary", "other"]
+available_genders_display = ["Male", "Female", "Non binary", "Other"]
 
-user_gender_preferences = Table(
-    'user_gender_preferences',
-    Base.metadata,
-    Column('matching_preferences_id', ForeignKey('matching_preferences.id'), primary_key=True),
-    Column('gender', Enum(Gender), primary_key=True)
-)
+Gender = Literal[*available_genders]
 
 class Interests(db.Model):
     __tablename__ = 'interests'
@@ -55,6 +50,12 @@ class User(db.Model, UserMixin):
     sent_proposals: Mapped[list["DateProposal"]] = relationship("DateProposal", back_populates="proposer", foreign_keys="DateProposal.proposer_id")
     received_proposals: Mapped[list["DateProposal"]] = relationship("DateProposal", back_populates="recipient", foreign_keys="DateProposal.recipient_id")
 
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
 
 class Profile(db.Model):
     __tablename__ = 'profile'
@@ -62,18 +63,18 @@ class Profile(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), unique=True)
     user: Mapped["User"] = relationship("User", back_populates="profile")
     name: Mapped[str] = mapped_column(String(100), nullable=False)
-    gender: Mapped[Gender] = mapped_column(Enum(Gender), nullable=False)
+    gender: Mapped[Gender] = mapped_column(Enum(*get_args(Gender),name="gender", create_constraint=True, validate_strings=True), nullable=False)
     year_of_birth: Mapped[int] = mapped_column(Integer, nullable=False)
     description: Mapped[str] = mapped_column(String(500), nullable=True)
-    photo_id: Mapped[int] = mapped_column(ForeignKey('photo.id'))
-    photo: Mapped[Optional["Photo"]] = relationship("Photo", foreign_keys=[photo_id], uselist=False, backref="profile")
+    photo_id: Mapped[Optional[int]] = mapped_column(ForeignKey('photo.id'))
+    photo: Mapped[Optional["Photo"]] = relationship("Photo", back_populates="profile")
     interests = relationship("Interests", secondary=profile_interests_table, backref="profiles")
 
 
 class Photo(db.Model):
     __tablename__ = 'photo'
     id: Mapped[int] = mapped_column(primary_key=True)
-    profile_id: Mapped[int] = mapped_column(ForeignKey("profile.id"))
+    profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="photo")
     file_extension: Mapped[str] = mapped_column(String(8))
 
 class ProposalStatus(enum.Enum):
@@ -107,8 +108,19 @@ class BlockingAssociation(db.Model):
     blocker_id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
     blocked_id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
 
+class UserGenderPreference(db.Model):
+    __tablename__ = "user_gender_preferences"
+    matching_preferences_id: Mapped[int] = mapped_column(ForeignKey('matching_preferences.id', ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
+    matching_preferences: Mapped["MatchingPreferences"] = relationship("MatchingPreferences", back_populates="genders")
+    gender : Mapped[Gender] = mapped_column(Enum(*get_args(Gender),name="gender", create_constraint=True, validate_strings=True), primary_key=True)
+
+
 class MatchingPreferences(db.Model):
     __tablename__ = 'matching_preferences'
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), unique=True)
     user: Mapped["User"] = relationship("User", back_populates="matching_preferences")
+    genders = relationship("UserGenderPreference", back_populates="matching_preferences", cascade="all, delete-orphan")
+    gender_preferences = association_proxy('genders', 'gender', creator=lambda gender : UserGenderPreference(gender=gender), cascade_scalar_deletes=True)
+    lower_difference = mapped_column(Integer, nullable=False)
+    upper_difference = mapped_column(Integer, nullable=False)
