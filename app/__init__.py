@@ -1,16 +1,15 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_mail import Mail
 
 from app.models import User, db
 
 
 def create_app():
     app = Flask(__name__)
-    app.secret_key = "secret_key"  # TODO: Change this to a random value
+    app.config.from_pyfile("config.py")
 
-    # Configure database URI
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.mail = Mail(app)
 
     # Initialize extensions
     db.init_app(app)
@@ -52,5 +51,9 @@ def create_app():
     from app.views.profile import profile_bp
 
     app.register_blueprint(profile_bp)
+
+    from app.views.account_manager import account_manager_bp
+
+    app.register_blueprint(account_manager_bp)
 
     return app

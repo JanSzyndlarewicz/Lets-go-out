@@ -1,11 +1,12 @@
-# app/models.py
 import enum
 from datetime import datetime
-from typing import Literal, Optional, get_args
+from typing import Optional
 
+from flask import current_app as app
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, Table
+from itsdangerous import URLSafeTimedSerializer
+from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Integer, String, Table
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -45,6 +46,7 @@ class User(db.Model, UserMixin):
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
+    confirmed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="user")
     matching_preferences: Mapped["MatchingPreferences"] = relationship(
         "MatchingPreferences", uselist=False, back_populates="user"
@@ -78,10 +80,14 @@ class User(db.Model, UserMixin):
         back_populates="blocking",
     )
     sent_proposals: Mapped[list["DateProposal"]] = relationship(
-        "DateProposal", back_populates="proposer", foreign_keys="DateProposal.proposer_id"
+        "DateProposal",
+        back_populates="proposer",
+        foreign_keys="DateProposal.proposer_id",
     )
     received_proposals: Mapped[list["DateProposal"]] = relationship(
-        "DateProposal", back_populates="recipient", foreign_keys="DateProposal.recipient_id"
+        "DateProposal",
+        back_populates="recipient",
+        foreign_keys="DateProposal.recipient_id",
     )
 
     def set_password(self, password):
@@ -89,6 +95,22 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+    def has_preference_for(self, gender_value: str) -> bool:
+        return Gender[gender_value] in self.matching_preferences.gender_preferences
+
+    def generate_token(self):
+        serializer = URLSafeTimedSerializer(app.secret_key)
+        return serializer.dumps(self.id, salt="confirmation_token")
+
+    def confirm(self, token):
+        serializer = URLSafeTimedSerializer(app.secret_key)
+        try:
+            serializer.loads(token, salt="confirmation_token", max_age=3600)
+            self.confirmed = True
+            return True
+        except:
+            return False
 
 
 class Profile(db.Model):
@@ -152,7 +174,8 @@ class BlockingAssociation(db.Model):
 class UserGenderPreference(db.Model):
     __tablename__ = "user_gender_preferences"
     matching_preferences_id: Mapped[int] = mapped_column(
-        ForeignKey("matching_preferences.id", ondelete="CASCADE", onupdate="CASCADE"), primary_key=True
+        ForeignKey("matching_preferences.id", ondelete="CASCADE", onupdate="CASCADE"),
+        primary_key=True,
     )
     matching_preferences: Mapped["MatchingPreferences"] = relationship("MatchingPreferences", back_populates="genders")
     gender: Mapped[Gender] = mapped_column(Enum(Gender), primary_key=True)
@@ -163,9 +186,16 @@ class MatchingPreferences(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), unique=True)
     user: Mapped["User"] = relationship("User", back_populates="matching_preferences")
-    genders = relationship("UserGenderPreference", back_populates="matching_preferences", cascade="all, delete-orphan")
+    genders = relationship(
+        "UserGenderPreference",
+        back_populates="matching_preferences",
+        cascade="all, delete-orphan",
+    )
     gender_preferences = association_proxy(
-        "genders", "gender", creator=lambda gender: UserGenderPreference(gender=gender), cascade_scalar_deletes=True
+        "genders",
+        "gender",
+        creator=lambda gender: UserGenderPreference(gender=gender),
+        cascade_scalar_deletes=True,
     )
     lower_difference = mapped_column(Integer, nullable=False)
     upper_difference = mapped_column(Integer, nullable=False)
