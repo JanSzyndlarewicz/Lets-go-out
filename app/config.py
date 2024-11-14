@@ -10,3 +10,5 @@ MAIL_PASSWORD = 'eshkswvewdvzrcnw'
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
 MAIL_DEFAULT_SENDER = 'webapp2024madrid@gmail.com'
+
+ADVANCED_ACCESS_CONTROL = False

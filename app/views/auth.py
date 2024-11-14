@@ -1,6 +1,7 @@
 from functools import wraps
 
 from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import current_app as app
 from flask_login import current_user, login_required, login_user, logout_user
 
 from sqlalchemy.exc import IntegrityError
@@ -16,6 +17,7 @@ def confirmed_required(func):
     @wraps(func)
     @login_required
     def inner(*args, **kwargs):
+        if not app.config["ADVANCED_ACCESS_CONTROL"]: return func(*args, **kwargs)
         if not current_user.confirmed:
             return redirect(url_for('auth_bp.unconfirmed'))
         return func(*args, **kwargs)
@@ -27,6 +29,7 @@ def unconfirmed_required(func):
     @wraps(func)
     @login_required
     def inner(*args, **kwargs):
+        if not app.config["ADVANCED_ACCESS_CONTROL"]: return func(*args, **kwargs)
         if current_user.confirmed:
             return redirect(url_for("find_page_bp.find_page"))
         return func(*args, **kwargs)
@@ -37,6 +40,7 @@ def unconfirmed_required(func):
 def anonymous_required(func):
     @wraps(func)
     def inner(*args, **kwargs):
+        if not app.config["ADVANCED_ACCESS_CONTROL"]: return func(*args, **kwargs)
         if not current_user.is_anonymous:
             return redirect(url_for("find_page_bp.find_page"))
         return func(*args, **kwargs)
