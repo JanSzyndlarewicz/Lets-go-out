@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app import db
 from app.forms import ProfileManagerForm
-from app.models import available_genders, available_genders_display
+from app.models import Gender
 
 logger = logging.getLogger(__name__)
 
@@ -16,29 +16,24 @@ profile_manager_bp = Blueprint("profile_manager_bp", __name__)
 # Image uploading and maybe other fields
 
 
-@profile_manager_bp.route("/profile_manager", methods=["GET", "POST"])
+@profile_manager_bp.route("/profile-manager", methods=["GET", "POST"])
 @login_required
 def profile_manager():
     form = ProfileManagerForm()
-    # dynamically pass the list of genders to appropriate inputs
-    form.gender_preferences.choices = list(zip(available_genders, available_genders_display))
-    form.gender.choices = list(zip(available_genders, available_genders_display))
 
-    # setting some default values that cannot be easily set in jinja
+    form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
+    form.gender.choices = [(gender.name, gender.value) for gender in Gender]
+
     if request.method == "GET":
         form.description.data = current_user.profile.description
 
     if form.validate_on_submit():
-
         name = form.name.data
-        gender = form.gender.data
+        gender = Gender[form.gender.data]
         description = form.description.data.strip()
         lower_difference = form.lower_difference.data
         upper_difference = form.upper_difference.data
-        gender_preferences = []
-        for g in available_genders:
-            if g in form.gender_preferences.data:
-                gender_preferences.append(g)
+        gender_preferences = [Gender[gp] for gp in form.gender_preferences.data]
 
         logger.info(description)
 

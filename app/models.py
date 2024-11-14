@@ -5,7 +5,7 @@ from typing import Literal, Optional, get_args
 
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import DateTime, Enum, ForeignKey, Integer, String, Table
+from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, Table
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -14,10 +14,12 @@ from werkzeug.security import check_password_hash, generate_password_hash
 db = SQLAlchemy()
 Base = declarative_base()
 
-available_genders = ["male", "female", "non_binary", "other"]
-available_genders_display = ["Male", "Female", "Non binary", "Other"]
 
-Gender = Literal[*available_genders]
+class Gender(enum.Enum):
+    MALE = "Male"
+    FEMALE = "Female"
+    NON_BINARY = "Non binary"
+    OTHER = "Other"
 
 
 class Interests(db.Model):
@@ -95,9 +97,7 @@ class Profile(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), unique=True)
     user: Mapped["User"] = relationship("User", back_populates="profile")
     name: Mapped[str] = mapped_column(String(100), nullable=False)
-    gender: Mapped[Gender] = mapped_column(
-        Enum(*get_args(Gender), name="gender", create_constraint=True, validate_strings=True), nullable=False
-    )
+    gender: Mapped[Gender] = mapped_column(Enum(Gender), nullable=False)
     year_of_birth: Mapped[int] = mapped_column(Integer, nullable=False)
     description: Mapped[str] = mapped_column(String(500), nullable=True)
     photo_id: Mapped[Optional[int]] = mapped_column(ForeignKey("photo.id"))
@@ -155,9 +155,7 @@ class UserGenderPreference(db.Model):
         ForeignKey("matching_preferences.id", ondelete="CASCADE", onupdate="CASCADE"), primary_key=True
     )
     matching_preferences: Mapped["MatchingPreferences"] = relationship("MatchingPreferences", back_populates="genders")
-    gender: Mapped[Gender] = mapped_column(
-        Enum(*get_args(Gender), name="gender", create_constraint=True, validate_strings=True), primary_key=True
-    )
+    gender: Mapped[Gender] = mapped_column(Enum(Gender), primary_key=True)
 
 
 class MatchingPreferences(db.Model):

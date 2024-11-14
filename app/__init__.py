@@ -1,10 +1,7 @@
 from flask import Flask
-from flask_login import LoginManager
 
 from app.extensions import login_manager
 from app.models import User, db
-
-login_manager = LoginManager()
 
 
 @login_manager.user_loader

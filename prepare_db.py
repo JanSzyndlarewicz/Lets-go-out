@@ -2,7 +2,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash
 
 from app import create_app
-from app.models import Interests, MatchingPreferences, Photo, Profile, User, available_genders, db
+from app.models import Gender, Interests, MatchingPreferences, Photo, Profile, User, db
 
 app = create_app()
 
@@ -21,7 +21,7 @@ with app.app_context():
     email = "admin"
 
     name = "Admin"
-    gender = "male"
+    gender = Gender.MALE
     year_of_birth = 1999
     description = "this is admin"
     interests = []
@@ -39,7 +39,7 @@ with app.app_context():
         new_user = User(username=username, password=password_hash, email=email)
         new_user.profile = new_profile
         new_preferences = MatchingPreferences(
-            user=new_user, gender_preferences=["male", "female"], lower_difference=10, upper_difference=8
+            user=new_user, gender_preferences=[Gender.MALE, Gender.FEMALE], lower_difference=10, upper_difference=8
         )
 
         db.session.add(new_profile)
@@ -62,25 +62,18 @@ with app.app_context():
             "password": "password",
             "profile": {
                 "name": f"User {i}",
-                "gender": "male" if i % 2 == 0 else "female",
+                "gender": Gender.MALE if i % 2 == 0 else Gender.FEMALE,
                 "year_of_birth": 1990 + i,
                 "description": f"This is user {i}'s profile description.",
             },
             "preferences": {
-                "gender_preference": "female" if i % 2 == 0 else "male",
+                "gender_preference": Gender.FEMALE if i % 2 == 0 else Gender.MALE,
                 "min_age": 5,
                 "max_age": 5,
             },
         }
         for i in range(1, 16)
     ]
-
-    from app.models import Gender
-
-    def validate_gender(gender):
-        if gender not in available_genders:
-            raise ValueError(f"'{gender}' is not a valid gender. Valid values are: {available_genders}")
-        return gender
 
     for user_data in new_users:
         user = User(
@@ -90,13 +83,13 @@ with app.app_context():
         )
         profile = Profile(
             name=user_data["profile"]["name"],
-            gender=validate_gender(user_data["profile"]["gender"]),
+            gender=user_data["profile"]["gender"],
             year_of_birth=user_data["profile"]["year_of_birth"],
             description=user_data["profile"]["description"],
             user=user,
         )
         preferences = MatchingPreferences(
-            gender_preferences=[validate_gender(user_data["preferences"]["gender_preference"])],
+            gender_preferences=[user_data["preferences"]["gender_preference"]],
             lower_difference=user_data["preferences"]["min_age"],
             upper_difference=user_data["preferences"]["max_age"],
             user=user,
