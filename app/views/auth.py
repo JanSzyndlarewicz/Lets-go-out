@@ -15,8 +15,6 @@ def login():
         username = form.username.data
         password = form.password.data
 
-        print(username)
-
         # Find user by username
         user = User.query.filter_by(username=username).first()
 
