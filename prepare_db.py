@@ -2,7 +2,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash
 
 from app import create_app
-from app.models.models import Gender, Interests, MatchingPreferences, Photo, Profile, User, UserGenderPreference, db
+from app.models import Gender, Interests, MatchingPreferences, Photo, Profile, User, db
 
 app = create_app()
 
@@ -21,7 +21,7 @@ with app.app_context():
     email = "admin"
 
     name = "Admin"
-    gender = "male"
+    gender = Gender.MALE
     year_of_birth = 1999
     description = "this is admin"
     interests = []
@@ -39,7 +39,7 @@ with app.app_context():
         new_user = User(username=username, password=password_hash, email=email)
         new_user.profile = new_profile
         new_preferences = MatchingPreferences(
-            user=new_user, gender_preferences=["male", "female"], lower_difference=10, upper_difference=8
+            user=new_user, gender_preferences=[Gender.MALE, Gender.FEMALE], lower_difference=10, upper_difference=8
         )
 
         db.session.add(new_profile)
@@ -53,5 +53,50 @@ with app.app_context():
             print(e)
     else:
         print(f"User {username} already exists.")
+
+    # Adding 15 new users
+    new_users = [
+        {
+            "email": f"user{i}@example.com",
+            "username": f"user{i}",
+            "password": "password",
+            "profile": {
+                "name": f"User {i}",
+                "gender": Gender.MALE if i % 2 == 0 else Gender.FEMALE,
+                "year_of_birth": 1990 + i,
+                "description": f"This is user {i}'s profile description.",
+            },
+            "preferences": {
+                "gender_preference": Gender.FEMALE if i % 2 == 0 else Gender.MALE,
+                "min_age": 5,
+                "max_age": 5,
+            },
+        }
+        for i in range(1, 16)
+    ]
+
+    for user_data in new_users:
+        user = User(
+            email=user_data["email"],
+            username=user_data["username"],
+            password=user_data["password"],
+        )
+        profile = Profile(
+            name=user_data["profile"]["name"],
+            gender=user_data["profile"]["gender"],
+            year_of_birth=user_data["profile"]["year_of_birth"],
+            description=user_data["profile"]["description"],
+            user=user,
+        )
+        preferences = MatchingPreferences(
+            gender_preferences=[user_data["preferences"]["gender_preference"]],
+            lower_difference=user_data["preferences"]["min_age"],
+            upper_difference=user_data["preferences"]["max_age"],
+            user=user,
+        )
+        db.session.add(user)
+        db.session.add(profile)
+        db.session.add(preferences)
+
     db.session.commit()
     print("Default interests added.")

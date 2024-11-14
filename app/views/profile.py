@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 from flask_login import login_required
 
-from .. import User, db
+from app import User, db
 
 profile_bp = Blueprint("profile_bp", __name__)
 

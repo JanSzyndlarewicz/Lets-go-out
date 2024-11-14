@@ -9,6 +9,15 @@ Jinja2==3.1.4
 # Database
 SQLAlchemy~=2.0.36
 
+# Testing
+pytest~=8.3.3
+
+# Formatting
+black~=24.10.0
+isort~=5.13.2
+
 #Flask-WTF
 Flask-WTF==1.2.2
 email_validator==2.2.0
+WTForms~=3.2.1
+Werkzeug~=3.1.3
