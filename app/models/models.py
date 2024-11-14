@@ -47,7 +47,7 @@ class User(db.Model, UserMixin):
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
-    confirmed : Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    confirmed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="user")
     matching_preferences: Mapped["MatchingPreferences"] = relationship(
         "MatchingPreferences", uselist=False, back_populates="user"
@@ -92,14 +92,14 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
-    
-    def has_preference_for(self, gender_value : str) -> bool:
+
+    def has_preference_for(self, gender_value: str) -> bool:
         return Gender[gender_value] in self.matching_preferences.gender_preferences
 
     def generate_token(self):
         serializer = URLSafeTimedSerializer(app.secret_key)
         return serializer.dumps(self.id, salt="confirmation_token")
-    
+
     def confirm(self, token):
         serializer = URLSafeTimedSerializer(app.secret_key)
         try:

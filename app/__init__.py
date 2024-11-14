@@ -7,7 +7,7 @@ from app.models import User, db
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_pyfile('config.py')
+    app.config.from_pyfile("config.py")
 
     app.mail = Mail(app)
 

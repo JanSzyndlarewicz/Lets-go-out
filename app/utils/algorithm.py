@@ -1,12 +1,12 @@
 from typing import Type
 
-from sqlalchemy import and_
+from sqlalchemy import ColumnElement, and_
 from sqlalchemy.orm import Session
 
 from app.models import BlockingAssociation, MatchingPreferences, Profile, User
 
 
-def between(column, start, end):
+def between(column: ColumnElement, start: any, end: any) -> ColumnElement:
     return and_(column >= start, column <= end)
 
 
