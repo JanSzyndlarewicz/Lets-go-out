@@ -1,4 +1,4 @@
-from .find_page import find_page_bp
+from app.views.find_page import find_page_bp
 
 
 def init_app(app):

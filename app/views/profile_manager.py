@@ -1,12 +1,13 @@
 import logging
 
 from flask import Blueprint, redirect, render_template, request, url_for
-from flask_login import current_user, login_required
+from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
 from app import db
 from app.forms import ProfileManagerForm
 from app.models import Gender
+from app.views.auth import confirmed_required
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +18,7 @@ profile_manager_bp = Blueprint("profile_manager_bp", __name__)
 
 
 @profile_manager_bp.route("/profile-manager", methods=["GET", "POST"])
-@login_required
+@confirmed_required
 def profile_manager():
     form = ProfileManagerForm()
 
