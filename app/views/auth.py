@@ -20,7 +20,7 @@ def login():
 
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for("dashboard_bp.dashboard"))
+            return redirect(url_for("find_page_bp.find_page"))
         return "Invalid credentials", 401
 
     return render_template("login.html", form=form)
@@ -49,6 +49,6 @@ def register():
         db.session.commit()
 
         login_user(new_user)
-        return redirect(url_for("find_page_bp.find-page"))
+        return redirect(url_for("find_page_bp.find_page"))
 
     return render_template("register.html", form=form)

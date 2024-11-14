@@ -29,10 +29,6 @@ def create_app():
 
     app.register_blueprint(auth_bp)
 
-    from app.views.dashboard import dashboard_bp
-
-    app.register_blueprint(dashboard_bp)
-
     from app.views.you_page import you_page_bp
 
     app.register_blueprint(you_page_bp)
