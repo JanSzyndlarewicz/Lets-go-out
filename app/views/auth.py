@@ -49,6 +49,6 @@ def register():
         db.session.commit()
 
         login_user(new_user)
-        return redirect(url_for("find_page_bp.find_page"))
+        return redirect(url_for("find_page_bp.find-page"))
 
     return render_template("register.html", form=form)
