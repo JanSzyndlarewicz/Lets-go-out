@@ -8,6 +8,8 @@ from app import db
 from app.forms import ProfileManagerForm
 from app.models import Gender
 
+from .auth import confirmed_required
+
 logger = logging.getLogger(__name__)
 
 profile_manager_bp = Blueprint("profile_manager_bp", __name__)
@@ -17,7 +19,7 @@ profile_manager_bp = Blueprint("profile_manager_bp", __name__)
 
 
 @profile_manager_bp.route("/profile-manager", methods=["GET", "POST"])
-@login_required
+@confirmed_required
 def profile_manager():
     form = ProfileManagerForm()
 
