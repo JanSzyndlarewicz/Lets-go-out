@@ -15,3 +15,7 @@ pytest~=8.3.3
 # Formatting
 black~=24.10.0
 isort~=5.13.2
+
+#Flask-WTF
+Flask-WTF==1.2.2
+email_validator==2.2.0
