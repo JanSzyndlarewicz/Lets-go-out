@@ -72,7 +72,6 @@ def login():
         username = form.username.data
         password = form.password.data
 
-        # Find user by username
         user = User.query.filter_by(username=username).first()
 
         if user and user.check_password(password):
@@ -100,7 +99,6 @@ def register():
         password = form.password.data
         email = form.email.data
 
-        # Create new user
         new_user = User(username=username, email=email)
         new_user.set_password(password)
         db.session.add(new_user)

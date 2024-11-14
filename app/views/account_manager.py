@@ -4,8 +4,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app import db
 from app.forms import AccountManagerForm
-
-from .auth import confirmed_required
+from app.views.auth import confirmed_required
 
 account_manager_bp = Blueprint("account_manager_bp", __name__)
 

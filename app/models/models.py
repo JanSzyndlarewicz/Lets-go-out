@@ -81,10 +81,14 @@ class User(db.Model, UserMixin):
         back_populates="blocking",
     )
     sent_proposals: Mapped[list["DateProposal"]] = relationship(
-        "DateProposal", back_populates="proposer", foreign_keys="DateProposal.proposer_id"
+        "DateProposal",
+        back_populates="proposer",
+        foreign_keys="DateProposal.proposer_id",
     )
     received_proposals: Mapped[list["DateProposal"]] = relationship(
-        "DateProposal", back_populates="recipient", foreign_keys="DateProposal.recipient_id"
+        "DateProposal",
+        back_populates="recipient",
+        foreign_keys="DateProposal.recipient_id",
     )
 
     def set_password(self, password):
@@ -171,7 +175,8 @@ class BlockingAssociation(db.Model):
 class UserGenderPreference(db.Model):
     __tablename__ = "user_gender_preferences"
     matching_preferences_id: Mapped[int] = mapped_column(
-        ForeignKey("matching_preferences.id", ondelete="CASCADE", onupdate="CASCADE"), primary_key=True
+        ForeignKey("matching_preferences.id", ondelete="CASCADE", onupdate="CASCADE"),
+        primary_key=True,
     )
     matching_preferences: Mapped["MatchingPreferences"] = relationship("MatchingPreferences", back_populates="genders")
     gender: Mapped[Gender] = mapped_column(Enum(Gender), primary_key=True)
@@ -182,9 +187,16 @@ class MatchingPreferences(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), unique=True)
     user: Mapped["User"] = relationship("User", back_populates="matching_preferences")
-    genders = relationship("UserGenderPreference", back_populates="matching_preferences", cascade="all, delete-orphan")
+    genders = relationship(
+        "UserGenderPreference",
+        back_populates="matching_preferences",
+        cascade="all, delete-orphan",
+    )
     gender_preferences = association_proxy(
-        "genders", "gender", creator=lambda gender: UserGenderPreference(gender=gender), cascade_scalar_deletes=True
+        "genders",
+        "gender",
+        creator=lambda gender: UserGenderPreference(gender=gender),
+        cascade_scalar_deletes=True,
     )
     lower_difference = mapped_column(Integer, nullable=False)
     upper_difference = mapped_column(Integer, nullable=False)

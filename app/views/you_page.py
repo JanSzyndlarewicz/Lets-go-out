@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template
-from flask_login import login_required
 
-from .auth import confirmed_required
+from app.views.auth import confirmed_required
 
 you_page_bp = Blueprint("you_page_bp", __name__)
 

@@ -1,14 +1,13 @@
 import logging
 
 from flask import Blueprint, redirect, render_template, request, url_for
-from flask_login import current_user, login_required
+from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
 from app import db
 from app.forms import ProfileManagerForm
 from app.models import Gender
-
-from .auth import confirmed_required
+from app.views.auth import confirmed_required
 
 logger = logging.getLogger(__name__)
 
