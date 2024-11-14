@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.models import MatchingPreferences, Profile, User, db
+from app.models import MatchingPreferences, Profile, User, db, Gender
 from app.utils.algorithm import suggest_matches
 
 
@@ -22,12 +22,12 @@ def create_test_data(session):
     profile1 = Profile(
         user_id=1,
         name="User 1",
-        gender="male",
+        gender=Gender.MALE,
         year_of_birth=1991,
         description="User 1's profile",
     )
     preferences1 = MatchingPreferences(
-        user_id=1, gender_preferences=["female"], lower_difference=20, upper_difference=30
+        user_id=1, gender_preferences=[Gender.FEMALE], lower_difference=20, upper_difference=30
     )
     user1.profile = profile1
     user1.matching_preferences = preferences1
@@ -36,11 +36,11 @@ def create_test_data(session):
     profile2 = Profile(
         user_id=2,
         name="User 2",
-        gender="female",
+        gender=Gender.FEMALE,
         year_of_birth=1990,
         description="User 2's profile",
     )
-    preferences2 = MatchingPreferences(user_id=2, gender_preferences=["male"], lower_difference=5, upper_difference=5)
+    preferences2 = MatchingPreferences(user_id=2, gender_preferences=[Gender.MALE], lower_difference=5, upper_difference=5)
     user2.profile = profile2
     user2.matching_preferences = preferences2
 
@@ -69,12 +69,12 @@ def test_no_matches_by_gender(test_session):
     profile3 = Profile(
         user_id=3,
         name="User 3",
-        gender="female",
+        gender=Gender.FEMALE,
         year_of_birth=2000,
         description="User 3's profile",
     )
     preferences3 = MatchingPreferences(
-        user_id=3, gender_preferences=["non_binary"], lower_difference=5, upper_difference=5
+        user_id=3, gender_preferences=[Gender.NON_BINARY], lower_difference=5, upper_difference=5
     )
     user3.profile = profile3
     user3.matching_preferences = preferences3
@@ -94,11 +94,11 @@ def test_no_matches_by_age(test_session):
     profile3 = Profile(
         user_id=4,
         name="User 4",
-        gender="female",
+        gender=Gender.FEMALE,
         year_of_birth=2010,
         description="User 4's profile",
     )
-    preferences3 = MatchingPreferences(user_id=4, gender_preferences=["female"], lower_difference=1, upper_difference=1)
+    preferences3 = MatchingPreferences(user_id=4, gender_preferences=[Gender.FEMALE], lower_difference=1, upper_difference=1)
     user3.profile = profile3
     user3.matching_preferences = preferences3
 
@@ -116,11 +116,11 @@ def test_blocked_users(test_session):
     profile1 = Profile(
         user_id=1,
         name="User 1",
-        gender="female",
+        gender=Gender.FEMALE,
         year_of_birth=1991,
         description="User 1's profile",
     )
-    preferences1 = MatchingPreferences(user_id=1, gender_preferences=["male"], lower_difference=5, upper_difference=5)
+    preferences1 = MatchingPreferences(user_id=1, gender_preferences=[Gender.FEMALE], lower_difference=5, upper_difference=5)
     user1.profile = profile1
     user1.matching_preferences = preferences1
 
@@ -128,11 +128,11 @@ def test_blocked_users(test_session):
     profile2 = Profile(
         user_id=2,
         name="User 2",
-        gender="male",
+        gender=Gender.MALE,
         year_of_birth=1990,
         description="User 2's profile",
     )
-    preferences2 = MatchingPreferences(user_id=2, gender_preferences=["female"], lower_difference=5, upper_difference=5)
+    preferences2 = MatchingPreferences(user_id=2, gender_preferences=[Gender.FEMALE], lower_difference=5, upper_difference=5)
     user2.profile = profile2
     user2.matching_preferences = preferences2
 
