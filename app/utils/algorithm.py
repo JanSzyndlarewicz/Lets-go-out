@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.models import BlockingAssociation, MatchingPreferences, Profile, User
 
 
-def between(column: ColumnElement, start: any, end: any) -> ColumnElement:
+def between(column: int, start: any, end: any) -> ColumnElement[bool]:
     return and_(column >= start, column <= end)
 
 
