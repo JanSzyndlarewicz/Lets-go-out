@@ -54,7 +54,7 @@ def anonymous_required(func):
 
 
 # THIS IS EXCLUSIVELY FOR TESTING AND MUST BE REMOVED IN THE FINAL VERSION
-@auth_bp.route("/forced_entry", methods=["POST"])
+@auth_bp.route("/forced-entry", methods=["POST"])
 def forced_entry():
     user = User.query.first()
     user.confirmed = True

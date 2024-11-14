@@ -1,4 +1,3 @@
-# app/models.py
 import enum
 from datetime import datetime
 from typing import Optional
