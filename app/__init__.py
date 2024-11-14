@@ -33,6 +33,22 @@ def create_app():
 
     app.register_blueprint(dashboard_bp)
 
+    from app.views.you_page import you_page_bp
+
+    app.register_blueprint(you_page_bp)
+
+    from app.views.matches_page import matches_page_bp
+
+    app.register_blueprint(matches_page_bp)
+
+    from app.views.about_us_page import about_us_page_bp
+
+    app.register_blueprint(about_us_page_bp)
+
+    from app.views.find_page import find_page_bp
+
+    app.register_blueprint(find_page_bp)
+
     from app.views.profile_manager import profile_manager_bp
 
     app.register_blueprint(profile_manager_bp)

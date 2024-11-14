@@ -1,0 +1,36 @@
+<DOCTYPE? html>
+<html>
+<head>
+    <link rel="stylesheet"
+              href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <ul>
+                    <li><a href="{{ url_for('find_page_bp.find-page') }}" class='nav-link'>Find</a></li>
+                    <li><a href="{{ url_for('matches_page_bp.matches-page') }}" class='nav-link'>Matches</a></li>
+                    <li><a href="{{ url_for('find_page_bp.find-page') }}" class='nav-link'>
+                        <img src="{{url_for('static', filename='images/lets-go-out-logo.png')}}" class="fit-content-in-patent" alt="Company Icon">
+                    </a></li>
+                    <li><a href="{{ url_for('you_page_bp.you-page') }}" class='nav-link'>You</a></li>
+                    <li><a href="{{ url_for('about_us_page_bp.about-us-page') }}" class='nav-link'>About us</a></li>
+                </ul>
+                
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>Let's go out</p>
+    </footer>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>    
+</body>
