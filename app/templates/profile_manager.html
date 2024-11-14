@@ -9,21 +9,16 @@
         
         {{ form.csrf_token }}
         
-        {{ form.name.label }}
-        {{ form.name(value=current_user.profile.name) }}
-        {% if form.name.errors %}
-            <ul class="errors">
-            {% for error in form.name.errors %}
-                <li>{{ error }}</li>{% endfor %}
-            </ul>
-        {% endif %}
+        {% with input = form.name, val = current_user.profile.name %}
+        {% include 'form_input.html' %}
+        {% endwith %}
         <br>
         
         {{ form.gender.label }}
-        {% for value, label in form.gender.choices %}
+        {% for name, value in form.gender.choices %}
             <label>
-                <input type="radio" name="gender" value="{{ value }}" {{ "checked" if current_user.profile.gender == value }}>
-                {{ label }}
+                <input type="radio" name="gender" value="{{ name }}" {{ "checked" if current_user.profile.gender.name == name }}>
+                {{ value }}
             </label>
         {% endfor %}
         
@@ -36,14 +31,9 @@
         {% endif %}
         <br>
 
-        {{ form.description.label }}
-        {{ form.description() }}
-        {% if form.description.errors %}
-            <ul class="errors">
-            {% for error in form.description.errors %}
-                <li>{{ error }}</li>{% endfor %}
-            </ul>
-        {% endif %}
+        {% with input = form.description %}
+        {% include 'form_input.html' %}
+        {% endwith %}
         <br>
 
         {% if form.gender_preferences.errors %}
@@ -51,9 +41,9 @@
                 <span>{{ error }}</span>
             {% endfor %}
         {% endif %}
-        {% for value, label in form.gender_preferences.choices %}
-            <input type="checkbox" name="gender_preferences" value="{{ value }}" {{ "checked" if value in current_user.matching_preferences.gender_preferences}}>
-            {{ label }}
+        {% for name, value in form.gender_preferences.choices %}
+            <input type="checkbox" name="gender_preferences" value="{{ name }}" {{ "checked" if current_user.has_preference_for(name)}}>
+            {{ value }}
         {% endfor %}
 
         <br>
@@ -64,24 +54,14 @@
 
         <label>Age preferences:</label>  
             <br>    
-            {{ form.lower_difference.label }}
-            {{ form.lower_difference(value=current_user.matching_preferences.lower_difference) }}
-            {% if form.lower_difference.errors %}
-                <ul class="errors">
-                {% for error in form.lower_difference.errors %}
-                    <li>{{ error }}</li>{% endfor %}
-                </ul>
-            {% endif %}
+            {% with input = form.lower_difference, val=current_user.matching_preferences.lower_difference %}
+            {% include 'form_input.html' %}
+            {% endwith %}
             <br>
 
-            {{ form.upper_difference.label }}
-            {{ form.upper_difference(value=current_user.matching_preferences.upper_difference) }}
-            {% if form.upper_difference.errors %}
-                <ul class="errors">
-                {% for error in form.upper_difference.errors %}
-                    <li>{{ error }}</li>{% endfor %}
-                </ul>
-            {% endif %}
+            {% with input = form.upper_difference, val=current_user.matching_preferences.upper_difference %}
+            {% include 'form_input.html' %}
+            {% endwith %}
             <br>
         <br>
 

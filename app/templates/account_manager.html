@@ -2,34 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Login</title>
 </head>
 <body>
-    <h1>Register</h1>
-    <form method="post">
-        {{ form.csrf_token }}
+    <form action="{{ url_for('account_manager_bp.account_manager') }}" method="POST">
         
-        {% with input = form.username %}
+        {{ form.csrf_token }}
+
+        {% with input = form.email, val = current_user.email %}
         {% include 'form_input.html' %}
         {% endwith %}
         <br>
 
-        {% with input = form.email %}
+        {% with input = form.old_password %}
         {% include 'form_input.html' %}
         {% endwith %}
         <br>
 
-        {% with input = form.password %}
+        {% with input = form.new_password %}
         {% include 'form_input.html' %}
         {% endwith %}
         <br>
 
-        {% with input = form.confirm %}
+        {% with input = form.new_confirm %}
         {% include 'form_input.html' %}
         {% endwith %}
         <br>
-
+        
+        
         {{ form.submit() }}
+
     </form>
 </body>
 </html>
