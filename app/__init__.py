@@ -1,7 +1,10 @@
 from flask import Flask
+from flask_login import LoginManager
 
 from app.extensions import login_manager
 from app.models import User, db
+
+login_manager = LoginManager()
 
 
 @login_manager.user_loader
@@ -24,18 +27,20 @@ def create_app():
     login_manager.init_app(app)
 
     # Register blueprints
-    from app.auth import auth_bp
+    from app.views.auth import auth_bp
 
     app.register_blueprint(auth_bp)
 
-    from app.dashboard import dashboard_bp
+    from app.views.dashboard import dashboard_bp
 
     app.register_blueprint(dashboard_bp)
 
-    from app.profile_manager import profile_manager_bp
+    from app.views.profile_manager import profile_manager_bp
+
     app.register_blueprint(profile_manager_bp)
 
     from app.profile import profile_bp
+
     app.register_blueprint(profile_bp)
 
     return app

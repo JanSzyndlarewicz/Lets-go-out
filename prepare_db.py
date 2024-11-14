@@ -1,11 +1,8 @@
-from app import create_app
-from app.models import Interests, MatchingPreferences, Profile, User, db
-
 from sqlalchemy.exc import IntegrityError
-
 from werkzeug.security import generate_password_hash
 
-from app.models import db, User, Interests, Profile, Photo, MatchingPreferences, Gender, UserGenderPreference
+from app import create_app
+from app.models import Interests, MatchingPreferences, Photo, Profile, User, available_genders, db
 
 app = create_app()
 
@@ -19,9 +16,9 @@ with app.app_context():
             new_interest = Interests(name=interest_name)
             db.session.add(new_interest)
 
-    username = 'admin'
-    password = 'admin'  # Hash this in production
-    email = 'admin'
+    username = "admin"
+    password = "admin"  # Hash this in production
+    email = "admin"
 
     name = "Admin"
     gender = "male"
@@ -35,11 +32,15 @@ with app.app_context():
     if existing_user is None:
 
         new_photo = Photo(file_extension="jpg")
-        new_profile = Profile(name=name, gender=gender, year_of_birth=year_of_birth, description=description, interests=interests)
+        new_profile = Profile(
+            name=name, gender=gender, year_of_birth=year_of_birth, description=description, interests=interests
+        )
         new_profile.photo = new_photo
         new_user = User(username=username, password=password_hash, email=email)
         new_user.profile = new_profile
-        new_preferences = MatchingPreferences(user=new_user,gender_preferences=["male", "female"], lower_difference=10, upper_difference=8)
+        new_preferences = MatchingPreferences(
+            user=new_user, gender_preferences=["male", "female"], lower_difference=10, upper_difference=8
+        )
 
         db.session.add(new_profile)
         db.session.add(new_user)
@@ -52,6 +53,7 @@ with app.app_context():
             print(e)
     else:
         print(f"User {username} already exists.")
+
     # Adding 15 new users
     new_users = [
         {
@@ -73,6 +75,13 @@ with app.app_context():
         for i in range(1, 16)
     ]
 
+    from app.models import Gender
+
+    def validate_gender(gender):
+        if gender not in available_genders:
+            raise ValueError(f"'{gender}' is not a valid gender. Valid values are: {available_genders}")
+        return gender
+
     for user_data in new_users:
         user = User(
             email=user_data["email"],
@@ -81,15 +90,15 @@ with app.app_context():
         )
         profile = Profile(
             name=user_data["profile"]["name"],
-            gender=user_data["profile"]["gender"],
+            gender=validate_gender(user_data["profile"]["gender"]),
             year_of_birth=user_data["profile"]["year_of_birth"],
             description=user_data["profile"]["description"],
             user=user,
         )
         preferences = MatchingPreferences(
-            gender_preference=user_data["preferences"]["gender_preference"],
-            min_age=user_data["preferences"]["min_age"],
-            max_age=user_data["preferences"]["max_age"],
+            gender_preferences=[validate_gender(user_data["preferences"]["gender_preference"])],
+            lower_difference=user_data["preferences"]["min_age"],
+            upper_difference=user_data["preferences"]["max_age"],
             user=user,
         )
         db.session.add(user)
@@ -98,4 +107,3 @@ with app.app_context():
 
     db.session.commit()
     print("Default interests added.")
-
