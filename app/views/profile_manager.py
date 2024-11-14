@@ -3,29 +3,30 @@ from flask_login import login_required, current_user
 
 from sqlalchemy.exc import IntegrityError
 
-from . import db
-from .forms import ProfileManagerForm
-from .models import available_genders, available_genders_display
+from .. import db
+from ..forms.forms import ProfileManagerForm
+from ..models.models import available_genders, available_genders_display
 
-profile_manager_bp = Blueprint('profile_manager_bp', __name__)
+profile_manager_bp = Blueprint("profile_manager_bp", __name__)
 
-#TODO
-#Image uploading and maybe other fields
+# TODO
+# Image uploading and maybe other fields
 
-@profile_manager_bp.route('/profile_manager', methods=['GET', 'POST'])
+
+@profile_manager_bp.route("/profile_manager", methods=["GET", "POST"])
 @login_required
 def profile_manager():
     form = ProfileManagerForm()
-    #dynamically pass the list of genders to appropriate inputs
-    form.gender_preferences.choices = list(zip(available_genders,available_genders_display))
-    form.gender.choices = list(zip(available_genders,available_genders_display))
-    
-    #setting some default values that cannot be easily set in jinja
-    if request.method == 'GET': 
+    # dynamically pass the list of genders to appropriate inputs
+    form.gender_preferences.choices = list(zip(available_genders, available_genders_display))
+    form.gender.choices = list(zip(available_genders, available_genders_display))
+
+    # setting some default values that cannot be easily set in jinja
+    if request.method == "GET":
         form.description.data = current_user.profile.description
-     
+
     if form.validate_on_submit():
-        
+
         name = form.name.data
         gender = form.gender.data
         description = form.description.data.strip()
@@ -35,7 +36,7 @@ def profile_manager():
         for g in available_genders:
             if g in form.gender_preferences.data:
                 gender_preferences.append(g)
-        
+
         print(description)
 
         current_user.profile.name = name
@@ -52,4 +53,4 @@ def profile_manager():
             print(e)
         return redirect(url_for("profile_manager_bp.profile_manager"))
 
-    return render_template('profile_manager.html', form=form)
+    return render_template("profile_manager.html", form=form)
