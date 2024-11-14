@@ -1,4 +1,5 @@
 from flask import Flask
+
 from app.extensions.extensions import login_manager
 from app.models.models import User, db
 
@@ -24,24 +25,31 @@ def create_app():
 
     # Register blueprints
     from app.auth.auth import auth_bp
+
     app.register_blueprint(auth_bp)
 
     from app.views.find_page import find_page_bp
+
     app.register_blueprint(find_page_bp)
-    
+
     from app.views.about_us_page import about_us_page_bp
+
     app.register_blueprint(about_us_page_bp)
-    
+
     from app.views.you_page import you_page_bp
+
     app.register_blueprint(you_page_bp)
-    
+
     from app.views.matches_page import matches_page_bp
+
     app.register_blueprint(matches_page_bp)
 
     from app.views.profile_manager import profile_manager_bp
+
     app.register_blueprint(profile_manager_bp)
 
     from app.views.profile import profile_bp
+
     app.register_blueprint(profile_bp)
 
     return app

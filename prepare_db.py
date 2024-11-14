@@ -1,10 +1,8 @@
-from app import create_app
-
 from sqlalchemy.exc import IntegrityError
-
 from werkzeug.security import generate_password_hash
 
-from app.models.models import db, User, Interests, Profile, Photo, MatchingPreferences, Gender, UserGenderPreference
+from app import create_app
+from app.models.models import Gender, Interests, MatchingPreferences, Photo, Profile, User, UserGenderPreference, db
 
 app = create_app()
 

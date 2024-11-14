@@ -1,15 +1,15 @@
 # app/models.py
-from flask_login import UserMixin
-from flask_sqlalchemy import SQLAlchemy
 import enum
 from datetime import datetime
-from typing import Optional, Literal, get_args
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum, Table
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm import relationship, Mapped, mapped_column, mapper
+from typing import Literal, Optional, get_args
 
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, DateTime, Enum, ForeignKey, Integer, String, Table
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Mapped, mapped_column, mapper, relationship
+from werkzeug.security import check_password_hash, generate_password_hash
 
 db = SQLAlchemy()
 Base = declarative_base()
@@ -43,9 +43,7 @@ class User(db.Model, UserMixin):
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
-    profile: Mapped["Profile"] = relationship(
-        "Profile", uselist=False, back_populates="user"
-    )
+    profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="user")
     matching_preferences: Mapped["MatchingPreferences"] = relationship(
         "MatchingPreferences", uselist=False, back_populates="user"
     )
@@ -114,17 +112,13 @@ class Profile(db.Model):
     description: Mapped[str] = mapped_column(String(500), nullable=True)
     photo_id: Mapped[Optional[int]] = mapped_column(ForeignKey("photo.id"))
     photo: Mapped[Optional["Photo"]] = relationship("Photo", back_populates="profile")
-    interests = relationship(
-        "Interests", secondary=profile_interests_table, backref="profiles"
-    )
+    interests = relationship("Interests", secondary=profile_interests_table, backref="profiles")
 
 
 class Photo(db.Model):
     __tablename__ = "photo"
     id: Mapped[int] = mapped_column(primary_key=True)
-    profile: Mapped["Profile"] = relationship(
-        "Profile", uselist=False, back_populates="photo"
-    )
+    profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="photo")
     file_extension: Mapped[str] = mapped_column(String(8))
 
 
@@ -147,18 +141,10 @@ class DateProposal(db.Model):
     )
     proposal_message: Mapped[Optional[str]] = mapped_column(String(250))
     response_message: Mapped[Optional[str]] = mapped_column(String(250))
-    proposal_timestamp: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow
-    )
-    response_timestamp: Mapped[Optional[datetime]] = mapped_column(
-        DateTime, nullable=True
-    )
-    proposer: Mapped["User"] = relationship(
-        "User", back_populates="sent_proposals", foreign_keys=[proposer_id]
-    )
-    recipient: Mapped["User"] = relationship(
-        "User", back_populates="received_proposals", foreign_keys=[recipient_id]
-    )
+    proposal_timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    response_timestamp: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    proposer: Mapped["User"] = relationship("User", back_populates="sent_proposals", foreign_keys=[proposer_id])
+    recipient: Mapped["User"] = relationship("User", back_populates="received_proposals", foreign_keys=[recipient_id])
 
 
 class LikingAssociation(db.Model):
@@ -179,9 +165,7 @@ class UserGenderPreference(db.Model):
         ForeignKey("matching_preferences.id", ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True,
     )
-    matching_preferences: Mapped["MatchingPreferences"] = relationship(
-        "MatchingPreferences", back_populates="genders"
-    )
+    matching_preferences: Mapped["MatchingPreferences"] = relationship("MatchingPreferences", back_populates="genders")
     gender: Mapped[Gender] = mapped_column(
         Enum(
             *get_args(Gender),
