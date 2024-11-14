@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.models import MatchingPreferences, Profile, User, db, Gender
+from app.models import Gender, MatchingPreferences, Profile, User, db
 from app.utils.algorithm import suggest_matches
 
 
@@ -40,7 +40,9 @@ def create_test_data(session):
         year_of_birth=1990,
         description="User 2's profile",
     )
-    preferences2 = MatchingPreferences(user_id=2, gender_preferences=[Gender.MALE], lower_difference=5, upper_difference=5)
+    preferences2 = MatchingPreferences(
+        user_id=2, gender_preferences=[Gender.MALE], lower_difference=5, upper_difference=5
+    )
     user2.profile = profile2
     user2.matching_preferences = preferences2
 
@@ -98,7 +100,9 @@ def test_no_matches_by_age(test_session):
         year_of_birth=2010,
         description="User 4's profile",
     )
-    preferences3 = MatchingPreferences(user_id=4, gender_preferences=[Gender.FEMALE], lower_difference=1, upper_difference=1)
+    preferences3 = MatchingPreferences(
+        user_id=4, gender_preferences=[Gender.FEMALE], lower_difference=1, upper_difference=1
+    )
     user3.profile = profile3
     user3.matching_preferences = preferences3
 
@@ -120,7 +124,9 @@ def test_blocked_users(test_session):
         year_of_birth=1991,
         description="User 1's profile",
     )
-    preferences1 = MatchingPreferences(user_id=1, gender_preferences=[Gender.FEMALE], lower_difference=5, upper_difference=5)
+    preferences1 = MatchingPreferences(
+        user_id=1, gender_preferences=[Gender.FEMALE], lower_difference=5, upper_difference=5
+    )
     user1.profile = profile1
     user1.matching_preferences = preferences1
 
@@ -132,7 +138,9 @@ def test_blocked_users(test_session):
         year_of_birth=1990,
         description="User 2's profile",
     )
-    preferences2 = MatchingPreferences(user_id=2, gender_preferences=[Gender.FEMALE], lower_difference=5, upper_difference=5)
+    preferences2 = MatchingPreferences(
+        user_id=2, gender_preferences=[Gender.FEMALE], lower_difference=5, upper_difference=5
+    )
     user2.profile = profile2
     user2.matching_preferences = preferences2
 
