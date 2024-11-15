@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from app import db
 from app.forms import ProfileManagerForm
 from app.models import Gender, Photo
-from app.utils.photo import generate_photo_url
+from app.utils.photo import generate_photo_url, os_photo_url
 from app.views.auth import confirmed_required
 
 logger = logging.getLogger(__name__)
@@ -66,9 +66,11 @@ def profile_manager():
 
 def handle_photo_upload(photo, current_user) -> Photo:
     if current_user.profile.photo:
-        old_photo_path = generate_photo_url(current_user.profile.photo)
+        old_photo_path = os.path.join(current_app.config["UPLOAD_FOLDER"], f"{current_user.profile.photo.id}.{current_user.profile.photo.file_extension}")
         if os.path.exists(old_photo_path):
             os.remove(old_photo_path)
+        else:
+            logger.error(f"Photo path {old_photo_path} does not exist")
 
         db.session.delete(current_user.profile.photo)
 
@@ -78,8 +80,7 @@ def handle_photo_upload(photo, current_user) -> Photo:
     db.session.add(new_photo)
     db.session.commit()
 
-    new_photo_path = os.path.join(current_app.config["UPLOAD_FOLDER"], f"{new_photo.id}.{extension}")
-    photo.save(new_photo_path)
+    photo.save(os_photo_url(new_photo))
 
     current_user.profile.photo = new_photo
 
