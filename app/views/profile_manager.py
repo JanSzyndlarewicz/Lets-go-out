@@ -64,7 +64,7 @@ def profile_manager():
     return render_template("profile_manager.html", form=form)
 
 
-def handle_photo_upload(new_photo, user) -> Photo:
+def handle_photo_upload(photo, user) -> Photo:
     if user.profile.photo:
         old_photo_path = os_photo_url(user.profile.photo)
         if os.path.exists(old_photo_path):
@@ -74,13 +74,13 @@ def handle_photo_upload(new_photo, user) -> Photo:
 
         db.session.delete(user.profile.photo)
 
-    extension = secure_filename(new_photo.filename).split(".")[-1]
+    extension = secure_filename(photo.filename).split(".")[-1]
     new_photo = Photo(profile=user.profile, file_extension=extension)
 
     db.session.add(new_photo)
     db.session.commit()
 
-    new_photo.save(os_photo_url(new_photo))
+    photo.save(os_photo_url(new_photo))
 
     user.profile.photo = new_photo
 
