@@ -1,12 +1,15 @@
 import logging
+import os
 
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, current_app
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
+from werkzeug.utils import secure_filename
 
 from app import db
 from app.forms import ProfileManagerForm
-from app.models import Gender
+from app.models import Gender, Photo
+from app.utils.photo import generate_photo_url
 from app.views.auth import confirmed_required
 
 logger = logging.getLogger(__name__)
@@ -27,6 +30,10 @@ def profile_manager():
 
     if request.method == "GET":
         form.description.data = current_user.profile.description
+        photo_url = None
+        if current_user.profile.photo:
+            photo_url = generate_photo_url(current_user.profile.photo)
+        return render_template("profile_manager.html", form=form, photo_url=photo_url)
 
     if form.validate_on_submit():
         name = form.name.data
@@ -36,7 +43,9 @@ def profile_manager():
         upper_difference = form.upper_difference.data
         gender_preferences = [Gender[gp] for gp in form.gender_preferences.data]
 
-        logger.info(description)
+        if form.photo.data:
+            photo = form.photo.data
+            handle_photo_upload(photo, current_user)
 
         current_user.profile.name = name
         current_user.profile.gender = gender
@@ -53,3 +62,27 @@ def profile_manager():
         return redirect(url_for("profile_manager_bp.profile_manager"))
 
     return render_template("profile_manager.html", form=form)
+
+
+def handle_photo_upload(photo, current_user) -> Photo:
+    if current_user.profile.photo:
+        old_photo_path = os.path.join(current_app.config['UPLOAD_FOLDER'], f"{current_user.profile.photo.id}.{current_user.profile.photo.file_extension}")
+        if os.path.exists(old_photo_path):
+            os.remove(old_photo_path)
+
+        db.session.delete(current_user.profile.photo)
+
+    extension = secure_filename(photo.filename).split('.')[-1]
+    new_photo = Photo(profile=current_user.profile, file_extension=extension)
+
+    db.session.add(new_photo)
+    db.session.commit()
+
+    new_photo_path = os.path.join(current_app.config['UPLOAD_FOLDER'], f"{new_photo.id}.{extension}")
+    photo.save(new_photo_path)
+
+    current_user.profile.photo = new_photo
+
+    return new_photo
+
+

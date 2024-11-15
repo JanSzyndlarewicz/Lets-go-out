@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import FileField, IntegerField, RadioField, SelectMultipleField, StringField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, InputRequired, NumberRange
+from flask_wtf.file import FileField
+from wtforms import IntegerField, RadioField, SelectMultipleField, StringField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, InputRequired, NumberRange, Optional
 
 
 class ProfileManagerForm(FlaskForm):
@@ -22,4 +23,5 @@ class ProfileManagerForm(FlaskForm):
             NumberRange(min=1, message="Age difference must be positive."),
         ],
     )
+    photo = FileField("Profile Photo", validators=[Optional()])
     submit = SubmitField("Change")
