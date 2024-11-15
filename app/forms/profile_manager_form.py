@@ -8,7 +8,7 @@ class ProfileManagerForm(FlaskForm):
     name = StringField("Name", [InputRequired(message="Name must not be empty.")])
     gender = RadioField("Gender")
     description = TextAreaField("Description", [])
-    gender_preferences = SelectMultipleField("Gender Preferences")
+    gender_preferences = SelectMultipleField("Gender preferences")
     lower_difference = IntegerField(
         "Lower age difference",
         [

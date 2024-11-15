@@ -1,7 +1,7 @@
 import logging
 import os
 
-from flask import Blueprint, current_app, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
@@ -64,24 +64,24 @@ def profile_manager():
     return render_template("profile_manager.html", form=form)
 
 
-def handle_photo_upload(photo, current_user) -> Photo:
-    if current_user.profile.photo:
-        old_photo_path = os.path.join(current_app.config["UPLOAD_FOLDER"], f"{current_user.profile.photo.id}.{current_user.profile.photo.file_extension}")
+def handle_photo_upload(new_photo, user) -> Photo:
+    if user.profile.photo:
+        old_photo_path = os_photo_url(user.profile.photo)
         if os.path.exists(old_photo_path):
             os.remove(old_photo_path)
         else:
             logger.error(f"Photo path {old_photo_path} does not exist")
 
-        db.session.delete(current_user.profile.photo)
+        db.session.delete(user.profile.photo)
 
-    extension = secure_filename(photo.filename).split(".")[-1]
-    new_photo = Photo(profile=current_user.profile, file_extension=extension)
+    extension = secure_filename(new_photo.filename).split(".")[-1]
+    new_photo = Photo(profile=user.profile, file_extension=extension)
 
     db.session.add(new_photo)
     db.session.commit()
 
-    photo.save(os_photo_url(new_photo))
+    new_photo.save(os_photo_url(new_photo))
 
-    current_user.profile.photo = new_photo
+    user.profile.photo = new_photo
 
     return new_photo
