@@ -8,27 +8,27 @@
     <h1>Login</h1>
     <form method="post" action="{{ url_for('auth_bp.login') }}">
         {{ form.csrf_token }}
-
-        {% with input = form.username %}
-        {% include 'form_input.html' %}
-        {% endwith %}
-        <br>
         
-        {% with input = form.password %}
-        {% include 'form_input.html' %}
-        {% endwith %}
+        {{ form.username.label }}
+        {{ form.username() }}
+        {% if form.username.errors %}
+            <ul class="errors">
+            {% for error in form.username.errors %}
+                <li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
 
+        <br>
+        {{ form.password.label }}
+        {{ form.password() }}
+        {% if form.password.errors %}
+            <ul class="errors">
+            {% for error in form.password.errors %}
+                <li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
         <br>
         {{ form.submit() }}
     </form>
-    
-
-    <!--THIS IS EXCLUSIVELY FOR TESTING AND MUST BE REMOVED IN THE FINAL VERSION-->
-    <br>
-    <form method="POST" action="{{ url_for('auth_bp.forced_entry') }}">
-        <input type="submit" value="Force entry">
-    </form>
-
-
 </body>
 </html>
