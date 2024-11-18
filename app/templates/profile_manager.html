@@ -5,7 +5,7 @@
     <title>Login</title>
 </head>
 <body>
-    <form action="{{ url_for('profile_manager_bp.profile_manager') }}" method="POST">
+    <form action="{{ url_for('profile_manager_bp.profile_manager') }}" method="POST" enctype="multipart/form-data">
         
         {{ form.csrf_token }}
         
@@ -48,7 +48,17 @@
 
         <br>
         
+        <label>Profile Photo:</label>
+        {% if photo_url %}
+            <div>
+                <img src="{{ photo_url }}" alt="Profile Photo" width="100" height="100">
+            </div>
+        {% endif %}
+        <br>
 
+        <input type="file" name="photo" accept="image/*">
+
+        <br>
 
         <br>
 
