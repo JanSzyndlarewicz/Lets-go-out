@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Find</h2>
-    <p>Find a place to go out</p>
+    <main class="find-page-content">
+        <div class="date-invitation-card outline">
+            <div class="fill-width centered-column">
+                <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Logo" class="logo">
+            </div>
+            {% include 'components/date_request.html' %}
+            
+        </div>
+    </main>
 {% endblock %}

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainColor = getComputedStyle(root).getPropertyValue('--primary-color').trim();;
 
     // Retrieve the saved clicked link from localStorage
-    const savedLink = localStorage.getItem('clickedLink');
+    const savedLink = window.location.href;
 
     links.forEach(link => {
         // If the link matches the saved one, apply the color
@@ -21,11 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Set color for clicked link
             this.style.color = mainColor;
 
-            // Save the clicked link's href to localStorage
-            localStorage.setItem('clickedLink', this.href);
-
             // Redirect to the link's href after the color change
             window.location.href = this.href;
         });
     });
 });
+
+

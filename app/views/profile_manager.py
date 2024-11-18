@@ -1,12 +1,16 @@
 import logging
+import os
 
 from flask import Blueprint, redirect, render_template, request, url_for
-from flask_login import current_user, login_required
+from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
+from werkzeug.utils import secure_filename
 
 from app import db
 from app.forms import ProfileManagerForm
-from app.models import Gender
+from app.models import Gender, Photo
+from app.utils.photo import generate_photo_url, os_photo_url
+from app.views.auth import confirmed_required
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +21,7 @@ profile_manager_bp = Blueprint("profile_manager_bp", __name__)
 
 
 @profile_manager_bp.route("/profile-manager", methods=["GET", "POST"])
-@login_required
+@confirmed_required
 def profile_manager():
     form = ProfileManagerForm()
 
@@ -26,6 +30,10 @@ def profile_manager():
 
     if request.method == "GET":
         form.description.data = current_user.profile.description
+        photo_url = None
+        if current_user.profile.photo:
+            photo_url = generate_photo_url(current_user.profile.photo)
+        return render_template("profile_manager.html", form=form, photo_url=photo_url)
 
     if form.validate_on_submit():
         name = form.name.data
@@ -35,7 +43,9 @@ def profile_manager():
         upper_difference = form.upper_difference.data
         gender_preferences = [Gender[gp] for gp in form.gender_preferences.data]
 
-        logger.info(description)
+        if form.photo.data:
+            photo = form.photo.data
+            handle_photo_upload(photo, current_user)
 
         current_user.profile.name = name
         current_user.profile.gender = gender
@@ -52,3 +62,26 @@ def profile_manager():
         return redirect(url_for("profile_manager_bp.profile_manager"))
 
     return render_template("profile_manager.html", form=form)
+
+
+def handle_photo_upload(photo, user) -> Photo:
+    if user.profile.photo:
+        old_photo_path = os_photo_url(user.profile.photo)
+        if os.path.exists(old_photo_path):
+            os.remove(old_photo_path)
+        else:
+            logger.error(f"Photo path {old_photo_path} does not exist")
+
+        db.session.delete(user.profile.photo)
+
+    extension = secure_filename(photo.filename).split(".")[-1]
+    new_photo = Photo(profile=user.profile, file_extension=extension)
+
+    db.session.add(new_photo)
+    db.session.commit()
+
+    photo.save(os_photo_url(new_photo))
+
+    user.profile.photo = new_photo
+
+    return new_photo
