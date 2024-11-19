@@ -2,7 +2,7 @@ from flask import Blueprint, render_template
 
 from app.views.auth import confirmed_required
 
-from app.forms import DateRequestForm
+from app.forms import DateProposalForm
 
 find_page_bp = Blueprint("find_page_bp", __name__)
 
@@ -10,7 +10,7 @@ find_page_bp = Blueprint("find_page_bp", __name__)
 @find_page_bp.route("/find-page")
 @confirmed_required
 def find_page():
-    date_request_form = DateRequestForm(
+    date_request_form = DateProposalForm(
         message_label_text="Optional text attached to accept/reject/reschedule", given_date="2021-01-01"
     )
     is_requesting = True
