@@ -34,6 +34,7 @@ def profile_manager():
     if form.validate_on_submit():
         name = form.name.data
         gender = Gender[form.gender.data]
+        year_of_birth = form.year_of_birth.data
         description = form.description.data.strip()
         lower_difference = form.lower_difference.data
         upper_difference = form.upper_difference.data
@@ -45,6 +46,7 @@ def profile_manager():
 
         current_user.profile.name = name
         current_user.profile.gender = gender
+        current_user.profile.year_of_birth = year_of_birth
         current_user.profile.description = description
         current_user.matching_preferences.gender_preferences = gender_preferences
         current_user.matching_preferences.lower_difference = lower_difference

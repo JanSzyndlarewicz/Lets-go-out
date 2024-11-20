@@ -1,8 +1,7 @@
-from wsgiref.validate import validator
-
 from flask_wtf import FlaskForm
-from wtforms import DateField, StringField, SubmitField
+from wtforms import DateField, StringField
 from wtforms.validators import DataRequired, InputRequired
+
 
 class DateRequestForm(FlaskForm):
     message = StringField(

@@ -1,4 +1,4 @@
-from flask import url_for, current_app
+from flask import current_app, url_for
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 

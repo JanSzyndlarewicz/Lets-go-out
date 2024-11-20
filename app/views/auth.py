@@ -144,3 +144,8 @@ def resend():
     send_email(current_user.email, subject, contents)
 
     return redirect(url_for("auth_bp.unconfirmed"))
+
+
+@auth_bp.route("/")
+def index():
+    return redirect(url_for("auth_bp.login"))
