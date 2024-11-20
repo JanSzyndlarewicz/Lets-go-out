@@ -9,15 +9,11 @@ from werkzeug.utils import secure_filename
 from app import db
 from app.forms import ProfileManagerForm
 from app.models import Gender, Photo
-from app.utils.photo import generate_photo_url, os_photo_url
 from app.views.auth import confirmed_required
 
 logger = logging.getLogger(__name__)
 
 profile_manager_bp = Blueprint("profile_manager_bp", __name__)
-
-# TODO
-# Image uploading and maybe other fields
 
 
 @profile_manager_bp.route("/profile-manager", methods=["GET", "POST"])
@@ -32,7 +28,7 @@ def profile_manager():
         form.description.data = current_user.profile.description
         photo_url = None
         if current_user.profile.photo:
-            photo_url = generate_photo_url(current_user.profile.photo)
+            photo_url = current_user.profile.photo.flask_photo_url
         return render_template("profile_manager.html", form=form, photo_url=photo_url)
 
     if form.validate_on_submit():
@@ -66,7 +62,7 @@ def profile_manager():
 
 def handle_photo_upload(photo, user) -> Photo:
     if user.profile.photo:
-        old_photo_path = os_photo_url(user.profile.photo)
+        old_photo_path = user.profile.photo.os_photo_url
         if os.path.exists(old_photo_path):
             os.remove(old_photo_path)
         else:
@@ -80,7 +76,7 @@ def handle_photo_upload(photo, user) -> Photo:
     db.session.add(new_photo)
     db.session.commit()
 
-    photo.save(os_photo_url(new_photo))
+    photo.save(new_photo.os_photo_url)
 
     user.profile.photo = new_photo
 
