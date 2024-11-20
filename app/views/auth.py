@@ -148,4 +148,6 @@ def resend():
 
 @auth_bp.route("/")
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for("find_page_bp.find_page"))
     return redirect(url_for("auth_bp.login"))
