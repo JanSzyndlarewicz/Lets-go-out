@@ -190,9 +190,7 @@ def create_user_with_profile(registration_data, profile_form):
         year_of_birth=profile_form.year_of_birth.data,
     )
 
-    new_user.matching_preferences.gender_preferences = [
-        Gender[gp] for gp in profile_form.gender_preferences.data
-    ]
+    new_user.matching_preferences.gender_preferences = [Gender[gp] for gp in profile_form.gender_preferences.data]
     new_user.matching_preferences.lower_difference = profile_form.lower_difference.data
     new_user.matching_preferences.upper_difference = profile_form.upper_difference.data
 
