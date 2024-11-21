@@ -2,11 +2,14 @@ from functools import wraps
 
 from flask import Blueprint
 from flask import current_app as app
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy.exc import IntegrityError
 
 from app import User, db
 from app.forms import LoginForm, RegisterForm
+from app.forms.user_data_fulfilment import ProfileDataFulfilment
+from app.models import Gender, Profile
 from app.utils import send_email
 
 auth_bp = Blueprint("auth_bp", __name__)
@@ -93,28 +96,63 @@ def logout():
 @anonymous_required
 def register():
     form = RegisterForm()
+
     if form.validate_on_submit():
+        session["registration_data"] = {
+            "username": form.username.data,
+            "email": form.email.data,
+            "password": form.password.data,
+        }
+        return redirect(url_for("auth_bp.register", step="complete-profile"))
 
-        username = form.username.data
-        password = form.password.data
-        email = form.email.data
+    step = request.args.get("step", "register")
 
-        new_user = User(username=username, email=email)
-        new_user.set_password(password)
-        db.session.add(new_user)
-        db.session.commit()
+    profile_form = ProfileDataFulfilment()
+    profile_form.gender.choices = [(gender.name, gender.value) for gender in Gender]
+    profile_form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
 
-        token = new_user.generate_token()
-        confirm_url = url_for("auth_bp.confirm", token=token, _external=True)
-        contents = render_template("confirmation_email.html", url=confirm_url)
-        subject = "Email confirmation"
+    if step == "complete-profile" and "registration_data" in session:
 
-        send_email(email, subject, contents)
+        if profile_form.validate_on_submit():
+            registration_data = session["registration_data"]
+            new_user = User(
+                username=registration_data["username"],
+                email=registration_data["email"],
+                password=registration_data["password"],
+            )
 
-        login_user(new_user)
-        return redirect(url_for("auth_bp.unconfirmed"))
+            new_user.profile = Profile(
+                name=profile_form.name.data,
+                gender=Gender[profile_form.gender.data],
+                year_of_birth=profile_form.year_of_birth.data,
+            )
 
-    return render_template("register.html", form=form)
+            new_user.matching_preferences.gender_preferences = [
+                Gender[gp] for gp in profile_form.gender_preferences.data
+            ]
+            new_user.matching_preferences.lower_difference = profile_form.lower_difference.data
+            new_user.matching_preferences.upper_difference = profile_form.upper_difference.data
+
+            db.session.add(new_user)
+            try:
+                db.session.commit()
+                login_user(new_user)  # TODO For development purposes only
+                session.pop("registration_data", None)
+
+                token = new_user.generate_token()
+                confirm_url = url_for("auth_bp.confirm", token=token, _external=True)
+                contents = render_template("confirmation_email.html", url=confirm_url)
+                subject = "Email confirmation"
+                send_email(registration_data["email"], subject, contents)
+
+                login_user(new_user)
+                return redirect(url_for("auth_bp.unconfirmed"))
+            except IntegrityError:
+                db.session.rollback()
+                flash("An error occurred while creating your account.")
+                return redirect(url_for("auth_bp.register"))
+
+    return render_template("register.html", form=form, profile_form=profile_form, step=step)
 
 
 @auth_bp.route("/confirm/<token>", methods=["GET", "POST"])

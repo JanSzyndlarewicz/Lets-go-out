@@ -2,34 +2,111 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Registration and Profile Setup</title>
+    <style>
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+        }
+    </style>
+    <script>
+        function switchStep(step) {
+            document.querySelectorAll('.form-step').forEach(function(formStep) {
+                formStep.classList.remove('active');
+            });
+            document.getElementById(step).classList.add('active');
+
+            document.querySelectorAll('.form-step').forEach(function(formStep) {
+                if (!formStep.classList.contains('active')) {
+                    formStep.querySelectorAll('input[required], select[required], textarea[required]').forEach(function(input) {
+                        input.removeAttribute('required');
+                    });
+                } else {
+                    formStep.querySelectorAll('input, select, textarea').forEach(function(input) {
+                        input.setAttribute('required', 'true');
+                    });
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-    <h1>Register</h1>
+    <h1>Complete Your Registration</h1>
+
     <form method="post">
         {{ form.csrf_token }}
-        
-        {% with input = form.username %}
-        {% include 'form_input.html' %}
-        {% endwith %}
-        <br>
 
-        {% with input = form.email %}
-        {% include 'form_input.html' %}
-        {% endwith %}
-        <br>
+        <div id="register" class="form-step {% if step == 'register' %}active{% endif %}">
+            {% with input = form.username %}
+            {% include 'form_input.html' %}
+            {% endwith %}
+            <br>
 
-        {% with input = form.password %}
-        {% include 'form_input.html' %}
-        {% endwith %}
-        <br>
+            {% with input = form.email %}
+            {% include 'form_input.html' %}
+            {% endwith %}
+            <br>
 
-        {% with input = form.confirm %}
-        {% include 'form_input.html' %}
-        {% endwith %}
-        <br>
+            {% with input = form.password %}
+            {% include 'form_input.html' %}
+            {% endwith %}
+            <br>
 
-        {{ form.submit() }}
+            {% with input = form.confirm %}
+            {% include 'form_input.html' %}
+            {% endwith %}
+            <br>
+
+            <input type="hidden" name="step" value="register">
+            <button type="submit">Next</button>
+        </div>
+
+        <div id="complete-profile" class="form-step {% if step == 'complete-profile' %}active{% endif %}">
+            {% with input = profile_form.name %}
+            {% include 'form_input.html' %}
+            {% endwith %}
+            <br>
+
+            {{ profile_form.gender.label }}
+            {% for name, value in profile_form.gender.choices %}
+                <label>
+                    <input type="radio" name="gender" value="{{ name }}" {% if name == profile_form.gender.data %}checked{% endif %}>
+                    {{ value }}
+                </label>
+            {% endfor %}
+            <br>
+
+            {% with input = profile_form.year_of_birth %}
+            {% include 'form_input.html' %}
+            {% endwith %}
+            <br>
+            <label>Age preferences:</label>
+            <br>
+            {% with input = profile_form.lower_difference %}
+            {% include 'form_input.html' %}
+            {% endwith %}
+            <br>
+
+            {% with input = profile_form.upper_difference %}
+            {% include 'form_input.html' %}
+            {% endwith %}
+            <br>
+            <br>
+
+            <input type="hidden" name="step" value="complete-profile">
+            <button type="submit">Submit</button>
+        </div>
+
     </form>
+
+    <script>
+        {% if step == 'complete-profile' %}
+            switchStep('complete-profile');
+        {% else %}
+            switchStep('register');
+        {% endif %}
+    </script>
 </body>
 </html>

@@ -30,4 +30,4 @@ class RegisterForm(FlaskForm):
             Email(message="Please provide a correct email address."),
         ],
     )
-    submit = SubmitField("Submit")
+    submit = SubmitField("Next")
