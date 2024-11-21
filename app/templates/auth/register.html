@@ -13,21 +13,11 @@
     </style>
     <script>
         function switchStep(step) {
-            document.querySelectorAll('.form-step').forEach(function(formStep) {
-                formStep.classList.remove('active');
-            });
-            document.getElementById(step).classList.add('active');
-
-            document.querySelectorAll('.form-step').forEach(function(formStep) {
-                if (!formStep.classList.contains('active')) {
-                    formStep.querySelectorAll('input[required], select[required], textarea[required]').forEach(function(input) {
-                        input.removeAttribute('required');
-                    });
-                } else {
-                    formStep.querySelectorAll('input, select, textarea').forEach(function(input) {
-                        input.setAttribute('required', 'true');
-                    });
-                }
+            document.querySelectorAll('.form-step').forEach(formStep => {
+                formStep.classList.toggle('active', formStep.id === step);
+                formStep.querySelectorAll('input, select, textarea').forEach(input => {
+                    input.required = formStep.classList.contains('active');
+                });
             });
         }
     </script>
@@ -38,7 +28,7 @@
     <form method="post">
         {{ form.csrf_token }}
 
-        <div id="register" class="form-step {% if step == 'register' %}active{% endif %}">
+        <div id="register" class="form-step">
             {% with input = form.username %}
             {% include 'components/form_input.html' %}
             {% endwith %}
@@ -63,7 +53,7 @@
             <button type="submit">Next</button>
         </div>
 
-        <div id="complete-profile" class="form-step {% if step == 'complete-profile' %}active{% endif %}">
+        <div id="complete-profile" class="form-step">
             {% with input = profile_form.name %}
             {% include 'components/form_input.html' %}
             {% endwith %}
@@ -98,15 +88,10 @@
             <input type="hidden" name="step" value="complete-profile">
             <button type="submit">Submit</button>
         </div>
-
     </form>
 
     <script>
-        {% if step == 'complete-profile' %}
-            switchStep('complete-profile');
-        {% else %}
-            switchStep('register');
-        {% endif %}
+        switchStep("{{ step }}");
     </script>
 </body>
 </html>
