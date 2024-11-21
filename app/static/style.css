@@ -124,7 +124,7 @@ header ul li {
 }
 
 
-.fit-content-in-patent {
+.fit-content-in-parent {
     object-fit: contain;
     /* min-width: 100%; */
     /* width: 100%; */
