@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import Blueprint
+from flask import Blueprint, current_app
 from flask import current_app as app
 from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
@@ -100,13 +100,19 @@ def register():
 
     step = request.args.get("step", "register")
 
+    if step == "complete-profile" and "registration_data" not in session:
+        return redirect(url_for("auth_bp.register", step="register"))
+
     if step == "register" and process_registration_form(form):
         return redirect(url_for("auth_bp.register", step="complete-profile"))
 
     if step == "complete-profile" and process_profile_form(profile_form):
-        return redirect(url_for("auth_bp.unconfirmed"))
+        return redirect(url_for("find_page_bp.find_page"))
 
-    return render_template("auth/register.html", form=form, profile_form=profile_form, step=step)
+    if step == "register":
+        return render_template("auth/register.html", form=form, step=step)
+    elif step == "complete-profile":
+        return render_template("auth/complete_profile.html", profile_form=profile_form, step=step)
 
 
 @auth_bp.route("/confirm/<token>", methods=["GET", "POST"])
@@ -148,7 +154,9 @@ def index():
 def initialize_profile_form():
     profile_form = ProfileDataFulfilment()
     profile_form.gender.choices = [(gender.name, gender.value) for gender in Gender]
-    profile_form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
+    profile_form.gender_preferences.choices = [
+        (gender.name, gender.value) for gender in Gender
+    ]
     return profile_form
 
 
@@ -190,7 +198,9 @@ def create_user_with_profile(registration_data, profile_form):
         year_of_birth=profile_form.year_of_birth.data,
     )
 
-    new_user.matching_preferences.gender_preferences = [Gender[gp] for gp in profile_form.gender_preferences.data]
+    new_user.matching_preferences.gender_preferences = [
+        Gender[gp] for gp in profile_form.gender_preferences.data
+    ]
     new_user.matching_preferences.lower_difference = profile_form.lower_difference.data
     new_user.matching_preferences.upper_difference = profile_form.upper_difference.data
 

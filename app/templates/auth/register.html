@@ -2,96 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registration and Profile Setup</title>
-    <style>
-        .form-step {
-            display: none;
-        }
-        .form-step.active {
-            display: block;
-        }
-    </style>
-    <script>
-        function switchStep(step) {
-            document.querySelectorAll('.form-step').forEach(formStep => {
-                formStep.classList.toggle('active', formStep.id === step);
-                formStep.querySelectorAll('input, select, textarea').forEach(input => {
-                    input.required = formStep.classList.contains('active');
-                });
-            });
-        }
-    </script>
+    <title>Registration</title>
 </head>
 <body>
-    <h1>Complete Your Registration</h1>
+<h1>Register</h1>
+<form method="post">
+    {{ form.csrf_token }}
 
-    <form method="post">
-        {{ form.csrf_token }}
+    <div id="register">
+        {% with input = form.username %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+        <br>
 
-        <div id="register" class="form-step">
-            {% with input = form.username %}
-            {% include 'components/form_input.html' %}
-            {% endwith %}
-            <br>
+        {% with input = form.email %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+        <br>
 
-            {% with input = form.email %}
-            {% include 'components/form_input.html' %}
-            {% endwith %}
-            <br>
+        {% with input = form.password %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+        <br>
 
-            {% with input = form.password %}
-            {% include 'components/form_input.html' %}
-            {% endwith %}
-            <br>
+        {% with input = form.confirm %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+        <br>
 
-            {% with input = form.confirm %}
-            {% include 'components/form_input.html' %}
-            {% endwith %}
-            <br>
-
-            <input type="hidden" name="step" value="register">
-            <button type="submit">Next</button>
-        </div>
-
-        <div id="complete-profile" class="form-step">
-            {% with input = profile_form.name %}
-            {% include 'components/form_input.html' %}
-            {% endwith %}
-            <br>
-
-            {{ profile_form.gender.label }}
-            {% for name, value in profile_form.gender.choices %}
-                <label>
-                    <input type="radio" name="gender" value="{{ name }}" {% if name == profile_form.gender.data %}checked{% endif %}>
-                    {{ value }}
-                </label>
-            {% endfor %}
-            <br>
-
-            {% with input = profile_form.year_of_birth %}
-            {% include 'components/form_input.html' %}
-            {% endwith %}
-            <br>
-            <label>Age preferences:</label>
-            <br>
-            {% with input = profile_form.lower_difference %}
-            {% include 'components/form_input.html' %}
-            {% endwith %}
-            <br>
-
-            {% with input = profile_form.upper_difference %}
-            {% include 'components/form_input.html' %}
-            {% endwith %}
-            <br>
-            <br>
-
-            <input type="hidden" name="step" value="complete-profile">
-            <button type="submit">Submit</button>
-        </div>
-    </form>
-
-    <script>
-        switchStep("{{ step }}");
-    </script>
+        <input type="hidden" name="step" value="register">
+        <button type="submit">Next</button>
+    </div>
+</form>
 </body>
 </html>

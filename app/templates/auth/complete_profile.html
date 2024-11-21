@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complete Profile</title>
+</head>
+<body>
+<h1>Complete Your Profile</h1>
+<form method="post">
+    {{ profile_form.csrf_token }}
+
+    <div id="complete-profile">
+        {% with input = profile_form.name %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+        <br>
+
+        {{ profile_form.gender.label }}
+        {% for name, value in profile_form.gender.choices %}
+        <label>
+            <input type="radio" name="gender" value="{{ name }}" {% if name== profile_form.gender.data %}checked{% endif
+                   %}>
+            {{ value }}
+        </label>
+        {% endfor %}
+        <br>
+
+        {% if profile_form.gender_preferences.errors %}
+        {% for error in profile_form.gender_preferences.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
+        {% endif %}
+        {% for name, value in profile_form.gender_preferences.choices %}
+        <input type="checkbox" name="gender_preferences" value="{{ name }}">
+        {{ value }}
+        {% endfor %}
+        <br>
+
+        {% with input = profile_form.year_of_birth %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+        <br>
+        <label>Age preferences:</label>
+        <br>
+        {% with input = profile_form.lower_difference %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+        <br>
+
+        {% with input = profile_form.upper_difference %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+        <br>
+        <br>
+
+        <input type="hidden" name="step" value="complete-profile">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+</body>
+</html>
