@@ -82,7 +82,7 @@ def login():
             return redirect(url_for("find_page_bp.find_page"))
         return "Invalid credentials", 401
 
-    return render_template("login.html", form=form)
+    return render_template("auth/login.html", form=form)
 
 
 @auth_bp.route("/logout")
@@ -106,7 +106,7 @@ def register():
     if step == "complete-profile" and process_profile_form(profile_form):
         return redirect(url_for("auth_bp.unconfirmed"))
 
-    return render_template("register.html", form=form, profile_form=profile_form, step=step)
+    return render_template("auth/register.html", form=form, profile_form=profile_form, step=step)
 
 
 @auth_bp.route("/confirm/<token>", methods=["GET", "POST"])
@@ -122,7 +122,7 @@ def confirm(token):
 @auth_bp.route("/unconfirmed")
 @unconfirmed_required
 def unconfirmed():
-    return render_template("unconfirmed.html")
+    return render_template("components/unconfirmed.html")
 
 
 @auth_bp.route("/resend")
@@ -130,7 +130,7 @@ def unconfirmed():
 def resend():
     token = current_user.generate_token()
     confirm_url = url_for("auth_bp.confirm", token=token, _external=True)
-    contents = render_template("confirmation_email.html", url=confirm_url)
+    contents = render_template("components/confirmation_email.html", url=confirm_url)
     subject = "Email confirmation"
 
     send_email(current_user.email, subject, contents)
@@ -203,6 +203,6 @@ def create_user_with_profile(registration_data, profile_form):
 def send_confirmation_email(user):
     token = user.generate_token()
     confirm_url = url_for("auth_bp.confirm", token=token, _external=True)
-    contents = render_template("confirmation_email.html", url=confirm_url)
+    contents = render_template("components/confirmation_email.html", url=confirm_url)
     subject = "Email confirmation"
     send_email(user.email, subject, contents)
