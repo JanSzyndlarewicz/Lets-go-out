@@ -10,22 +10,22 @@
         {{ form.csrf_token }}
 
         {% with input = form.email, val = current_user.email %}
-        {% include 'form_input.html' %}
+        {% include 'components/form_input.html' %}
         {% endwith %}
         <br>
 
         {% with input = form.old_password %}
-        {% include 'form_input.html' %}
+        {% include 'components/form_input.html' %}
         {% endwith %}
         <br>
 
         {% with input = form.new_password %}
-        {% include 'form_input.html' %}
+        {% include 'components/form_input.html' %}
         {% endwith %}
         <br>
 
         {% with input = form.new_confirm %}
-        {% include 'form_input.html' %}
+        {% include 'components/form_input.html' %}
         {% endwith %}
         <br>
         
