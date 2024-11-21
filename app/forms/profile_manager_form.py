@@ -9,6 +9,7 @@ class ProfileManagerForm(FlaskForm):
     gender = RadioField("Gender")
     description = TextAreaField("Description", [])
     gender_preferences = SelectMultipleField("Gender preferences")
+    year_of_birth = IntegerField("Year of birth", [InputRequired(message="Year of birth is required.")])
     lower_difference = IntegerField(
         "Lower age difference",
         [
