@@ -8,10 +8,13 @@ from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
 from app.models.gender import Gender
-from app.models.interests import profile_interests
+from app.models.interest import Interest
 from app.models.preferences import MatchingPreferences
+# from app.models.date_proposal import DateProposal
+# from app.models.photo import Photo
 
 
 class User(db.Model, UserMixin):
@@ -63,6 +66,21 @@ class User(db.Model, UserMixin):
         back_populates="recipient",
         foreign_keys="DateProposal.recipient_id",
     )
+    # TODO: test
+    rejected: Mapped[list["User"]] = relationship(
+        "User",
+        secondary="rejected_association",
+        primaryjoin="User.id == RejectedAssociation.rejecter_id",
+        secondaryjoin="User.id == RejectedAssociation.rejected_id",
+        back_populates="rejecters",
+    )
+    rejecters: Mapped[list["User"]] = relationship(
+        "User",
+        secondary="rejected_association",
+        primaryjoin="User.id == RejectedAssociation.rejected_id",
+        secondaryjoin="User.id == RejectedAssociation.rejecter_id",
+        back_populates="rejected",
+    )
 
     def __init__(self, email: str, username: str, password: str, **kwargs):
         self.email = email
@@ -106,4 +124,10 @@ class Profile(db.Model):
     description: Mapped[str] = mapped_column(String(500), nullable=True)
     photo_id: Mapped[Optional[int]] = mapped_column(ForeignKey("photo.id"))
     photo: Mapped[Optional["Photo"]] = relationship("Photo", back_populates="profile")
-    interests = relationship("Interests", secondary=profile_interests, backref="profiles")
+    interests: Mapped[list[Optional["Interest"]]] = relationship(
+        "Interest",
+        secondary=ProfileInterestAssociation.__table__,
+        primaryjoin="Profile.id == ProfileInterestAssociation.profile_id",
+        secondaryjoin="ProfileInterestAssociation.interest_id == Interest.id",
+        back_populates="profiles",
+    )

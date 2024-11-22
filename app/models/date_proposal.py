@@ -27,7 +27,7 @@ class DateProposal(db.Model):
     )
     proposal_message: Mapped[Optional[str]] = mapped_column(String(250))
     response_message: Mapped[Optional[str]] = mapped_column(String(250))
-    proposal_timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    proposal_timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     response_timestamp: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     proposer: Mapped["User"] = relationship("User", back_populates="sent_proposals", foreign_keys=[proposer_id])
     recipient: Mapped["User"] = relationship("User", back_populates="received_proposals", foreign_keys=[recipient_id])
