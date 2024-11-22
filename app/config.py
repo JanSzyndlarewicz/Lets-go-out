@@ -13,3 +13,6 @@ MAIL_DEFAULT_SENDER = "webapp2024madrid@gmail.com"
 
 ADVANCED_ACCESS_CONTROL = False
 UPLOAD_FOLDER = "app/static/images"
+
+MAIN_PAGE_ROUTE = "find_page_bp.find_page_invite"
+UNCONFIRMED_PAGE_ROUTE = "auth_bp.unconfirmed"

@@ -10,6 +10,7 @@ from app.models.database import db
 app = create_app()
 
 with app.app_context():
+    db.drop_all()
     db.create_all()
 
     # Adding default interests
@@ -28,7 +29,7 @@ with app.app_context():
 
     # Adding admin user
     username = "admin"
-    password = "admin"  # TODO: Hash this in production
+    password = "admin"
     email = "admin"
     name = "Admin"
     gender = Gender.MALE

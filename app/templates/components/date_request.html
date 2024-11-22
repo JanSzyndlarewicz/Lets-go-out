@@ -7,7 +7,7 @@
   <!--TODO: implement the date part here in js perhaps-->
   <hr />
   <p>at Malvarosa 4, Madrid</p>
-  <form type="submit" class="centered-column fill-parent">
+  <form type="submit" class="centered-column fill-parent" id="invite-form">
     {{ form.csrf_token }} 
     <div class="gap-15"></div>
     {{ form.date }} 
@@ -58,5 +58,33 @@
     </div>
   </form>
 </div>
+
+<script type="text/javascript">
+  const invite_path = {{ url_for("invite_bp.invite", user_id=current_user.id)|tojson }}
+  
+  invite_button = document.querySelector("#invite")
+  invite_button.addEventListener("click", send_invite)
+
+  function send_invite() {
+    let form = document.querySelector("#invite-form")
+    let data = new FormData(form)
+    fetch(invite_path, {
+        "method": "POST",
+        "body": data,
+    })
+    .then(response => response.json())
+    .then(data => {
+      for (var key in data){
+        let error_box = document.querySelector("#" + key + "-errors")
+        error_box.innerHTML = ""
+        for (let i = 0; i < data[key].length; i++){
+          error_box.innerHTML += "<li>" + data[key][i] + "</li>"
+        }
+      }
+      //afterwards we would probably want to use js to switch to another suggested match
+    })
+  }
+
+</script>
 
 {% endblock %}

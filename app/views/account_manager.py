@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, render_template, url_for
+from flask import current_app as app
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
@@ -18,7 +19,6 @@ def account_manager():
     if form.validate_on_submit():
         if current_user.check_password(form.old_password.data):
             current_user.set_password(form.new_password.data)
-
             try:
                 db.session.commit()
             except IntegrityError as e:
@@ -26,6 +26,6 @@ def account_manager():
                 print(e)
         else:
             return "Invalid credentials", 401
-        return redirect(url_for("find_page_bp.find_page"))
+        return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
 
     return render_template("account_manager.html", form=form)
