@@ -1,9 +1,8 @@
 from functools import wraps
 
 from flask import Blueprint
-from flask import current_app
 from flask import current_app as app
-from flask import flash, redirect, render_template, request, session, url_for
+from flask import flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import IntegrityError
 

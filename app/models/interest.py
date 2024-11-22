@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, String, Table
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.associations import ProfileInterestAssociation

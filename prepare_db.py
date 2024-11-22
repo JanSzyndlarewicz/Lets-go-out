@@ -1,7 +1,6 @@
 import random
 
 from sqlalchemy.exc import IntegrityError
-from werkzeug.security import generate_password_hash
 
 from app import create_app
 from app.models import Gender, Interest, MatchingPreferences, Photo, Profile, User
