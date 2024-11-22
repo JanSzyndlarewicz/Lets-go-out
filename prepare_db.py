@@ -1,8 +1,10 @@
+import random
+
 from sqlalchemy.exc import IntegrityError
-from werkzeug.security import generate_password_hash
 
 from app import create_app
-from app.models import Gender, Interests, MatchingPreferences, Photo, Profile, User
+from app.models import Gender, Interest, MatchingPreferences, Photo, Profile, User
+from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
 
 app = create_app()
@@ -20,25 +22,22 @@ with app.app_context():
         "Gaming",
     ]
     for interest_name in default_interests:
-        if not Interests.query.filter_by(name=interest_name).first():
-            new_interest = Interests(name=interest_name)
+        if not Interest.query.filter_by(name=interest_name).first():
+            new_interest = Interest(name=interest_name)
             db.session.add(new_interest)
 
+    # Adding admin user
     username = "admin"
-    password = "admin"  # Hash this in production
+    password = "admin"  # TODO: Hash this in production
     email = "admin"
-
     name = "Admin"
     gender = Gender.MALE
     year_of_birth = 1999
     description = "this is admin"
-    interests = []
-
-    password_hash = generate_password_hash(password)
+    interests = Interest.query.limit(2).all()
 
     existing_user = User.query.filter_by(username=username).first()
     if existing_user is None:
-
         new_photo = Photo(file_extension="jpg")
         new_profile = Profile(
             name=name,
@@ -48,13 +47,13 @@ with app.app_context():
             interests=interests,
         )
         new_profile.photo = new_photo
-        new_user = User(username=username, password=password_hash, email=email)
+        new_user = User(username=username, password=password, email=email)
         new_user.profile = new_profile
         new_preferences = MatchingPreferences(
             user=new_user,
             gender_preferences=[Gender.MALE, Gender.FEMALE],
-            lower_difference=10,
-            upper_difference=8,
+            lower_difference=8,
+            upper_difference=4,
         )
 
         db.session.add(new_profile)
@@ -78,7 +77,7 @@ with app.app_context():
             "profile": {
                 "name": f"User {i}",
                 "gender": Gender.MALE if i % 2 == 0 else Gender.FEMALE,
-                "year_of_birth": 1990 + i,
+                "year_of_birth": random.randint(1980, 2003),
                 "description": f"This is user {i}'s profile description.",
             },
             "preferences": {
@@ -109,9 +108,27 @@ with app.app_context():
             upper_difference=user_data["preferences"]["max_age"],
             user=user,
         )
+
+        # Add user, profile, preferences, then commit to generate profile ID
         db.session.add(user)
         db.session.add(profile)
         db.session.add(preferences)
+        db.session.commit()  # Commit here to generate profile.id
 
-    db.session.commit()
-    print("Default interests added.")
+        # Now that the profile.id is available, create the associations
+        interests = Interest.query.all()
+
+        if not Profile.query.filter_by(id=profile.id).first().interests:
+            profile_interests = [
+                ProfileInterestAssociation(
+                    profile_id=profile.id,
+                    interest_id=interests[i].id,
+                )
+                for i in range(len(default_interests))
+                if random.choice([True, False])
+            ]
+
+            db.session.add_all(profile_interests)
+        db.session.commit()  # Commit associations
+
+    print("DB prepared.")

@@ -1,9 +1,8 @@
 from functools import wraps
 
 from flask import Blueprint
-from flask import current_app
 from flask import current_app as app
-from flask import flash, redirect, render_template, request, session, url_for
+from flask import flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import IntegrityError
 
@@ -38,7 +37,7 @@ def unconfirmed_required(func):
         if not app.config["ADVANCED_ACCESS_CONTROL"]:
             return func(*args, **kwargs)
         if current_user.confirmed:
-            return redirect(url_for("find_page_bp.find_page"))
+            return redirect(url_for("find_page_bp.find_page_invite"))
         return func(*args, **kwargs)
 
     return inner
@@ -51,7 +50,7 @@ def anonymous_required(func):
         if not app.config["ADVANCED_ACCESS_CONTROL"]:
             return func(*args, **kwargs)
         if not current_user.is_anonymous:
-            return redirect(url_for("find_page_bp.find_page"))
+            return redirect(url_for("find_page_bp.find_page_invite"))
         return func(*args, **kwargs)
 
     return inner
@@ -64,7 +63,7 @@ def forced_entry():
     user.confirmed = True
     db.session.commit()
     login_user(user)
-    return redirect(url_for("find_page_bp.find_page"))
+    return redirect(url_for("find_page_bp.find_page_invite"))
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
@@ -80,7 +79,7 @@ def login():
 
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for("find_page_bp.find_page"))
+            return redirect(url_for("find_page_bp.find_page_invite"))
         return "Invalid credentials", 401
 
     return render_template("auth/login.html", form=form)
@@ -119,7 +118,7 @@ def complete_profile():
 
     if process_profile_form(profile_form):
         session.pop("registration_data", None)
-        return redirect(url_for("find_page_bp.find_page"))
+        return redirect(url_for("find_page_bp.find_page_invite"))
 
     return render_template("auth/complete_profile.html", profile_form=profile_form)
 
@@ -129,7 +128,7 @@ def complete_profile():
 def confirm(token):
     if current_user.confirm(token):
         db.session.commit()
-        return redirect(url_for("find_page_bp.find_page"))
+        return redirect(url_for("find_page_bp.find_page_invite"))
     flash("The confirmation link is invalid or has expired.")
     return redirect(url_for("auth_bp.unconfirmed"))
 
@@ -156,7 +155,7 @@ def resend():
 @auth_bp.route("/")
 def index():
     if current_user.is_authenticated:
-        return redirect(url_for("find_page_bp.find_page"))
+        return redirect(url_for("find_page_bp.find_page_invite"))
     return redirect(url_for("auth_bp.login"))
 
 
