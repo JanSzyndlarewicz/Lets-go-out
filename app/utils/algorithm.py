@@ -3,7 +3,7 @@ from typing import Type
 from sqlalchemy import ColumnElement, and_
 from sqlalchemy.orm import Session
 
-from app.models import BlockingAssociation, MatchingPreferences, Profile, User, ProfileInterestAssociation
+from app.models import BlockingAssociation, MatchingPreferences, Profile, ProfileInterestAssociation, User
 
 
 def between(column: int, start: any, end: any) -> ColumnElement[bool]:
@@ -30,7 +30,11 @@ def suggest_matches(current_user_id: int, session: Session, number: int = None) 
                     ~User.blockers.any(BlockingAssociation.blocker_id == current_user_id),
                     ~User.rejected.any(BlockingAssociation.blocked_id == current_user_id),
                     ~User.rejecters.any(BlockingAssociation.blocker_id == current_user_id),
-                    Profile.interests.any(ProfileInterestAssociation.interest_id.in_([interest.id for interest in current_user.profile.interests])),
+                    Profile.interests.any(
+                        ProfileInterestAssociation.interest_id.in_(
+                            [interest.id for interest in current_user.profile.interests]
+                        )
+                    ),
                 )
             )
             .all()
@@ -55,4 +59,3 @@ def suggest_matches(current_user_id: int, session: Session, number: int = None) 
             .all()
         )
     return potential_matches
-

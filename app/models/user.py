@@ -13,6 +13,7 @@ from app.models.database import db
 from app.models.gender import Gender
 from app.models.interest import Interest
 from app.models.preferences import MatchingPreferences
+
 # from app.models.date_proposal import DateProposal
 # from app.models.photo import Photo
 
