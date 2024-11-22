@@ -23,7 +23,7 @@ def confirmed_required(func):
         if not app.config["ADVANCED_ACCESS_CONTROL"]:
             return func(*args, **kwargs)
         if not current_user.confirmed:
-            return redirect(url_for("auth_bp.unconfirmed"))
+            return redirect(url_for(app.config["UNCONFIRMED_PAGE_ROUTE"]))
         return func(*args, **kwargs)
 
     return inner
@@ -37,7 +37,7 @@ def unconfirmed_required(func):
         if not app.config["ADVANCED_ACCESS_CONTROL"]:
             return func(*args, **kwargs)
         if current_user.confirmed:
-            return redirect(url_for("find_page_bp.find_page_invite"))
+            return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
         return func(*args, **kwargs)
 
     return inner
@@ -50,7 +50,7 @@ def anonymous_required(func):
         if not app.config["ADVANCED_ACCESS_CONTROL"]:
             return func(*args, **kwargs)
         if not current_user.is_anonymous:
-            return redirect(url_for("find_page_bp.find_page_invite"))
+            return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
         return func(*args, **kwargs)
 
     return inner
@@ -63,7 +63,7 @@ def forced_entry():
     user.confirmed = True
     db.session.commit()
     login_user(user)
-    return redirect(url_for("find_page_bp.find_page_invite"))
+    return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
@@ -79,7 +79,7 @@ def login():
 
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for("find_page_bp.find_page_invite"))
+            return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
         return "Invalid credentials", 401
 
     return render_template("auth/login.html", form=form)
@@ -118,7 +118,7 @@ def complete_profile():
 
     if process_profile_form(profile_form):
         session.pop("registration_data", None)
-        return redirect(url_for("find_page_bp.find_page_invite"))
+        return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
 
     return render_template("auth/complete_profile.html", profile_form=profile_form)
 
@@ -128,9 +128,9 @@ def complete_profile():
 def confirm(token):
     if current_user.confirm(token):
         db.session.commit()
-        return redirect(url_for("find_page_bp.find_page_invite"))
+        return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
     flash("The confirmation link is invalid or has expired.")
-    return redirect(url_for("auth_bp.unconfirmed"))
+    return redirect(url_for(app.config["UNCONFIRMED_PAGE_ROUTE"]))
 
 
 @auth_bp.route("/unconfirmed")
@@ -149,13 +149,13 @@ def resend():
 
     send_email(current_user.email, subject, contents)
 
-    return redirect(url_for("auth_bp.unconfirmed"))
+    return redirect(url_for(app.config["UNCONFIRMED_PAGE_ROUTE"]))
 
 
 @auth_bp.route("/")
 def index():
     if current_user.is_authenticated:
-        return redirect(url_for("find_page_bp.find_page_invite"))
+        return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
     return redirect(url_for("auth_bp.login"))
 
 
