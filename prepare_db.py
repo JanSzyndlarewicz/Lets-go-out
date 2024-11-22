@@ -34,7 +34,7 @@ with app.app_context():
     year_of_birth = 1999
     description = "this is admin"
     interests = Interest.query.limit(2).all()
-    password_hash = generate_password_hash(password)
+    # password_hash = generate_password_hash(password)
 
     existing_user = User.query.filter_by(username=username).first()
     if existing_user is None:

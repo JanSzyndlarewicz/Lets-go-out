@@ -18,6 +18,6 @@ class DateRequestForm(FlaskForm):
         
         if given_date:
             # Modify the date field properties dynamically instead of replacing it
-            self.date.render_kw = {"readonly": True}  # Makes the field readonly
+            self.date.render_kw = {"readonly": True, "value": given_date.strftime("%Y-%m-%d")}  # Makes the field readonly
             self.date.data = given_date  # Pre-fill the field with the given date
         self.process()
