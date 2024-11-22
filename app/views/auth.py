@@ -118,6 +118,7 @@ def complete_profile():
     profile_form = initialize_profile_form()
 
     if process_profile_form(profile_form):
+        session.pop("registration_data", None)
         return redirect(url_for("find_page_bp.find_page"))
 
     return render_template("auth/complete_profile.html", profile_form=profile_form)
