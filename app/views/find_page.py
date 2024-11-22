@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, render_template
 
 from app.forms import DateRequestForm
@@ -15,7 +16,7 @@ find_page_bp = Blueprint("find_page_bp", __name__)
 def find_page_invite():
     
     date_request_form = DateRequestForm(
-        message_label_text="Optional text attached to accept/reject/reschedule", given_date="2021-01-01"
+        message_label_text="Optional text attached to accept/reject/reschedule"
     )
     is_requesting = True
     date_request_data = suggest_matches(current_user.id, db.session, 1)[0]
@@ -29,7 +30,7 @@ def find_page_invite():
 def find_page_answear():
     
     date_request_form = DateRequestForm(
-        message_label_text="Optional text attached to accept/reject"
+        message_label_text="Optional text attached to accept/reject", given_date=datetime.now().date()
     )
     is_requesting = False
     date_request_data = suggest_matches(current_user.id, db.session, 1)[0]
