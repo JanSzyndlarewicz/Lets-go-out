@@ -1,15 +1,14 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField
-from wtforms import IntegerField, RadioField, SelectMultipleField, StringField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, InputRequired, NumberRange, Optional
+from wtforms import IntegerField, RadioField, StringField, SubmitField
+from wtforms.fields.choices import SelectMultipleField
+from wtforms.validators import DataRequired, InputRequired, NumberRange
 
 
-class ProfileManagerForm(FlaskForm):
+class ProfileDataFulfilment(FlaskForm):
     name = StringField("Name", [InputRequired(message="Name must not be empty.")])
     gender = RadioField("Gender")
-    description = TextAreaField("Description", [])
-    gender_preferences = SelectMultipleField("Gender preferences")
     year_of_birth = IntegerField("Year of birth", [InputRequired(message="Year of birth is required.")])
+    gender_preferences = SelectMultipleField("Gender preferences")
     lower_difference = IntegerField(
         "Lower age difference",
         [
@@ -24,5 +23,4 @@ class ProfileManagerForm(FlaskForm):
             NumberRange(min=1, message="Age difference must be positive."),
         ],
     )
-    photo = FileField("Profile Photo", validators=[Optional()])
-    submit = SubmitField("Change")
+    submit = SubmitField("Submit")

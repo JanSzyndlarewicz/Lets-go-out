@@ -23,5 +23,4 @@ def invite(user_id : int):
         db.session.add(proposal)
         db.session.commit()
         return "true"
-    print(form.errors)
     return form.errors

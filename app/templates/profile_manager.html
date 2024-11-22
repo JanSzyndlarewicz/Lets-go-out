@@ -10,7 +10,7 @@
         {{ form.csrf_token }}
         
         {% with input = form.name, val = current_user.profile.name %}
-        {% include 'form_input.html' %}
+        {% include 'components/form_input.html' %}
         {% endwith %}
         <br>
         
@@ -32,7 +32,7 @@
         <br>
 
         {% with input = form.description %}
-        {% include 'form_input.html' %}
+        {% include 'components/form_input.html' %}
         {% endwith %}
         <br>
 
@@ -45,9 +45,13 @@
             <input type="checkbox" name="gender_preferences" value="{{ name }}" {{ "checked" if current_user.has_preference_for(name)}}>
             {{ value }}
         {% endfor %}
-
         <br>
-        
+
+        {% with input = form.year_of_birth, val = current_user.profile.year_of_birth %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+        <br>
+
         <label>Profile Photo:</label>
         {% if photo_url %}
             <div>
@@ -57,22 +61,20 @@
         <br>
 
         <input type="file" name="photo" accept="image/*">
-
+        <br>
         <br>
 
+        <label>Age preferences:</label>
+        <br>
+        {% with input = form.lower_difference, val=current_user.matching_preferences.lower_difference %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
         <br>
 
-        <label>Age preferences:</label>  
-            <br>    
-            {% with input = form.lower_difference, val=current_user.matching_preferences.lower_difference %}
-            {% include 'form_input.html' %}
-            {% endwith %}
-            <br>
-
-            {% with input = form.upper_difference, val=current_user.matching_preferences.upper_difference %}
-            {% include 'form_input.html' %}
-            {% endwith %}
-            <br>
+        {% with input = form.upper_difference, val=current_user.matching_preferences.upper_difference %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+        <br>
         <br>
 
         {{ form.submit() }}

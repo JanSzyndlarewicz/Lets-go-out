@@ -4,6 +4,7 @@ from app.views.auth import confirmed_required
 
 from app.forms import DateProposalForm
 
+
 find_page_bp = Blueprint("find_page_bp", __name__)
 
 
@@ -14,4 +15,4 @@ def find_page():
         message_label_text="Optional text attached to accept/reject/reschedule", given_date="2021-01-01"
     )
     is_requesting = True
-    return render_template("find_page.html", form=date_request_form, is_requesting=is_requesting)
+    return render_template("main/find_page.html", form=date_request_form, is_requesting=is_requesting)

@@ -9,14 +9,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.models.database import db
+from app.models.gender import Gender
 from app.models.interests import profile_interests
-
-
-class Gender(enum.Enum):
-    MALE = "Male"
-    FEMALE = "Female"
-    NON_BINARY = "Non binary"
-    OTHER = "Other"
+from app.models.preferences import MatchingPreferences
 
 
 class User(db.Model, UserMixin):
@@ -68,6 +63,14 @@ class User(db.Model, UserMixin):
         back_populates="recipient",
         foreign_keys="DateProposal.recipient_id",
     )
+
+    def __init__(self, email: str, username: str, password: str, **kwargs):
+        self.email = email
+        self.username = username
+        self.set_password(password)
+        self.confirmed = kwargs.get("confirmed", False)
+        self.profile = Profile(user=self)
+        self.matching_preferences = MatchingPreferences(user=self)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
