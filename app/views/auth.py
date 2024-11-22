@@ -1,12 +1,16 @@
 from functools import wraps
 
 from flask import Blueprint
+from flask import current_app
 from flask import current_app as app
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy.exc import IntegrityError
 
 from app import User, db
 from app.forms import LoginForm, RegisterForm
+from app.forms.user_data_fulfilment import ProfileDataFulfilment
+from app.models import Gender, Profile
 from app.utils import send_email
 
 auth_bp = Blueprint("auth_bp", __name__)
@@ -79,7 +83,7 @@ def login():
             return redirect(url_for("find_page_bp.find_page"))
         return "Invalid credentials", 401
 
-    return render_template("login.html", form=form)
+    return render_template("auth/login.html", form=form)
 
 
 @auth_bp.route("/logout")
@@ -93,28 +97,31 @@ def logout():
 @anonymous_required
 def register():
     form = RegisterForm()
-    if form.validate_on_submit():
 
-        username = form.username.data
-        password = form.password.data
-        email = form.email.data
+    if process_registration_form(form):
+        session["registration_data"] = {
+            "username": form.username.data,
+            "email": form.email.data,
+            "password": form.password.data,
+        }
+        return redirect(url_for("auth_bp.complete_profile"))
 
-        new_user = User(username=username, email=email)
-        new_user.set_password(password)
-        db.session.add(new_user)
-        db.session.commit()
+    return render_template("auth/register.html", form=form)
 
-        token = new_user.generate_token()
-        confirm_url = url_for("auth_bp.confirm", token=token, _external=True)
-        contents = render_template("confirmation_email.html", url=confirm_url)
-        subject = "Email confirmation"
 
-        send_email(email, subject, contents)
+@auth_bp.route("/complete-profile", methods=["GET", "POST"])
+@anonymous_required
+def complete_profile():
+    if "registration_data" not in session:
+        return redirect(url_for("auth_bp.register"))
 
-        login_user(new_user)
-        return redirect(url_for("auth_bp.unconfirmed"))
+    profile_form = initialize_profile_form()
 
-    return render_template("register.html", form=form)
+    if process_profile_form(profile_form):
+        session.pop("registration_data", None)
+        return redirect(url_for("find_page_bp.find_page"))
+
+    return render_template("auth/complete_profile.html", profile_form=profile_form)
 
 
 @auth_bp.route("/confirm/<token>", methods=["GET", "POST"])
@@ -130,7 +137,7 @@ def confirm(token):
 @auth_bp.route("/unconfirmed")
 @unconfirmed_required
 def unconfirmed():
-    return render_template("unconfirmed.html")
+    return render_template("components/unconfirmed.html")
 
 
 @auth_bp.route("/resend")
@@ -138,7 +145,7 @@ def unconfirmed():
 def resend():
     token = current_user.generate_token()
     confirm_url = url_for("auth_bp.confirm", token=token, _external=True)
-    contents = render_template("confirmation_email.html", url=confirm_url)
+    contents = render_template("components/confirmation_email.html", url=confirm_url)
     subject = "Email confirmation"
 
     send_email(current_user.email, subject, contents)
@@ -151,3 +158,66 @@ def index():
     if current_user.is_authenticated:
         return redirect(url_for("find_page_bp.find_page"))
     return redirect(url_for("auth_bp.login"))
+
+
+def initialize_profile_form():
+    profile_form = ProfileDataFulfilment()
+    profile_form.gender.choices = [(gender.name, gender.value) for gender in Gender]
+    profile_form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
+    return profile_form
+
+
+def process_registration_form(form):
+    if form.validate_on_submit():
+        session["registration_data"] = {
+            "username": form.username.data,
+            "email": form.email.data,
+            "password": form.password.data,
+        }
+        return True
+    return False
+
+
+def process_profile_form(profile_form):
+    if profile_form.validate_on_submit() and "registration_data" in session:
+        try:
+            new_user = create_user_with_profile(session["registration_data"], profile_form)
+            send_confirmation_email(new_user)
+            login_user(new_user)  # TODO: Only for development purposes
+            session.pop("registration_data", None)
+            return True
+        except IntegrityError:
+            db.session.rollback()
+            flash("An error occurred while creating your account.")
+    return False
+
+
+def create_user_with_profile(registration_data, profile_form):
+    new_user = User(
+        username=registration_data["username"],
+        email=registration_data["email"],
+        password=registration_data["password"],
+    )
+
+    new_user.profile = Profile(
+        name=profile_form.name.data,
+        gender=Gender[profile_form.gender.data],
+        year_of_birth=profile_form.year_of_birth.data,
+    )
+
+    new_user.matching_preferences.gender_preferences = [Gender[gp] for gp in profile_form.gender_preferences.data]
+    new_user.matching_preferences.lower_difference = profile_form.lower_difference.data
+    new_user.matching_preferences.upper_difference = profile_form.upper_difference.data
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return new_user
+
+
+def send_confirmation_email(user):
+    token = user.generate_token()
+    confirm_url = url_for("auth_bp.confirm", token=token, _external=True)
+    contents = render_template("components/confirmation_email.html", url=confirm_url)
+    subject = "Email confirmation"
+    send_email(user.email, subject, contents)
