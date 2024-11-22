@@ -34,5 +34,19 @@
         <button type="submit">Next</button>
     </div>
 </form>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputs = document.querySelectorAll("input");
+
+        inputs.forEach(input => {
+            const savedValue = localStorage.getItem(input.name);
+            if (savedValue) input.value = savedValue;
+
+            input.addEventListener("input", () => {
+                localStorage.setItem(input.name, input.value);
+            });
+        });
+    });
+</script>
 </body>
 </html>

@@ -97,6 +97,11 @@ def logout():
 def register():
     form = RegisterForm()
 
+    if "registration_data" in session:
+        registration_data = session["registration_data"]
+        form.username.data = registration_data.get("username", "")
+        form.email.data = registration_data.get("email", "")
+
     if process_registration_form(form):
         session["registration_data"] = {
             "username": form.username.data,
