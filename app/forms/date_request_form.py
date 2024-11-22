@@ -12,12 +12,15 @@ class DateRequestForm(FlaskForm):
 
     def __init__(self, message_label_text=None, given_date=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         if message_label_text:
             self.message.label.text = message_label_text
-        
+
         if given_date:
             # Modify the date field properties dynamically instead of replacing it
-            self.date.render_kw = {"readonly": True, "value": given_date.strftime("%Y-%m-%d")}  # Makes the field readonly
+            self.date.render_kw = {
+                "readonly": True,
+                "value": given_date.strftime("%Y-%m-%d"),
+            }  # Makes the field readonly
             self.date.data = given_date  # Pre-fill the field with the given date
         self.process()

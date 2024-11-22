@@ -1,10 +1,12 @@
+import random
+
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash
+
 from app import create_app
 from app.models import Gender, Interest, MatchingPreferences, Photo, Profile, User
 from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
-import random
 
 app = create_app()
 
@@ -27,14 +29,13 @@ with app.app_context():
 
     # Adding admin user
     username = "admin"
-    password = "admin"  #TODO: Hash this in production
+    password = "admin"  # TODO: Hash this in production
     email = "admin"
     name = "Admin"
     gender = Gender.MALE
     year_of_birth = 1999
     description = "this is admin"
     interests = Interest.query.limit(2).all()
-    # password_hash = generate_password_hash(password)
 
     existing_user = User.query.filter_by(username=username).first()
     if existing_user is None:
@@ -47,7 +48,7 @@ with app.app_context():
             interests=interests,
         )
         new_profile.photo = new_photo
-        new_user = User(username=username, password=password_hash, email=email)
+        new_user = User(username=username, password=password, email=email)
         new_user.profile = new_profile
         new_preferences = MatchingPreferences(
             user=new_user,
@@ -108,7 +109,7 @@ with app.app_context():
             upper_difference=user_data["preferences"]["max_age"],
             user=user,
         )
-        
+
         # Add user, profile, preferences, then commit to generate profile ID
         db.session.add(user)
         db.session.add(profile)
@@ -123,9 +124,11 @@ with app.app_context():
                 ProfileInterestAssociation(
                     profile_id=profile.id,
                     interest_id=interests[i].id,
-                ) for i in range(len(default_interests)) if random.choice([True, False])
+                )
+                for i in range(len(default_interests))
+                if random.choice([True, False])
             ]
-        
+
             db.session.add_all(profile_interests)
         db.session.commit()  # Commit associations
 

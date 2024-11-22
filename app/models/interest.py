@@ -1,7 +1,6 @@
 from sqlalchemy import ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-
 from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
 
@@ -12,7 +11,7 @@ class Interest(db.Model):
     name = db.Column(db.String(50), unique=True, nullable=False)
     profiles: Mapped[list["Profile"]] = relationship(
         "Profile",
-        secondary=ProfileInterestAssociation.__table__,  
+        secondary=ProfileInterestAssociation.__table__,
         primaryjoin="Interest.id == ProfileInterestAssociation.interest_id",
         secondaryjoin="Profile.id == ProfileInterestAssociation.profile_id",
         back_populates="interests",
