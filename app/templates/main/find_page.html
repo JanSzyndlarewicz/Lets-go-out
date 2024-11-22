@@ -3,8 +3,9 @@
 {% block content %}
     <main class="find-page-content">
         <div class="date-invitation-card outline">
-            <div class="fill-width centered-column">
-                <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Logo" class="logo">
+            <div class="fill-width centered-column gap-45">
+                <img src="https://thispersondoesnotexist.com/" alt="Profile picture" class="circular-avatar-big ">
+                <h2 class="push-to-bottom gap-15">{{ date_request_data.name }}</h2>
             </div>
             {% include 'components/date_request.html' %}
             

@@ -10,10 +10,10 @@
         <nav>
             <ul>
 
-                <li><a href="{{ url_for('find_page_bp.find_page') }}" class='nav-link'>Find</a></li>
+                <li><a href="{{ url_for('find_page_bp.find_page_invite') }}" class='nav-link'>Find</a></li>
                 <li><a href="{{ url_for('matches_page_bp.matches_page') }}" class='nav-link'>Matches</a></li>
-                <li><a href="{{ url_for('find_page_bp.find_page') }}" class='nav-link'>
-                    <img src="{{url_for('static', filename='images/lets-go-out-logo.png')}}" class="fit-content-in-parent" alt="Company Icon">
+                <li><a href="{{ url_for('find_page_bp.find_page_invite') }}" class='nav-link'>
+                    <img src="{{url_for('static', filename='images/lets-go-out-logo.png')}}" class="base-logo" alt="Company Icon">
                 </a></li>
                 <li><a href="{{ url_for('you_page_bp.you_page') }}" class='nav-link'>You</a></li>
                 <li><a href="{{ url_for('about_us_page_bp.about_us_page') }}" class='nav-link'>About us</a></li>
