@@ -124,12 +124,10 @@ header ul li {
 }
 
 
-.fit-content-in-parent {
-    object-fit: contain;
-    /* min-width: 100%; */
-    /* width: 100%; */
-    height: 80%;
-    min-height: 80%;
+.base-logo {
+    width: 200px; /* Fixed width */
+    max-width: none;
+    max-height: none;
 }
 
 .find-page-content {
