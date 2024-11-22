@@ -2,6 +2,7 @@
 
 {% block content %}
     <main class="find-page-content">
+        {% if date_request_data %}
         <div class="date-invitation-card outline">
             <div class="fill-width centered-column gap-45">
                 <img src="https://thispersondoesnotexist.com/" alt="Profile picture" class="circular-avatar-big ">
@@ -10,5 +11,11 @@
             {% include 'components/date_request.html' %}
             
         </div>
+        {% else %}
+        <div class="centered-column">
+            <h1>Ups! it seems like we couldn't find any date for you</h1>
+            <p>maybe lower your standards...</p>
+        </div>
+        {% endif %}
     </main>
 {% endblock %}
