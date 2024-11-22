@@ -124,7 +124,5 @@ class Profile(db.Model):
     interests: Mapped[list[Optional["Interest"]]] = relationship(
         "Interest",
         secondary=ProfileInterestAssociation.__table__,
-        primaryjoin="Profile.id == ProfileInterestAssociation.profile_id",
-        secondaryjoin="ProfileInterestAssociation.interest_id == Interest.id",
         back_populates="profiles",
     )

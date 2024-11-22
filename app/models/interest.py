@@ -15,8 +15,6 @@ class Interest(db.Model):
     profiles: Mapped[list["Profile"]] = relationship(
         "Profile",
         secondary=ProfileInterestAssociation.__table__,
-        primaryjoin="Interest.id == ProfileInterestAssociation.interest_id",
-        secondaryjoin="Profile.id == ProfileInterestAssociation.profile_id",
         back_populates="interests",
     )
 
