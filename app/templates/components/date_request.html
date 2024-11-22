@@ -16,7 +16,7 @@
       {% for error in form.date.errors %}
       <li>{{ error }}</li>
       {% endfor %}
-
+    {% endif %}
     
     <div class="push-to-bottom centered-column fill-width">
       {{ form.message.label }}
