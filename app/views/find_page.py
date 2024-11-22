@@ -3,10 +3,14 @@ from datetime import datetime
 from flask import Blueprint, render_template
 from flask_login import current_user
 
+
 from app.forms import DateRequestForm
 from app.models.database import db
 from app.utils.algorithm import suggest_matches
 from app.views.auth import confirmed_required
+
+from app.forms import DateProposalForm
+
 
 find_page_bp = Blueprint("find_page_bp", __name__)
 
