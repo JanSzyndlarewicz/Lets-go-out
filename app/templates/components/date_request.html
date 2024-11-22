@@ -9,40 +9,53 @@
   <p>at Malvarosa 4, Madrid</p>
   <form type="submit" class="centered-column fill-parent">
     {{ form.csrf_token }} 
-    {{ form.message.label }} 
-    {{ form.message }} 
-    {% if
-    form.message.errors %}
+    <div class="gap-15"></div>
+    {{ form.date }} 
+    {% if form.date.errors %}
     <ul class="errors">
-      {% for error in form.message.errors %}
+      {% for error in form.date.errors %}
       <li>{{ error }}</li>
       {% endfor %}
-    </ul>
-    {% endif %} {% if is_requesting %}
-    <ul class="push-to-bottom row space-between fill-width">
-      <li>
-        <div class="labeled-icon"><i class="fas fa-times"></i>Reject</div>
-      </li>
-      <li>
-        <div class="labeled-icon"><i class="fas fa-heart"></i>Invite</div>
-      </li>
-    </ul>
-    {% else %}
-    <ul class="push-to-bottom row space-around fill-width">
-      <li>
-        <div class="labeled-icon"><i class="fas fa-times"></i>Reject</div>
-      </li>
-      <li>
-        <div class="labeled-icon"><i class="fas fa-heart-broken"></i>Ignore</div>
-      </li>
-      <li>
-        <div class="labeled-icon"><i class="fas fa-clock"></i>Reschedule</div>
-      </li>
-      <li>
-        <div class="labeled-icon"><i class="fas fa-heart"></i>Accept</div>
-      </li>
-    </ul>
     {% endif %}
+    
+    <div class="push-to-bottom centered-column fill-width">
+      {{ form.message.label }}
+      {{ form.message }}
+      {% if
+      form.message.errors %}
+      <ul class="errors">
+        {% for error in form.message.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <div class="gap-15"></div>
+      {% if is_requesting %}
+      <ul class="push-to-bottom row space-between fill-width">
+        <li>
+          <div class="labeled-icon"><i class="fas fa-times"></i>Reject</div>
+        </li>
+        <li>
+          <div class="labeled-icon"><i class="fas fa-heart"></i>Invite</div>
+        </li>
+      </ul>
+      {% else %}
+      <ul class="push-to-bottom row space-around fill-width">
+        <li>
+          <div class="labeled-icon"><i class="fas fa-times"></i>Reject</div>
+        </li>
+        <li>
+          <div class="labeled-icon"><i class="fas fa-heart-broken"></i>Ignore</div>
+        </li>
+        <li>
+          <div class="labeled-icon"><i class="fas fa-clock"></i>Reschedule</div>
+        </li>
+        <li>
+          <div class="labeled-icon"><i class="fas fa-heart"></i>Accept</div>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
   </form>
 </div>
 

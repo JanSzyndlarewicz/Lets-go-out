@@ -201,3 +201,29 @@ i {
     align-items: center;
     width: 80px;
 }
+
+.gap-15 {
+    margin-top: 15px;
+}
+
+.gap-30 {
+    margin-top: 30px;
+}
+
+.gap-45 {
+    margin-top: 45px;
+}
+
+.gap-60 {
+    margin-top: 60px;
+}
+
+.circular-avatar-big {
+    width: 200px;          
+    height: 200px;          
+    border-radius: 50%;     /* Make it circular */
+    object-fit: cover;      /* Ensure the image covers the entire circle */
+    border: 2px solid #ddd; /* Optional: border around the avatar */
+
+}
+
