@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import DateField, StringField
+from wtforms import DateField, StringField, HiddenField
 from wtforms.validators import DataRequired, InputRequired
 from app.forms.validators import is_not_past
 
 
 class DateRequestForm(FlaskForm):
+    id = HiddenField()
     message = StringField(
         "Optional text attached to accept/reject/reschedule",
         validators=[InputRequired(message="Message can't be empty.")],

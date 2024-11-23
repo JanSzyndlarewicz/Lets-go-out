@@ -2,20 +2,155 @@
 
 {% block content %}
     <main class="find-page-content">
-        {% if date_request_data %}
-        <div class="date-invitation-card outline">
+        
+        <div class="date-invitation-card outline" id="profile-block" {% if not date_request_data %} style="display: none" {% endif %}>
             <div class="fill-width centered-column gap-45">
-                <img src="https://thispersondoesnotexist.com/" alt="Profile picture" class="circular-avatar-big ">
-                <h2 class="push-to-bottom gap-15">{{ date_request_data.name }}</h2>
+                <img src="https://thispersondoesnotexist.com/" alt="Profile picture" class="circular-avatar-big " id="profile-img">
+                <h2 class="push-to-bottom gap-15" id="name">Name</h2>
             </div>
             {% include 'components/date_request.html' %}
             
         </div>
-        {% else %}
-        <div class="centered-column">
+        <div class="centered-column" id="empty-block" {% if date_request_data %} style="display: none" {% endif %}>
             <h1>Ups! it seems like we couldn't find any date for you</h1>
             <p>maybe lower your standards...</p>
         </div>
-        {% endif %}
+        
     </main>
+
+    <script type="text/javascript">
+
+        var users = JSON.parse('{{ date_request_data | tojson | safe}}');
+        console.log(users)
+        
+
+
+        function switch_profile(user) {
+            console.log("Switching to user " + user.id)
+            name_label = document.querySelector("#name")
+            name_label.innerHTML = user.name
+            id_hidden_input = document.querySelector("#id-hidden")
+            id_hidden_input.value = user.id
+            //actually change images here once they exist
+            img = document.querySelector("#profile-img")
+            img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();
+            
+        }
+
+        const refill_path = "{{ url_for('find_page_bp.refill') }}"
+
+        function next_user() {
+            if (users == null || users.length == 0) {
+                document.querySelector("#profile-block").style.display = "none"
+                document.querySelector("#empty-block").style.display = "block"
+                return
+            }
+            switch_profile(users[0])
+            console.log(users)
+            if (users.length <= 5) {
+                fetch(refill_path, {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify(users),
+            })
+                .then(response => response.json())
+                .then(data => {     
+                    users.push(...data)
+                })
+            } 
+        }
+
+        const invite_path = "{{ url_for('interaction_bp.invite') }}"
+
+
+        invite_button = document.querySelector("#invite")
+        invite_button.addEventListener("click", send_invite)
+
+        function send_invite() {
+            let form = document.querySelector("#invite-form")
+            let data = new FormData(form)
+            fetch(invite_path, {
+                "method": "POST",
+                "body": data,
+            })
+            .then(response => response.json())
+            .then(response => {
+                //make it a loop
+                let error_box = document.querySelector("#date-errors")
+                error_box.innerHTML = ""
+                error_box = document.querySelector("#message-errors")
+                error_box.innerHTML = ""
+                
+                if (response === true) {
+                    // Handle success - maybe notify the user or load another match
+                    users.shift()
+                    next_user()   
+                } else {
+                    return response; // Parse JSON for error messages
+                }
+                
+                })
+                .then(data => {
+                    for (var key in data) {
+                        let error_box = document.querySelector("#" + key + "-errors")
+                        error_box.innerHTML = ""
+                        for (let i = 0; i < data[key].length; i++) {
+                            error_box.innerHTML += "<li>" + data[key][i] + "</li>"
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error during rejection:", error);
+                });
+        }
+
+        const reject_path = "{{ url_for('interaction_bp.reject') }}";
+
+        const reject_button = document.querySelector("#reject");
+        reject_button.addEventListener("click", send_reject);
+
+        function send_reject() {
+            // Fetch the current user's ID dynamically or ensure it's embedded in the button element
+            let form = document.querySelector("#invite-form")
+            let data = new FormData(form)
+            fetch(reject_path, {
+                method: "POST",
+                body : data,
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Handle success - maybe notify the user or load another match
+                        users.shift()
+                        next_user()
+                    } else {
+                        return response.json(); // Parse JSON for error messages
+                    }
+                })
+                .then(data => {
+                    if (data) {
+                        // Display errors dynamically
+                        let error_box = document.querySelector("#date-errors"); // Adjust the selector for errors
+                        error_box.innerHTML = "";
+                        if (data.errors) {
+                            data.errors.forEach(error => {
+                                error_box.innerHTML += `<li>${error}</li>`;
+                            });
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error during rejection:", error);
+                });
+            
+        }
+
+        next_user()
+       
+        
+    </script>
+
+
 {% endblock %}
+
