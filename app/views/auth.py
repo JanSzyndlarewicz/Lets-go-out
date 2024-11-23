@@ -103,11 +103,6 @@ def register():
         form.email.data = registration_data.get("email", "")
 
     if process_registration_form(form):
-        session["registration_data"] = {
-            "username": form.username.data,
-            "email": form.email.data,
-            "password": form.password.data,
-        }
         return redirect(url_for("auth_bp.complete_profile"))
 
     return render_template("auth/register.html", form=form)
@@ -122,7 +117,6 @@ def complete_profile():
     profile_form = initialize_profile_form()
 
     if process_profile_form(profile_form):
-        session.pop("registration_data", None)
         return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
 
     return render_template("auth/complete_profile.html", profile_form=profile_form)
