@@ -10,29 +10,15 @@
     <form type="submit" class="centered-column fill-parent" id="invite-form">
         {{ form.csrf_token }}
         <div class="gap-15"></div>
-        {{ form.date }}
-        {% if form.date.errors %}
-        <ul class="errors">
-            {% for error in form.date.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-            {% endif %}
-
             <div class="push-to-bottom centered-column fill-width">
                 {{ form.message.label }}
                 {{ form.message }}
-                {% if
-                form.message.errors %}
                 <ul class="errors" id="message-errors">
-                    {% for error in form.message.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
                 </ul>
                 {{ form.date.label }}
                 {{ form.date }}
                 <ul class="errors" id="date-errors">
                 </ul>
-                {% endif %}
                 <div class="gap-15"></div>
                 {% if is_requesting %}
                 <ul class="push-to-bottom row space-between fill-width">
@@ -64,11 +50,7 @@
 </div>
 
 <script type="text/javascript">
-    const invite_path = {
-    {
-        url_for("invite_bp.invite", user_id = current_user.id) | tojson
-    }
-    }
+    const invite_path = {{url_for("invite_bp.invite", user_id = current_user.id) | tojson}}
 
     invite_button = document.querySelector("#invite")
     invite_button.addEventListener("click", send_invite)
