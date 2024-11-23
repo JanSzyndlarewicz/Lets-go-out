@@ -51,7 +51,7 @@
 
 <script type="text/javascript">
 
-    const invite_path = {{url_for("invite_bp.invite", user_id = current_user.id) | tojson}}
+    const invite_path = "{{ url_for('interaction_bp.invite', user_id=date_request_data.user_id) }}"
 
 
     invite_button = document.querySelector("#invite")
