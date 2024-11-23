@@ -1,6 +1,9 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+    <meta id="refill-path" data-path="{{ url_for('find_page_bp.refill') }}">
+    <meta id="invite-path" data-path="{{ url_for('interaction_bp.invite') }}">
+    <meta id="reject-path" data-path="{{ url_for('interaction_bp.reject') }}">
     <main class="find-page-content">
         
         <div class="date-invitation-card outline" id="profile-block" {% if not date_request_data %} style="display: none" {% endif %}>
@@ -18,140 +21,10 @@
         
     </main>
 
-    <script type="text/javascript">
-
-        var users = JSON.parse('{{ date_request_data | tojson | safe}}');
-        
-        function switch_profile(user) {
-            //console.log("Switching to user " + user.id)
-            document.querySelector("#message-input").value = ""
-            document.querySelector("#date-input").value = ""
-            name_label = document.querySelector("#name")
-            name_label.innerHTML = user.name
-            id_hidden_input = document.querySelector("#id-hidden")
-            id_hidden_input.value = user.id
-            //actually change images here once they exist
-            img = document.querySelector("#profile-img")
-            img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();
-            
-        }
-
-        const refill_path = "{{ url_for('find_page_bp.refill') }}"
-
-        function load_new_suggestions() {
-            fetch(refill_path, {
-                method: "POST",
-                headers: {
-                "Content-Type": "application/json",
-                },
-                body: JSON.stringify(users),
-            })
-                .then(response => response.json())
-                .then(data => {     
-                    users.push(...data)
-                })
-        }
-
-        function next_user() {
-            if (users == null || users.length == 0) {
-                document.querySelector("#profile-block").style.display = "none"
-                document.querySelector("#empty-block").style.display = "block"
-                return
-            }
-            switch_profile(users[0])
-            if (users.length <= 5) {
-                load_new_suggestions()
-            } 
-        }
-
-        const invite_path = "{{ url_for('interaction_bp.invite') }}"
-
-        function clear_error_messages(){
-            let error_box = document.querySelector("#date-errors")
-            error_box.innerHTML = ""
-            error_box = document.querySelector("#message-errors")
-            error_box.innerHTML = ""
-        }
-
-        invite_button = document.querySelector("#invite")
-        invite_button.addEventListener("click", send_invite)
-
-        function send_invite() {
-            let form = document.querySelector("#invite-form")
-            let data = new FormData(form)
-            fetch(invite_path, {
-                method: "POST",
-                body: data,
-            })
-            .then(response => response.json())
-            .then(response => {
-                clear_error_messages()
-                if (response === true) {
-                    // Handle success - maybe notify the user or load another match
-                    users.shift()
-                    next_user()   
-                } else {
-                    return response; // Parse JSON for error messages
-                }
-                
-                })
-                .then(data => {
-                    for (var key in data) {
-                        let error_box = document.querySelector("#" + key + "-errors")
-                        error_box.innerHTML = ""
-                        for (let i = 0; i < data[key].length; i++) {
-                            error_box.innerHTML += "<li>" + data[key][i] + "</li>"
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error("Error during rejection:", error);
-                });
-        }
-
-        const reject_path = "{{ url_for('interaction_bp.reject') }}";
-
-        const reject_button = document.querySelector("#reject");
-        reject_button.addEventListener("click", send_reject);
-
-        function send_reject() {
-            let form = document.querySelector("#invite-form")
-            let data = new FormData(form)
-            clear_error_messages()
-            fetch(reject_path, {
-                method: "POST",
-                body : data,
-            })
-                .then(response => {
-                    if (response.ok) {
-                        // Handle success - maybe notify the user or load another match
-                        users.shift()
-                        next_user()
-                    } else {
-                        return response.json(); // Parse JSON for error messages
-                    }
-                })
-                .then(data => {
-                    if (data) {
-                        // Display errors dynamically
-                        let error_box = document.querySelector("#date-errors"); // Adjust the selector for errors
-                        error_box.innerHTML = "";
-                        if (data.errors) {
-                            data.errors.forEach(error => {
-                                error_box.innerHTML += `<li>${error}</li>`;
-                            });
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error("Error during rejection:", error);
-                });  
-        }
-
-        
+    <script src="{{ url_for('static', filename='find_page_logic.js')}}"></script>
+    <script>
+        set_users(JSON.parse('{{ date_request_data | tojson | safe}}'))
         next_user()
-       
-        
     </script>
 
 
