@@ -3,36 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-<h1>Register</h1>
-<form method="post">
-    {{ form.csrf_token }}
+<body class="scaffold-background-color">
+<div class="centered-column fill-height">
+    <h1 class="primary-color">Register</h1>
+    <form method="post" id="register-form" class="centered-column date-invitation-card shadow">
+        {{ form.csrf_token }}
 
-    <div id="register">
         {% with input = form.username %}
-        {% include 'components/form_input.html' %}
+        <div class="gap-15 fill-width">
+            {% include 'components/form_input.html' %}
+        </div>
         {% endwith %}
-        <br>
 
         {% with input = form.email %}
-        {% include 'components/form_input.html' %}
+        <div class="gap-15 fill-width">
+            {% include 'components/form_input.html' %}
+        </div>
         {% endwith %}
-        <br>
 
         {% with input = form.password %}
-        {% include 'components/form_input.html' %}
+        <div class="gap-15 fill-width">
+            {% include 'components/form_input.html' %}
+        </div>
         {% endwith %}
-        <br>
 
         {% with input = form.confirm %}
-        {% include 'components/form_input.html' %}
+        <div class="gap-15 fill-width">
+            {% include 'components/form_input.html' %}
+        </div>
         {% endwith %}
-        <br>
 
         <input type="hidden" name="step" value="register">
-        <button type="submit">Next</button>
-    </div>
-</form>
+
+        <button type="submit" class="primary-background-color text-color shadow gap-30">Next</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputs = document.querySelectorAll("input");
+
+        inputs.forEach(input => {
+            const savedValue = localStorage.getItem(input.name);
+            if (savedValue) input.value = savedValue;
+
+            input.addEventListener("input", () => {
+                localStorage.setItem(input.name, input.value);
+            });
+        });
+    });
+</script>
 </body>
 </html>

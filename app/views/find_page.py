@@ -17,7 +17,7 @@ def find_page_invite():
     date_request_data = suggest_matches(db.session, current_user.id, 1)
     if not date_request_data:
         return render_template("main/find_page.html", date_request_data=None)
-    
+
     date_request_form = DateRequestForm()
     is_requesting = True
     date_request_data = date_request_data[0].profile
@@ -32,10 +32,8 @@ def find_page_answear():
     date_request_data = suggest_matches(db.session, current_user.id, 1)
     if not date_request_data:
         return render_template("main/find_page.html", date_request_data=None)
-    
-    date_request_form = DateRequestForm(
-        given_date=datetime.now().date()
-    )
+
+    date_request_form = DateRequestForm(given_date=datetime.now().date())
     is_requesting = False
     date_request_data = date_request_data[0].profile
     return render_template(
