@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.models import BlockingAssociation, MatchingPreferences, Profile, ProfileInterestAssociation, User
 from flask_login import current_user
 
+
 def between(column: int, start: any, end: any) -> ColumnElement[bool]:
     return and_(column >= start, column <= end)
 

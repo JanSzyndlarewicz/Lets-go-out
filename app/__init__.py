@@ -57,4 +57,8 @@ def create_app():
 
     app.register_blueprint(account_manager_bp)
 
+    from app.views.invite import invite_bp
+
+    app.register_blueprint(invite_bp)
+
     return app
