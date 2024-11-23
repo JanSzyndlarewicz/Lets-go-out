@@ -2,7 +2,7 @@ from functools import wraps
 
 from flask import Blueprint
 from flask import current_app as app
-from flask import flash, redirect, render_template, session, url_for
+from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import IntegrityError
 
@@ -97,7 +97,7 @@ def logout():
 def register():
     form = RegisterForm()
 
-    if "registration_data" in session:
+    if request.method == "GET" and "registration_data" in session:
         registration_data = session["registration_data"]
         form.username.data = registration_data.get("username", "")
         form.email.data = registration_data.get("email", "")
@@ -184,9 +184,10 @@ def process_registration_form(form):
 
 def process_profile_form(profile_form):
     if profile_form.validate_on_submit() and "registration_data" in session:
+        print("validated")
         try:
             new_user = create_user_with_profile(session["registration_data"], profile_form)
-            send_confirmation_email(new_user)
+            if app.config["ADVANCED_ACCESS_CONTROL"]: send_confirmation_email(new_user)
             login_user(new_user)  # TODO: Only for development purposes
             session.pop("registration_data", None)
             return True
