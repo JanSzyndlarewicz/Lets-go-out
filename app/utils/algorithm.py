@@ -1,10 +1,10 @@
 from typing import Type
 
+from flask_login import current_user
 from sqlalchemy import ColumnElement, and_
 from sqlalchemy.orm import Session
 
 from app.models import BlockingAssociation, MatchingPreferences, Profile, ProfileInterestAssociation, User
-from flask_login import current_user
 
 
 def between(column: int, start: any, end: any) -> ColumnElement[bool]:
@@ -34,9 +34,7 @@ def suggest_matches(session: Session, user_id: int = None, number: int = None) -
                 ~User.rejected.any(BlockingAssociation.blocked_id == user_id),
                 ~User.rejecters.any(BlockingAssociation.blocker_id == user_id),
                 Profile.interests.any(
-                    ProfileInterestAssociation.interest_id.in_(
-                        [interest.id for interest in user.profile.interests]
-                    )
+                    ProfileInterestAssociation.interest_id.in_([interest.id for interest in user.profile.interests])
                 ),
             )
         )

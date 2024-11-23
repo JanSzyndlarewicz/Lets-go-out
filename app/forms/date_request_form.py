@@ -9,11 +9,12 @@ class DateRequestForm(FlaskForm):
         validators=[InputRequired(message="Message can't be empty.")],
     )
     date = DateField("Date", format="%Y-%m-%d", validators=[DataRequired()])
+
     def __init__(self, message_label_text=True, given_date=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         if not message_label_text:
-            self.message.label.text = ''
+            self.message.label.text = ""
 
         if given_date:
             # Modify the date field properties dynamically instead of replacing it

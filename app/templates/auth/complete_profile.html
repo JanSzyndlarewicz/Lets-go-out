@@ -6,6 +6,10 @@
 </head>
 <body>
 <h1>Complete Your Profile</h1>
+<form action="{{ url_for('auth_bp.register') }}" method="get" style="margin-top: 20px;">
+    <button type="submit">Back to Register</button>
+</form>
+<br>
 <form method="post">
     {{ profile_form.csrf_token }}
 
@@ -18,9 +22,7 @@
         {{ profile_form.gender.label }}
         {% for name, value in profile_form.gender.choices %}
         <label>
-            <input type="radio" name="gender" value="{{ name }}" {% if name== profile_form.gender.data %}checked{% endif
-                   %}>
-            {{ value }}
+            <input type="radio" name="gender" value="{{ name }}"> {{ value }}
         </label>
         {% endfor %}
         <br>
@@ -31,8 +33,7 @@
         {% endfor %}
         {% endif %}
         {% for name, value in profile_form.gender_preferences.choices %}
-        <input type="checkbox" name="gender_preferences" value="{{ name }}">
-        {{ value }}
+        <input type="checkbox" name="gender_preferences" value="{{ name }}"> {{ value }}
         {% endfor %}
         <br>
 
@@ -57,5 +58,26 @@
         <button type="submit">Submit</button>
     </div>
 </form>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputs = document.querySelectorAll("input");
+
+        inputs.forEach(input => {
+            const savedValue = localStorage.getItem(input.name);
+            if (savedValue) {
+                if (input.type === "radio" || input.type === "checkbox") {
+                    input.checked = savedValue === "true";
+                } else {
+                    input.value = savedValue;
+                }
+            }
+
+            input.addEventListener("input", () => {
+                const value = input.type === "radio" || input.type === "checkbox" ? input.checked : input.value;
+                localStorage.setItem(input.name, value);
+            });
+        });
+    });
+</script>
 </body>
 </html>
