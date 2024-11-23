@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import DateField, StringField
 from wtforms.validators import DataRequired, InputRequired
@@ -23,4 +24,8 @@ class DateRequestForm(FlaskForm):
                 "value": given_date.strftime("%Y-%m-%d"),
             }  # Makes the field readonly
             self.date.data = given_date  # Pre-fill the field with the given date
+        else:
+            self.date.render_kw = {
+                "value": datetime.now().date().strftime("%Y-%m-%d"),
+            }
         self.process()
