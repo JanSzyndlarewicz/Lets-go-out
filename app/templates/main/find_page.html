@@ -80,8 +80,8 @@
             let form = document.querySelector("#invite-form")
             let data = new FormData(form)
             fetch(invite_path, {
-                "method": "POST",
-                "body": data,
+                method: "POST",
+                body: data,
             })
             .then(response => response.json())
             .then(response => {

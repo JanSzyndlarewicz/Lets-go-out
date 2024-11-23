@@ -30,8 +30,12 @@ def invite():
 @confirmed_required
 def reject():
     form = DateRequestForm()
-    user = db.get_or_404(User, form.id.data)
-    current_user.rejected.append(user)
-    db.session.commit()
-    return "true"
+    del form.message
+    del form.date
+    if form.validate_on_submit():
+        user = db.get_or_404(User, form.id.data)
+        current_user.rejected.append(user)
+        db.session.commit()
+        return "true"
+    return "false"
 
