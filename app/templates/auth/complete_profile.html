@@ -2,62 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<h1>Complete Your Profile</h1>
-<form action="{{ url_for('auth_bp.register') }}" method="get" style="margin-top: 20px;">
-    <button type="submit">Back to Register</button>
-</form>
-<br>
-<form method="post">
-    {{ profile_form.csrf_token }}
+<div class="centered-column scaffold-background-color fill-parent gap-30">
+    <h1 class="primary-color">Complete Your Profile</h1>
 
-    <div id="complete-profile">
-        {% with input = profile_form.name %}
-        {% include 'components/form_input.html' %}
-        {% endwith %}
-        <br>
+    <form action="{{ url_for('auth_bp.register') }}" method="get" class="gap-15">
+        <button type="submit" class="primary-background-color text-color fill-width shadow">Back to Register</button>
+    </form>
 
-        {{ profile_form.gender.label }}
-        {% for name, value in profile_form.gender.choices %}
-        <label>
-            <input type="radio" name="gender" value="{{ name }}"> {{ value }}
-        </label>
-        {% endfor %}
-        <br>
+    <form method="post" class="centered-column fill-width gap-30 outline shadow" id="complete-profile">
+        {{ profile_form.csrf_token }}
 
-        {% if profile_form.gender_preferences.errors %}
-        {% for error in profile_form.gender_preferences.errors %}
-        <span>{{ error }}</span>
-        {% endfor %}
-        {% endif %}
-        {% for name, value in profile_form.gender_preferences.choices %}
-        <input type="checkbox" name="gender_preferences" value="{{ name }}"> {{ value }}
-        {% endfor %}
-        <br>
+        <div class="centered-column fill-width">
+            {% with input = profile_form.name %}
+            {% include 'components/form_input.html' %}
+            {% endwith %}
+        </div>
 
-        {% with input = profile_form.year_of_birth %}
-        {% include 'components/form_input.html' %}
-        {% endwith %}
-        <br>
-        <label>Age preferences:</label>
-        <br>
-        {% with input = profile_form.lower_difference %}
-        {% include 'components/form_input.html' %}
-        {% endwith %}
-        <br>
+        <div class="centered-column fill-width gap-15">
+            <label for="gender" class="primary-color">Gender</label>
+            <div class="row space-around fill-width">
+                {% for name, value in profile_form.gender.choices %}
+                <label>
+                    <input type="radio" name="gender" value="{{ name }}" class="gap-15"> {{ value }}
+                </label>
+                {% endfor %}
+            </div>
+        </div>
 
-        {% with input = profile_form.upper_difference %}
-        {% include 'components/form_input.html' %}
-        {% endwith %}
-        <br>
-        <br>
+        <div class="centered-column fill-width gap-15">
+            <label for="gender_preferences" class="primary-color">Gender Preferences</label>
+            <div class="row space-around fill-width">
+                {% if profile_form.gender_preferences.errors %}
+                {% for error in profile_form.gender_preferences.errors %}
+                <span class="error-text">{{ error }}</span>
+                {% endfor %}
+                {% endif %}
+                {% for name, value in profile_form.gender_preferences.choices %}
+                <label>
+                    <input type="checkbox" name="gender_preferences" value="{{ name }}" class="gap-15"> {{ value }}
+                </label>
+                {% endfor %}
+            </div>
+        </div>
 
-        <input type="hidden" name="step" value="complete-profile">
-        <button type="submit">Submit</button>
-    </div>
-</form>
+        <div class="centered-column fill-width gap-15">
+            {% with input = profile_form.year_of_birth %}
+            {% include 'components/form_input.html' %}
+            {% endwith %}
+        </div>
+
+        <div class="centered-column fill-width gap-15">
+            <label for="age_preferences" class="primary-color">Age Preferences</label>
+            <div class="centered-column fill-width">
+                {% with input = profile_form.lower_difference %}
+                {% include 'components/form_input.html' %}
+                {% endwith %}
+                <br>
+                {% with input = profile_form.upper_difference %}
+                {% include 'components/form_input.html' %}
+                {% endwith %}
+            </div>
+        </div>
+
+        <button type="submit" class="primary-background-color text-color shadow">Submit</button>
+    </form>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const inputs = document.querySelectorAll("input");
