@@ -5,6 +5,7 @@ from sqlalchemy import ColumnElement, and_
 from sqlalchemy.orm import Session
 
 from app.models import BlockingAssociation, MatchingPreferences, Profile, ProfileInterestAssociation, User
+from app.models.associations import RejectedAssociation
 
 
 def between(column: int, start: any, end: any) -> ColumnElement[bool]:
@@ -31,8 +32,8 @@ def suggest_matches(session: Session, user_id: int = None, number: int = None) -
                 User.id != user_id,
                 ~User.blocking.any(BlockingAssociation.blocked_id == user_id),
                 ~User.blockers.any(BlockingAssociation.blocker_id == user_id),
-                ~User.rejected.any(BlockingAssociation.blocked_id == user_id),
-                ~User.rejecters.any(BlockingAssociation.blocker_id == user_id),
+                ~User.rejected.any(RejectedAssociation.rejected_id == user_id),
+                ~User.rejecters.any(RejectedAssociation.rejecter_id == user_id),
                 Profile.interests.any(
                     ProfileInterestAssociation.interest_id.in_([interest.id for interest in user.profile.interests])
                 ),

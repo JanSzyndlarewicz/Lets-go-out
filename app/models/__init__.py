@@ -1,4 +1,4 @@
-from app.models.associations import BlockingAssociation, LikingAssociation, ProfileInterestAssociation
+from app.models.associations import BlockingAssociation, LikingAssociation, ProfileInterestAssociation, RejectedAssociation
 from app.models.date_proposal import DateProposal, ProposalStatus
 from app.models.gender import Gender
 from app.models.interest import Interest
