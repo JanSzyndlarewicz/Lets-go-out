@@ -1,5 +1,6 @@
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint
 from flask import current_app as app
+from flask import redirect, render_template, url_for
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
 
