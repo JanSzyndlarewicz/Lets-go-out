@@ -50,7 +50,9 @@
 </div>
 
 <script type="text/javascript">
+
     const invite_path = {{url_for("invite_bp.invite", user_id = current_user.id) | tojson}}
+
 
     invite_button = document.querySelector("#invite")
     invite_button.addEventListener("click", send_invite)
@@ -73,6 +75,45 @@
                 }
                 //afterwards we would probably want to use js to switch to another suggested match
             })
+    }
+
+    const reject_path = "{{ url_for('interaction_bp.reject', user_id=date_request_data.user_id) }}";
+
+    const reject_button = document.querySelector("#reject");
+    reject_button.addEventListener("click", send_reject);
+
+    function send_reject() {
+        // Fetch the current user's ID dynamically or ensure it's embedded in the button element
+        fetch(reject_path, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ form.csrf_token._value() }}",
+                "Content-Type": "application/json",
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Handle success - maybe notify the user or load another match
+                    alert("User rejected successfully!");
+                } else {
+                    return response.json(); // Parse JSON for error messages
+                }
+            })
+            .then(data => {
+                if (data) {
+                    // Display errors dynamically
+                    let error_box = document.querySelector("#date-errors"); // Adjust the selector for errors
+                    error_box.innerHTML = "";
+                    if (data.errors) {
+                        data.errors.forEach(error => {
+                            error_box.innerHTML += `<li>${error}</li>`;
+                        });
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("Error during rejection:", error);
+            });
     }
 
 </script>

@@ -6,10 +6,10 @@ from app.forms import DateRequestForm, DateProposalForm
 from app.models import DateProposal
 from app.views.auth import confirmed_required
 
-invite_bp = Blueprint("invite_bp", __name__)
+interaction_bp = Blueprint("interaction_bp", __name__)
 
 
-@invite_bp.route("/invite/<int:user_id>", methods=["POST"])
+@interaction_bp.route("/invite/<int:user_id>", methods=["POST"])
 @confirmed_required
 def invite(user_id: int):
     form = DateRequestForm()
@@ -28,3 +28,14 @@ def invite(user_id: int):
     print("nie przeszło")
     print(form.errors)
     return form.errors
+
+
+@interaction_bp.route("/reject/<int:user_id>", methods=["POST"])
+@confirmed_required
+def reject(user_id: int):
+    user = db.get_or_404(User, user_id)
+    current_user.rejected.append(user)
+    user.rejecters.append(current_user)
+    db.session.commit()
+    return "true"
+
