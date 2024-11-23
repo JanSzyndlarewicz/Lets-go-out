@@ -19,10 +19,8 @@ def find_page_invite():
     
     date_request_data = get_suggested_matches_data(10)
     if not date_request_data:
-        return render_template("main/find_page.html", date_request_data=None, form=date_request_form, is_requesting=is_requesting)
-
-    
-    
+        date_request_data=None
+        
     return render_template(
         "main/find_page.html", date_request_data=date_request_data, form=date_request_form, is_requesting=is_requesting
     )

@@ -14,11 +14,11 @@
                 {{form.id(id='id-hidden')}}
 
                 {{ form.message.label }}
-                {{ form.message }}
+                {{ form.message(id='message-input') }}
                 <ul class="errors" id="message-errors">
                 </ul>
                 {{ form.date.label }}
-                {{ form.date }}
+                {{ form.date(id='date-input') }}
                 <ul class="errors" id="date-errors">
                 </ul>
                 <div class="gap-15"></div>

@@ -21,12 +21,11 @@
     <script type="text/javascript">
 
         var users = JSON.parse('{{ date_request_data | tojson | safe}}');
-        console.log(users)
         
-
-
         function switch_profile(user) {
-            console.log("Switching to user " + user.id)
+            //console.log("Switching to user " + user.id)
+            document.querySelector("#message-input").value = ""
+            document.querySelector("#date-input").value = ""
             name_label = document.querySelector("#name")
             name_label.innerHTML = user.name
             id_hidden_input = document.querySelector("#id-hidden")
@@ -39,16 +38,8 @@
 
         const refill_path = "{{ url_for('find_page_bp.refill') }}"
 
-        function next_user() {
-            if (users == null || users.length == 0) {
-                document.querySelector("#profile-block").style.display = "none"
-                document.querySelector("#empty-block").style.display = "block"
-                return
-            }
-            switch_profile(users[0])
-            console.log(users)
-            if (users.length <= 5) {
-                fetch(refill_path, {
+        function load_new_suggestions() {
+            fetch(refill_path, {
                 method: "POST",
                 headers: {
                 "Content-Type": "application/json",
@@ -59,11 +50,28 @@
                 .then(data => {     
                     users.push(...data)
                 })
+        }
+
+        function next_user() {
+            if (users == null || users.length == 0) {
+                document.querySelector("#profile-block").style.display = "none"
+                document.querySelector("#empty-block").style.display = "block"
+                return
+            }
+            switch_profile(users[0])
+            if (users.length <= 5) {
+                load_new_suggestions()
             } 
         }
 
         const invite_path = "{{ url_for('interaction_bp.invite') }}"
 
+        function clear_error_messages(){
+            let error_box = document.querySelector("#date-errors")
+            error_box.innerHTML = ""
+            error_box = document.querySelector("#message-errors")
+            error_box.innerHTML = ""
+        }
 
         invite_button = document.querySelector("#invite")
         invite_button.addEventListener("click", send_invite)
@@ -77,12 +85,7 @@
             })
             .then(response => response.json())
             .then(response => {
-                //make it a loop
-                let error_box = document.querySelector("#date-errors")
-                error_box.innerHTML = ""
-                error_box = document.querySelector("#message-errors")
-                error_box.innerHTML = ""
-                
+                clear_error_messages()
                 if (response === true) {
                     // Handle success - maybe notify the user or load another match
                     users.shift()
@@ -112,9 +115,9 @@
         reject_button.addEventListener("click", send_reject);
 
         function send_reject() {
-            // Fetch the current user's ID dynamically or ensure it's embedded in the button element
             let form = document.querySelector("#invite-form")
             let data = new FormData(form)
+            clear_error_messages()
             fetch(reject_path, {
                 method: "POST",
                 body : data,
@@ -142,10 +145,10 @@
                 })
                 .catch(error => {
                     console.error("Error during rejection:", error);
-                });
-            
+                });  
         }
 
+        
         next_user()
        
         
