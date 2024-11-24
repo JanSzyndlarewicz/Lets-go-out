@@ -1,3 +1,11 @@
+function getOnlyFirstDirIn(url=null) {
+    url = url || window.location.href;
+    const baseUrl = `${window.location.protocol}//${window.location.host}`;
+    const firstDirectory = url.split('/')[3]; // Get the first directory
+    const fullPath = firstDirectory ? `${baseUrl}/${firstDirectory}` : baseUrl;
+    return fullPath;
+}
+
 // Change color of nav links when clicked
 document.addEventListener('DOMContentLoaded', function() {
     const links = document.querySelectorAll('.nav-link');
@@ -5,27 +13,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainColor = getComputedStyle(root).getPropertyValue('--primary-color').trim();;
     
     var redirectLink = null;
-    if (localStorage.getItem('clickedLink') !== null) {
-        redirectLink = localStorage.getItem('clickedLink');
-        console.log(redirectLink)
+    if (sessionStorage.getItem('clickedLink') !== null) {
+        redirectLink = sessionStorage.getItem('clickedLink');
     } else {
-        links.forEach(link => {
-            const baseUrl = `${window.location.protocol}//${window.location.host}`;
-            const firstDirectory = window.location.pathname.split('/')[1]; // Get the first directory
-            const fullPath = firstDirectory ? `${baseUrl}/${firstDirectory}` : baseUrl;
-    
-            if (link.href === fullPath) {
+        const fullPath = getOnlyFirstDirIn();
+        links.forEach(link => {   
+            if (getOnlyFirstDirIn(link.href) === fullPath) {
                 redirectLink = fullPath;            
             }
         });
     }
-    
-    
 
     links.forEach(link => {
         // If the link matches the saved one, apply the color
-        console.log(link.href, redirectLink);
-        if (link.href === redirectLink) {
+        console.log("check",link.href,"redirect", redirectLink ,1);
+        if (getOnlyFirstDirIn(link.href) === redirectLink) {
             link.style.color = mainColor;
         }
 
@@ -42,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = this.href;
 
             // Save the clicked link to localStorage
-            localStorage.setItem('clickedLink', this.href);
+            sessionStorage.setItem('clickedLink', this.href);
         });
     });
 });
