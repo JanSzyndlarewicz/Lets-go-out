@@ -1,14 +1,18 @@
+from app.forms.validators import is_not_past
 from flask_wtf import FlaskForm
-from wtforms import DateField, StringField
+from wtforms import DateField, HiddenField, StringField
 from wtforms.validators import DataRequired, InputRequired
 
 
 class DateRequestForm(FlaskForm):
+    id = HiddenField()
     message = StringField(
         "Optional text attached to accept/reject/reschedule",
         validators=[InputRequired(message="Message can't be empty.")],
     )
-    date = DateField("Date", format="%Y-%m-%d", validators=[DataRequired()])
+    date = DateField(
+        "Date", format="%Y-%m-%d", validators=[DataRequired(), is_not_past]
+    )
 
     def __init__(self, message_label_text=True, given_date=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -24,4 +28,4 @@ class DateRequestForm(FlaskForm):
                 "value": given_date.strftime("%Y-%m-%d"),
             }  # Makes the field readonly
             self.date.data = given_date  # Pre-fill the field with the given date
-        self.process()
+        # self.process()
