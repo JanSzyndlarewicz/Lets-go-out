@@ -2,19 +2,20 @@
 
 {% block content %}
     <main class="find-page-content">
+        {% include 'components/set_of_redirect_buttons.html' %}
+        
         {% if date_request_data %}
         <div class="date-invitation-card outline">
             <div class="fill-width centered-column gap-45">
                 <img src="https://thispersondoesnotexist.com/" alt="Profile picture" class="circular-avatar-big ">
-                <h2 class="push-to-bottom gap-15">{{ date_request_data.name }}</h2>
+                <h1 class="push-to-bottom gap-15">{{ date_request_data.name }}</h2>
             </div>
             {% include 'components/date_request.html' %}
             
         </div>
         {% else %}
         <div class="centered-column">
-            <h1>Ups! it seems like we couldn't find any date for you</h1>
-            <p>maybe lower your standards...</p>
+            {% include 'components/no_matches_found.html' %}
         </div>
         {% endif %}
     </main>
