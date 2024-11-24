@@ -1,7 +1,6 @@
-from flask import Blueprint, render_template
-
 from app import User, db
 from app.views.auth import confirmed_required
+from flask import Blueprint, render_template
 
 profile_bp = Blueprint("profile_bp", __name__)
 

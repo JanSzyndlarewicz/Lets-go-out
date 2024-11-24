@@ -4,7 +4,9 @@ from wtforms.validators import Email, EqualTo, InputRequired, Length
 
 
 class RegisterForm(FlaskForm):
-    username = StringField("User name", [InputRequired(message="Please input an username.")])
+    username = StringField(
+        "User name", [InputRequired(message="Please input an username.")]
+    )
     # minimal password length set to 1 for convenience of testing; set to something like 8 in final version
     password = PasswordField(
         "Password",

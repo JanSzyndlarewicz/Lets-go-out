@@ -1,12 +1,11 @@
+from app import db
+from app.forms import AccountManagerForm
+from app.views.auth import confirmed_required
 from flask import Blueprint
 from flask import current_app as app
 from flask import redirect, render_template, url_for
 from flask_login import current_user
 from sqlalchemy.exc import IntegrityError
-
-from app import db
-from app.forms import AccountManagerForm
-from app.views.auth import confirmed_required
 
 account_manager_bp = Blueprint("account_manager_bp", __name__)
 

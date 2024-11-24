@@ -4,7 +4,6 @@ function set_users(new_users) {
 
 var users
 
-
 function switch_profile(user) {
     //console.log("Switching to user " + user.id)
     document.querySelector("#message-input").value = ""
@@ -105,30 +104,28 @@ function send_reject() {
         method: "POST",
         body : data,
     })
-        .then(response => {
-            if (response.ok) {
-                // Handle success - maybe notify the user or load another match
-                users.shift()
-                next_user()
-            } else {
-                return response.json(); // Parse JSON for error messages
+    .then(response => {
+        if (response.ok) {
+            // Handle success - maybe notify the user or load another match
+            users.shift()
+            next_user()
+        } else {
+            return response.json(); // Parse JSON for error messages
+        }
+    })
+    .then(data => {
+        if (data) {
+            // Display errors dynamically
+            let error_box = document.querySelector("#date-errors"); // Adjust the selector for errors
+            error_box.innerHTML = "";
+            if (data.errors) {
+                data.errors.forEach(error => {
+                    error_box.innerHTML += `<li>${error}</li>`;
+                });
             }
-        })
-        .then(data => {
-            if (data) {
-                // Display errors dynamically
-                let error_box = document.querySelector("#date-errors"); // Adjust the selector for errors
-                error_box.innerHTML = "";
-                if (data.errors) {
-                    data.errors.forEach(error => {
-                        error_box.innerHTML += `<li>${error}</li>`;
-                    });
-                }
-            }
-        })
-        .catch(error => {
-            console.error("Error during rejection:", error);
-        });  
+        }
+    })
+    .catch(error => {
+        console.error("Error during rejection:", error);
+    });  
 }
-
-

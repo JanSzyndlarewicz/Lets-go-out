@@ -1,15 +1,14 @@
 import logging
 import os
 
-from flask import Blueprint, redirect, render_template, request, url_for
-from flask_login import current_user
-from sqlalchemy.exc import IntegrityError
-from werkzeug.utils import secure_filename
-
 from app import db
 from app.forms import ProfileManagerForm
 from app.models import Gender, Photo
 from app.views.auth import confirmed_required
+from flask import Blueprint, redirect, render_template, request, url_for
+from flask_login import current_user
+from sqlalchemy.exc import IntegrityError
+from werkzeug.utils import secure_filename
 
 logger = logging.getLogger(__name__)
 

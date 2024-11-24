@@ -1,10 +1,9 @@
-from flask import Blueprint, request
-from flask_login import current_user
-
 from app import User, db
-from app.forms import DateRequestForm, DateProposalForm
+from app.forms import DateProposalForm, DateRequestForm
 from app.models import DateProposal
 from app.views.auth import confirmed_required
+from flask import Blueprint, request
+from flask_login import current_user
 
 interaction_bp = Blueprint("interaction_bp", __name__)
 
@@ -18,7 +17,10 @@ def invite():
     if form.validate_on_submit():
         db.get_or_404(User, form.id.data)
         proposal = DateProposal(
-            proposer_id=current_user.id, recipient_id=form.id.data, date=form.date.data, proposal_message=form.message.data
+            proposer_id=current_user.id,
+            recipient_id=form.id.data,
+            date=form.date.data,
+            proposal_message=form.message.data,
         )
         db.session.add(proposal)
         db.session.commit()
@@ -38,4 +40,3 @@ def reject():
         db.session.commit()
         return "true"
     return "false"
-

@@ -1,17 +1,22 @@
 from typing import Type
 
+from app.models import (BlockingAssociation, MatchingPreferences, Profile,
+                        ProfileInterestAssociation, RejectedAssociation, User)
 from flask_login import current_user
 from sqlalchemy import ColumnElement, and_
 from sqlalchemy.orm import Session
-
-from app.models import BlockingAssociation, MatchingPreferences, Profile, ProfileInterestAssociation, RejectedAssociation, User
 
 
 def between(column: int, start: any, end: any) -> ColumnElement[bool]:
     return and_(column >= start, column <= end)
 
 
-def suggest_matches(session: Session, user_id: int = None, number: int = None, ignore_ids : list[int] = None) -> list[Type[User]]:
+def suggest_matches(
+    session: Session,
+    user_id: int = None,
+    number: int = None,
+    ignore_ids: list[int] = None,
+) -> list[Type[User]]:
     if ignore_ids is None:
         ignore_ids = []
     if user_id is None:
@@ -35,7 +40,9 @@ def suggest_matches(session: Session, user_id: int = None, number: int = None, i
                 ~User.blockers.any(BlockingAssociation.blocker_id == user_id),
                 ~User.rejecters.any(RejectedAssociation.rejecter_id == user_id),
                 Profile.interests.any(
-                    ProfileInterestAssociation.interest_id.in_([interest.id for interest in user.profile.interests])
+                    ProfileInterestAssociation.interest_id.in_(
+                        [interest.id for interest in user.profile.interests]
+                    )
                 ),
                 ~(User.id.in_(ignore_ids)),
             )
