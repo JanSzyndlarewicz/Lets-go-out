@@ -1,7 +1,7 @@
 from typing import Type
 
-from app.models import (BlockingAssociation, MatchingPreferences, Profile,
-                        ProfileInterestAssociation, RejectedAssociation, User)
+from app.models import (BlockingAssociation, DateProposal, LikingAssociation, MatchingPreferences, Profile,
+                        ProfileInterestAssociation, RejectedAssociation, User, UserGenderPreference)
 from flask_login import current_user
 from sqlalchemy import ColumnElement, and_
 from sqlalchemy.orm import Session
@@ -32,15 +32,22 @@ def suggest_matches(
         .filter(
             and_(
                 Profile.gender.in_(preferences.gender_preferences),
+                MatchingPreferences.genders.any(UserGenderPreference.gender == user.profile.gender),
                 between(Profile.year_of_birth, min_year_of_birth, max_year_of_birth),
+                between(
+                    user.profile.year_of_birth,
+                    Profile.year_of_birth - MatchingPreferences.lower_difference,
+                    Profile.year_of_birth + MatchingPreferences.upper_difference,
+                ),
                 User.id != user_id,
                 ~User.blocking.any(BlockingAssociation.blocked_id == user_id),
                 ~User.blockers.any(BlockingAssociation.blocker_id == user_id),
                 ~User.rejecters.any(RejectedAssociation.rejecter_id == user_id),
+                ~User.likers.any(LikingAssociation.liker_id == user_id),
+                ~User.sent_proposals.any(DateProposal.recipient_id == user_id),
+                ~User.received_proposals.any(DateProposal.proposer_id == user_id),
                 Profile.interests.any(
-                    ProfileInterestAssociation.interest_id.in_(
-                        [interest.id for interest in user.profile.interests]
-                    )
+                    ProfileInterestAssociation.interest_id.in_([interest.id for interest in user.profile.interests])
                 ),
                 ~(User.id.in_(ignore_ids)),
             )
