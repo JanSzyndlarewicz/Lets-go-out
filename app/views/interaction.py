@@ -53,20 +53,9 @@ def accept():
         return "true"
     return "false"
 
-@interaction_bp.route("/accept", methods=["POST"])
+@interaction_bp.route("/reject-invitation", methods=["POST"])
 @confirmed_required
-def accept():
-    form = DateRequestForm()
-    if form.validate_on_submit():
-        proposal = db.get_or_404(DateProposal, form.id.data)
-        proposal.status = ProposalStatus.accepted
-        db.session.commit()
-        return "true"
-    return "false"
-
-@interaction_bp.route("/reject", methods=["POST"])
-@confirmed_required
-def reject():
+def reject_invitation():
     form = DateRequestForm()
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)

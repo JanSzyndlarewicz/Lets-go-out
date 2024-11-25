@@ -5,19 +5,22 @@
     <meta id="invite-path" data-path="{{ url_for('interaction_bp.invite') }}">
     <meta id="reject-path" data-path="{{ url_for('interaction_bp.reject') }}">
     <main class="find-page-content">
+
+        {% include 'components/set_of_redirect_buttons.html' %}
         
-        <div class="date-invitation-card outline" id="profile-block" {% if not date_request_data %} style="display: none" {% endif %}>
+
+
+        <div class="date-invitation-card outline"  id="profile-block" {% if not date_request_data %} style="display: none" {% endif %}>
             <div class="fill-width centered-column gap-45">
-                <img src="https://thispersondoesnotexist.com/" alt="Profile picture" class="circular-avatar-big " id="profile-img">
-                <h2 class="push-to-bottom gap-15" id="name">Name</h2>
+                <img src="https://thispersondoesnotexist.com/" alt="Profile picture" class="circular-avatar-big " id="profile-img"> 
+                <h1 class="push-to-bottom gap-15" id="name"></h2>
             </div>
             {% include 'components/date_request.html' %}
             
         </div>
+
         <div class="centered-column" id="empty-block" {% if date_request_data %} style="display: none" {% endif %}>
-            <h1>Ups! it seems like we couldn't find any date for you</h1>
-            <p>maybe lower your standards...</p>
-        </div>
+            {% include 'components/no_matches_found.html' %}
         
     </main>
 
