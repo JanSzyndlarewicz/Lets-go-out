@@ -15,10 +15,8 @@ def suggest_matches(
     session: Session,
     user_id: int = None,
     number: int = None,
-    ignore_ids: list[int] = None,
+    ignore_ids: list[int] = [],
 ) -> list[Type[User]]:
-    if ignore_ids is None:
-        ignore_ids = []
     if user_id is None:
         user_id = current_user.id
     user = session.query(User).filter(User.id == user_id).first()
