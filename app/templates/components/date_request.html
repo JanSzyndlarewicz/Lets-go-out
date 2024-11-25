@@ -13,6 +13,10 @@
             <div class="push-to-bottom centered-column fill-width">
                 {{form.id(id='id-hidden')}}
 
+                {% if not is_requesting %}
+                <textarea id="message-inbound" disabled></textarea>
+                {% endif %}
+
                 {{ form.message.label }}
                 {{ form.message(id='message-input') }}
                 <ul class="errors" id="message-errors">
@@ -34,16 +38,16 @@
                 {% else %}
                 <ul class="push-to-bottom row space-around fill-width">
                     <li>
-                        <div class="labeled-icon"><i class="fas fa-times"></i>Reject</div>
+                        <div class="labeled-icon"><i class="fas fa-times" id="reject-invitation"></i>Reject</div>
                     </li>
                     <li>
-                        <div class="labeled-icon"><i class="fas fa-heart-broken"></i>Ignore</div>
+                        <div class="labeled-icon"><i class="fas fa-heart-broken" id="ignore"></i>Ignore</div>
                     </li>
                     <li>
-                        <div class="labeled-icon"><i class="fas fa-clock"></i>Reschedule</div>
+                        <div class="labeled-icon"><i class="fas fa-clock" id="reschedule"></i>Reschedule</div>
                     </li>
                     <li>
-                        <div class="labeled-icon"><i class="fas fa-heart"></i>Accept</div>
+                        <div class="labeled-icon"><i class="fas fa-heart" id="accept"></i>Accept</div>
                     </li>
                 </ul>
                 {% endif %}

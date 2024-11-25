@@ -4,6 +4,10 @@
     <meta id="refill-path" data-path="{{ url_for('find_page_bp.refill') }}">
     <meta id="invite-path" data-path="{{ url_for('interaction_bp.invite') }}">
     <meta id="reject-path" data-path="{{ url_for('interaction_bp.reject') }}">
+    <meta id="accept-path" data-path="{{ url_for('interaction_bp.accept') }}">
+    <meta id="reject-invitation-path" data-path="{{ url_for('interaction_bp.reject_invitation') }}">
+    <meta id="ignore-path" data-path="{{ url_for('interaction_bp.ignore') }}">
+    <meta id="reschedule-path" data-path="{{ url_for('interaction_bp.reschedule') }}">
     <main class="find-page-content">
 
         {% include 'components/set_of_redirect_buttons.html' %}
@@ -25,10 +29,20 @@
     </main>
 
     <script src="{{ url_for('static', filename='find_page_logic.js')}}"></script>
+
+    {% if is_requesting %}
     <script>
-        set_users(JSON.parse('{{ date_request_data | tojson | safe}}'))
+        set_cache(JSON.parse('{{ date_request_data | tojson | safe}}'))
+        prepare_invite()
         next_user()
     </script>
+    {% else %}
+    <script>
+        set_cache(JSON.parse('{{ date_request_data | tojson | safe}}'))
+        prepare_answear()
+        next_invitation()
+    </script>
+    {% endif %}
 
 
 {% endblock %}

@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from flask import Blueprint, request
 from flask_login import current_user
 
 from app import User, db
-from app.forms import DateProposalForm, DateRequestForm
+from app.forms import DateRequestForm
 from app.models import DateProposal, ProposalStatus
 from app.views.auth import confirmed_required
 
@@ -40,7 +42,7 @@ def reject():
         current_user.rejected.append(user)
         db.session.commit()
         return "true"
-    return "false"
+    return form.errors
 
 @interaction_bp.route("/accept", methods=["POST"])
 @confirmed_required
@@ -49,9 +51,11 @@ def accept():
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
         proposal.status = ProposalStatus.accepted
+        proposal.response_message = form.message.data
+        proposal.response_timestamp = datetime.now()
         db.session.commit()
         return "true"
-    return "false"
+    return form.errors
 
 @interaction_bp.route("/reject-invitation", methods=["POST"])
 @confirmed_required
@@ -60,20 +64,24 @@ def reject_invitation():
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
         proposal.status = ProposalStatus.rejected
+        proposal.response_message = form.message.data
+        proposal.response_timestamp = datetime.now()
         db.session.commit()
         return "true"
-    return "false"
+    return form.errors
 
 @interaction_bp.route("/ignore", methods=["POST"])
 @confirmed_required
 def ignore():
     form = DateRequestForm()
+    del form.message
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
         proposal.status = ProposalStatus.ignored
+        proposal.response_timestamp = datetime.now()
         db.session.commit()
         return "true"
-    return "false"
+    return form.errors
 
 @interaction_bp.route("/reschedule", methods=["POST"])
 @confirmed_required
@@ -82,6 +90,8 @@ def reschedule():
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
         proposal.status = ProposalStatus.reschedule
+        proposal.response_message = form.message.data
+        proposal.response_timestamp = datetime.now()
         db.session.commit()
         return "true"
-    return "false"
+    return form.errors
