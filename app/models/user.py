@@ -1,16 +1,17 @@
 from typing import Optional
 
-from app.models.associations import ProfileInterestAssociation
-from app.models.database import db
-from app.models.gender import Gender
-from app.models.interest import Interest
-from app.models.preferences import MatchingPreferences
 from flask import current_app as app
 from flask_login import UserMixin
 from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from werkzeug.security import check_password_hash, generate_password_hash
+
+from app.models.associations import ProfileInterestAssociation
+from app.models.database import db
+from app.models.gender import Gender
+from app.models.interest import Interest
+from app.models.preferences import MatchingPreferences
 
 
 class User(db.Model, UserMixin):
@@ -20,9 +21,7 @@ class User(db.Model, UserMixin):
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
     confirmed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    profile: Mapped["Profile"] = relationship(
-        "Profile", uselist=False, back_populates="user"
-    )
+    profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="user")
     matching_preferences: Mapped["MatchingPreferences"] = relationship(
         "MatchingPreferences", uselist=False, back_populates="user"
     )

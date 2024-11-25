@@ -1,12 +1,14 @@
 from datetime import datetime
 
+from flask import Blueprint
+from flask import current_app as app
+from flask import render_template, request
+from flask_login import current_user
+
 from app.forms import DateRequestForm
 from app.models.database import db
 from app.utils.algorithm import suggest_matches
 from app.views.auth import confirmed_required
-from flask import Blueprint, render_template, request
-from flask import current_app as app
-from flask_login import current_user
 
 find_page_bp = Blueprint("find_page_bp", __name__)
 

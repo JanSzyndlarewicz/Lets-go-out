@@ -1,9 +1,10 @@
+from flask import Blueprint, request
+from flask_login import current_user
+
 from app import User, db
 from app.forms import DateProposalForm, DateRequestForm
 from app.models import DateProposal
 from app.views.auth import confirmed_required
-from flask import Blueprint, request
-from flask_login import current_user
 
 interaction_bp = Blueprint("interaction_bp", __name__)
 

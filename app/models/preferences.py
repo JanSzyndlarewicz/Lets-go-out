@@ -1,8 +1,9 @@
-from app.models.database import db
-from app.models.gender import Gender
 from sqlalchemy import Enum, ForeignKey, Integer
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.models.database import db
+from app.models.gender import Gender
 
 
 class UserGenderPreference(db.Model):
@@ -11,9 +12,7 @@ class UserGenderPreference(db.Model):
         ForeignKey("matching_preferences.id", ondelete="CASCADE", onupdate="CASCADE"),
         primary_key=True,
     )
-    matching_preferences: Mapped["MatchingPreferences"] = relationship(
-        "MatchingPreferences", back_populates="genders"
-    )
+    matching_preferences: Mapped["MatchingPreferences"] = relationship("MatchingPreferences", back_populates="genders")
     gender: Mapped["Gender"] = mapped_column(Enum(Gender), primary_key=True)
 
 

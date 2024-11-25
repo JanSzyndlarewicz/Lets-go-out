@@ -1,15 +1,16 @@
 from functools import wraps
 
-from app import User, db
-from app.forms import LoginForm, RegisterForm
-from app.forms.user_data_fulfilment import ProfileDataFulfilment
-from app.models import Gender, Profile
-from app.utils import send_email
 from flask import Blueprint
 from flask import current_app as app
 from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import IntegrityError
+
+from app import User, db
+from app.forms import LoginForm, RegisterForm
+from app.forms.user_data_fulfilment import ProfileDataFulfilment
+from app.models import Gender, Profile
+from app.utils import send_email
 
 auth_bp = Blueprint("auth_bp", __name__)
 
@@ -160,9 +161,7 @@ def index():
 def initialize_profile_form():
     profile_form = ProfileDataFulfilment()
     profile_form.gender.choices = [(gender.name, gender.value) for gender in Gender]
-    profile_form.gender_preferences.choices = [
-        (gender.name, gender.value) for gender in Gender
-    ]
+    profile_form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
     return profile_form
 
 
@@ -181,9 +180,7 @@ def process_profile_form(profile_form):
     if profile_form.validate_on_submit() and "registration_data" in session:
         print("validated")
         try:
-            new_user = create_user_with_profile(
-                session["registration_data"], profile_form
-            )
+            new_user = create_user_with_profile(session["registration_data"], profile_form)
             if app.config["ADVANCED_ACCESS_CONTROL"]:
                 send_confirmation_email(new_user)
             login_user(new_user)  # TODO: Only for development purposes
@@ -208,9 +205,7 @@ def create_user_with_profile(registration_data, profile_form):
         year_of_birth=profile_form.year_of_birth.data,
     )
 
-    new_user.matching_preferences.gender_preferences = [
-        Gender[gp] for gp in profile_form.gender_preferences.data
-    ]
+    new_user.matching_preferences.gender_preferences = [Gender[gp] for gp in profile_form.gender_preferences.data]
     new_user.matching_preferences.lower_difference = profile_form.lower_difference.data
     new_user.matching_preferences.upper_difference = profile_form.upper_difference.data
 

@@ -1,9 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from wtforms import (IntegerField, RadioField, SelectMultipleField,
-                     StringField, SubmitField, TextAreaField)
-from wtforms.validators import (DataRequired, InputRequired, NumberRange,
-                                Optional)
+from wtforms import IntegerField, RadioField, SelectMultipleField, StringField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, InputRequired, NumberRange, Optional
 
 
 class ProfileManagerForm(FlaskForm):
@@ -11,9 +9,7 @@ class ProfileManagerForm(FlaskForm):
     gender = RadioField("Gender")
     description = TextAreaField("Description", [])
     gender_preferences = SelectMultipleField("Gender preferences")
-    year_of_birth = IntegerField(
-        "Year of birth", [InputRequired(message="Year of birth is required.")]
-    )
+    year_of_birth = IntegerField("Year of birth", [InputRequired(message="Year of birth is required.")])
     lower_difference = IntegerField(
         "Lower age difference",
         [

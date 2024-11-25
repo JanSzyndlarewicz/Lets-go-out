@@ -1,8 +1,9 @@
-from app.models import User
-from app.models.database import db
 from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
+
+from app.models import User
+from app.models.database import db
 
 
 def create_app():

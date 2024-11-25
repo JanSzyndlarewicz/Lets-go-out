@@ -1,8 +1,9 @@
 from datetime import datetime
 
-from app.models.database import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
+
+from app.models.database import db
 
 
 class LikingAssociation(db.Model):
@@ -32,6 +33,4 @@ class RejectedAssociation(db.Model):
 class ProfileInterestAssociation(db.Model):
     __tablename__ = "profile_interest_association"
     profile_id: Mapped[int] = mapped_column(ForeignKey("profile.id"), primary_key=True)
-    interest_id: Mapped[int] = mapped_column(
-        ForeignKey("interest.id"), primary_key=True
-    )
+    interest_id: Mapped[int] = mapped_column(ForeignKey("interest.id"), primary_key=True)

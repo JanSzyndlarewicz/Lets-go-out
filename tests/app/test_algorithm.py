@@ -1,9 +1,10 @@
 import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 from app.models import Gender, MatchingPreferences, Profile, User
 from app.models.database import db
 from app.utils.algorithm import suggest_matches
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 
 @pytest.fixture(scope="function")

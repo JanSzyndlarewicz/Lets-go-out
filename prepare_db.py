@@ -1,11 +1,11 @@
 import random
 
+from sqlalchemy.exc import IntegrityError
+
 from app import create_app
-from app.models import (Gender, Interest, MatchingPreferences, Photo, Profile,
-                        User)
+from app.models import Gender, Interest, MatchingPreferences, Photo, Profile, User
 from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
-from sqlalchemy.exc import IntegrityError
 
 app = create_app()
 

@@ -1,10 +1,20 @@
 from typing import Type
 
-from app.models import (BlockingAssociation, DateProposal, LikingAssociation, MatchingPreferences, Profile,
-                        ProfileInterestAssociation, RejectedAssociation, User, UserGenderPreference)
 from flask_login import current_user
 from sqlalchemy import ColumnElement, and_
 from sqlalchemy.orm import Session
+
+from app.models import (
+    BlockingAssociation,
+    DateProposal,
+    LikingAssociation,
+    MatchingPreferences,
+    Profile,
+    ProfileInterestAssociation,
+    RejectedAssociation,
+    User,
+    UserGenderPreference,
+)
 
 
 def between(column: int, start: any, end: any) -> ColumnElement[bool]:
