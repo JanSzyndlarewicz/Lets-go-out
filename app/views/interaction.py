@@ -3,7 +3,7 @@ from flask_login import current_user
 
 from app import User, db
 from app.forms import DateProposalForm, DateRequestForm
-from app.models import DateProposal
+from app.models import DateProposal, ProposalStatus
 from app.views.auth import confirmed_required
 
 interaction_bp = Blueprint("interaction_bp", __name__)
@@ -38,6 +38,61 @@ def reject():
     if form.validate_on_submit():
         user = db.get_or_404(User, form.id.data)
         current_user.rejected.append(user)
+        db.session.commit()
+        return "true"
+    return "false"
+
+@interaction_bp.route("/accept", methods=["POST"])
+@confirmed_required
+def accept():
+    form = DateRequestForm()
+    if form.validate_on_submit():
+        proposal = db.get_or_404(DateProposal, form.id.data)
+        proposal.status = ProposalStatus.accepted
+        db.session.commit()
+        return "true"
+    return "false"
+
+@interaction_bp.route("/accept", methods=["POST"])
+@confirmed_required
+def accept():
+    form = DateRequestForm()
+    if form.validate_on_submit():
+        proposal = db.get_or_404(DateProposal, form.id.data)
+        proposal.status = ProposalStatus.accepted
+        db.session.commit()
+        return "true"
+    return "false"
+
+@interaction_bp.route("/reject", methods=["POST"])
+@confirmed_required
+def reject():
+    form = DateRequestForm()
+    if form.validate_on_submit():
+        proposal = db.get_or_404(DateProposal, form.id.data)
+        proposal.status = ProposalStatus.rejected
+        db.session.commit()
+        return "true"
+    return "false"
+
+@interaction_bp.route("/ignore", methods=["POST"])
+@confirmed_required
+def ignore():
+    form = DateRequestForm()
+    if form.validate_on_submit():
+        proposal = db.get_or_404(DateProposal, form.id.data)
+        proposal.status = ProposalStatus.ignored
+        db.session.commit()
+        return "true"
+    return "false"
+
+@interaction_bp.route("/reschedule", methods=["POST"])
+@confirmed_required
+def reschedule():
+    form = DateRequestForm()
+    if form.validate_on_submit():
+        proposal = db.get_or_404(DateProposal, form.id.data)
+        proposal.status = ProposalStatus.reschedule
         db.session.commit()
         return "true"
     return "false"
