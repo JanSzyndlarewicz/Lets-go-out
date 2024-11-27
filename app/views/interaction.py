@@ -50,9 +50,7 @@ def accept():
     form = DateRequestForm()
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
-        proposal.status = ProposalStatus.accepted
-        proposal.response_message = form.message.data
-        proposal.response_timestamp = datetime.now()
+        proposal.change_status(ProposalStatus.accepted, form.message.data)
         db.session.commit()
         return "true"
     return form.errors
@@ -63,9 +61,7 @@ def reject_invitation():
     form = DateRequestForm()
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
-        proposal.status = ProposalStatus.rejected
-        proposal.response_message = form.message.data
-        proposal.response_timestamp = datetime.now()
+        proposal.change_status(ProposalStatus.rejected, form.message.data)
         db.session.commit()
         return "true"
     return form.errors
@@ -77,8 +73,7 @@ def ignore():
     del form.message
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
-        proposal.status = ProposalStatus.ignored
-        proposal.response_timestamp = datetime.now()
+        proposal.change_status(ProposalStatus.ignored)
         db.session.commit()
         return "true"
     return form.errors
@@ -89,9 +84,7 @@ def reschedule():
     form = DateRequestForm()
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
-        proposal.status = ProposalStatus.reschedule
-        proposal.response_message = form.message.data
-        proposal.response_timestamp = datetime.now()
+        proposal.change_status(ProposalStatus.reschedule, form.message.data)
         db.session.commit()
         return "true"
     return form.errors

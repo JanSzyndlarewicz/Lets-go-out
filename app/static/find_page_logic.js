@@ -1,11 +1,31 @@
+//COMMON
+
+var cache
+
 function set_cache(new_cache) {
     cache = new_cache
 }
 
-var cache
+function clear_error_messages(){
+    let error_box = document.querySelector("#date-errors")
+    error_box.innerHTML = ""
+    error_box = document.querySelector("#message-errors")
+    error_box.innerHTML = ""
+}
+
+function display_errors(data){
+    for (var key in data) {
+        let error_box = document.querySelector("#" + key + "-errors")
+        error_box.innerHTML = ""
+        for (let i = 0; i < data[key].length; i++) {
+            error_box.innerHTML += "<li>" + data[key][i] + "</li>"
+        }
+    }
+}
+
+//SUGGESTIONS
 
 function switch_profile(user) {
-    //console.log("Switching to user " + user.id)
     document.querySelector("#message-input").value = ""
     document.querySelector("#date-input").value = ""
     name_label = document.querySelector("#name")
@@ -14,8 +34,7 @@ function switch_profile(user) {
     id_hidden_input.value = user.id
     //actually change images here once they exist
     img = document.querySelector("#profile-img")
-    img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();
-    
+    img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();  
 }
 
 const refill_path = $('#refill-path').data().path
@@ -46,50 +65,6 @@ function next_user() {
     } 
 }
 
-function switch_invitation(invitation) {
-    //console.log("Switching to user " + user.id)
-    document.querySelector("#message-input").value = ""
-    document.querySelector("#date-input").value = invitation.date
-    name_label = document.querySelector("#name")
-    name_label.innerHTML = invitation.name
-    id_hidden_input = document.querySelector("#id-hidden")
-    id_hidden_input.value = invitation.id
-
-    invitation_message_field = document.querySelector("#message-inbound")
-    invitation_message_field.value = invitation.message
-    if (invitation.message.length == 0){
-        invitation_message_field.style.display = "none"
-    } else {
-        invitation_message_field.style.display = "block"
-    }
-
-    date_input = document.querySelector("#date-input")
-    console.log(invitation.date)
-    date_input.value=invitation.date
-
-    //actually change images here once they exist
-    img = document.querySelector("#profile-img")
-    img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();
-    
-}
-
-function next_invitation() {
-    if (cache == null || cache.length == 0) {
-        document.querySelector("#profile-block").style.display = "none"
-        document.querySelector("#empty-block").style.display = "block"
-        return
-    }
-    switch_invitation(cache[0])
-}
-
-function clear_error_messages(){
-    let error_box = document.querySelector("#date-errors")
-    error_box.innerHTML = ""
-    error_box = document.querySelector("#message-errors")
-    error_box.innerHTML = ""
-}
-
-
 const invite_path = $('#invite-path').data().path
 
 function send_invite() {
@@ -108,18 +83,9 @@ function send_invite() {
             next_user()   
         } else {
             return response; // Parse JSON for error messages
-        }
-        
+        }     
         })
-        .then(data => {
-            for (var key in data) {
-                let error_box = document.querySelector("#" + key + "-errors")
-                error_box.innerHTML = ""
-                for (let i = 0; i < data[key].length; i++) {
-                    error_box.innerHTML += "<li>" + data[key][i] + "</li>"
-                }
-            }
-        })
+        .then(display_errors)
         .catch(error => {
             console.error("Error during rejection:", error);
         });
@@ -146,18 +112,7 @@ function send_reject() {
             return response.json(); // Parse JSON for error messages
         }
     })
-    .then(data => {
-        if (data) {
-            // Display errors dynamically
-            let error_box = document.querySelector("#date-errors"); // Adjust the selector for errors
-            error_box.innerHTML = "";
-            if (data.errors) {
-                data.errors.forEach(error => {
-                    error_box.innerHTML += `<li>${error}</li>`;
-                });
-            }
-        }
-    })
+    .then(display_errors)
     .catch(error => {
         console.error("Error during rejection:", error);
     });  
@@ -169,6 +124,43 @@ function prepare_invite(){
 
     const reject_button = document.querySelector("#reject");
     reject_button.addEventListener("click", send_reject);
+}
+
+
+// REPLIES TO INVITATION
+
+function switch_invitation(invitation) {
+    document.querySelector("#message-input").value = ""
+    document.querySelector("#date-input").value = invitation.date
+    name_label = document.querySelector("#name")
+    name_label.innerHTML = invitation.name
+    id_hidden_input = document.querySelector("#id-hidden")
+    id_hidden_input.value = invitation.id
+
+    invitation_message_field = document.querySelector("#message-inbound")
+    invitation_message_field.value = invitation.message
+    if (invitation.message.length == 0){
+        invitation_message_field.style.display = "none"
+    } else {
+        invitation_message_field.style.display = "block"
+    }
+
+    date_input = document.querySelector("#date-input")
+    date_input.value=invitation.date
+
+    //actually change images here once they exist
+    img = document.querySelector("#profile-img")
+    img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();
+    
+}
+
+function next_invitation() {
+    if (cache == null || cache.length == 0) {
+        document.querySelector("#profile-block").style.display = "none"
+        document.querySelector("#empty-block").style.display = "block"
+        return
+    }
+    switch_invitation(cache[0])
 }
 
 const accept_path = $('#accept-path').data().path
@@ -189,18 +181,9 @@ function reply_accept() {
             next_invitation()   
         } else {
             return response; // Parse JSON for error messages
-        }
-        
+        }     
         })
-        .then(data => {
-            for (var key in data) {
-                let error_box = document.querySelector("#" + key + "-errors")
-                error_box.innerHTML = ""
-                for (let i = 0; i < data[key].length; i++) {
-                    error_box.innerHTML += "<li>" + data[key][i] + "</li>"
-                }
-            }
-        })
+        .then(display_errors)
         .catch(error => {
             console.error("Error during accepting:", error);
         });
@@ -227,15 +210,7 @@ function reply_reject() {
         }
         
         })
-        .then(data => {
-            for (var key in data) {
-                let error_box = document.querySelector("#" + key + "-errors")
-                error_box.innerHTML = ""
-                for (let i = 0; i < data[key].length; i++) {
-                    error_box.innerHTML += "<li>" + data[key][i] + "</li>"
-                }
-            }
-        })
+        .then(display_errors)
         .catch(error => {
             console.error("Error during rejecting:", error);
         });
@@ -262,15 +237,7 @@ function reply_ignore() {
         }
         
         })
-        .then(data => {
-            for (var key in data) {
-                let error_box = document.querySelector("#" + key + "-errors")
-                error_box.innerHTML = ""
-                for (let i = 0; i < data[key].length; i++) {
-                    error_box.innerHTML += "<li>" + data[key][i] + "</li>"
-                }
-            }
-        })
+        .then(display_errors)
         .catch(error => {
             console.error("Error during ignoring:", error);
         });

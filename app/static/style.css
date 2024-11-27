@@ -265,3 +265,19 @@ main .redirect-buttons-set {
     top: 0px;
     left: 20px;
 }
+
+.elementToFadeInAndOut {
+    animation: fadeInOut 4s linear 1 forwards;
+}
+
+@keyframes fadeInOut {
+0% {
+    opacity: 0;
+}
+50% {
+    opacity: 1;
+}
+100% {
+    opacity: 0;
+}
+}

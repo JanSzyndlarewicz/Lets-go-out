@@ -1,2 +1,7 @@
 <p>It seems your account has not been activated yet! You should have received an email with a link allowing you to activate your account and begin using our service!</p>
 <p>If you have not received an email, or the activation link has alread expired, click <a href="{{url_for('auth_bp.resend')}}">here</a> to resend the email.</p>
+{% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+        <div>{{ message }}</div>
+    {% endfor %}
+{% endwith %}

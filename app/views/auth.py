@@ -14,11 +14,21 @@ from app.utils import send_email
 
 auth_bp = Blueprint("auth_bp", __name__)
 
+# only allow authenticated users, otherwise redirect to login page
+def login_redirect(func):
+    @wraps(func)
+    def inner(*args, **kwargs):
+        if current_user.is_authenticated:
+            return func(*args, **kwargs)
+        return redirect(url_for(app.config["LOGIN_PAGE_ROUTE"]))
+    
+    return inner
+        
 
-# only allow confirmed users, otherwise redirect to unconfirmeed page
+# only allow confirmed users, otherwise redirect to unconfirmed/login page 
 def confirmed_required(func):
     @wraps(func)
-    @login_required
+    @login_redirect
     def inner(*args, **kwargs):
         if not app.config["ADVANCED_ACCESS_CONTROL"]:
             return func(*args, **kwargs)
@@ -29,10 +39,10 @@ def confirmed_required(func):
     return inner
 
 
-# only allow unconfirmed users, otherwise redirect to main page
+# only allow unconfirmed users, otherwise redirect to main/login page
 def unconfirmed_required(func):
     @wraps(func)
-    @login_required
+    @login_redirect
     def inner(*args, **kwargs):
         if not app.config["ADVANCED_ACCESS_CONTROL"]:
             return func(*args, **kwargs)
