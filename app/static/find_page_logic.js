@@ -26,6 +26,12 @@ function display_errors(data){
 //SUGGESTIONS
 
 function switch_profile(user) {
+    block = document.querySelector("#profile-block")
+    block.classList.remove("fadeOut")
+    block.classList.remove("fadeIn")
+    block.offsetWidth
+    block.classList.add("fadeOut")
+
     document.querySelector("#message-input").value = ""
     document.querySelector("#date-input").value = ""
     name_label = document.querySelector("#name")
@@ -34,7 +40,9 @@ function switch_profile(user) {
     id_hidden_input.value = user.id
     //actually change images here once they exist
     img = document.querySelector("#profile-img")
-    img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();  
+    img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();
+    block.offsetWidth
+    block.classList.add("fadeIn")
 }
 
 const refill_path = $('#refill-path').data().path
@@ -120,6 +128,12 @@ function prepare_invite(){
 // REPLIES TO INVITATION
 
 function switch_invitation(invitation) {
+    block = document.querySelector("#profile-block")
+    block.classList.remove("fadeOut")
+    block.classList.remove("fadeIn")
+    block.offsetWidth
+    block.classList.add("fadeOut")
+
     document.querySelector("#message-input").value = ""
     document.querySelector("#date-input").value = invitation.date
     name_label = document.querySelector("#name")
@@ -142,6 +156,8 @@ function switch_invitation(invitation) {
     img = document.querySelector("#profile-img")
     img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();
     
+    block.offsetWidth
+    block.classList.add("fadeIn")
 }
 
 function next_invitation() {
