@@ -47,10 +47,10 @@ function load_new_suggestions() {
         },
         body: JSON.stringify(cache),
     })
-        .then(response => response.json())
-        .then(data => {     
-            cache.push(...data)
-        })
+    .then(response => response.json())
+    .then(data => {     
+        cache.push(...data)
+    })
 }
 
 function next_user() {
@@ -65,58 +65,48 @@ function next_user() {
     } 
 }
 
-const invite_path = $('#invite-path').data().path
+function handle_response_invite(response) {
+    console.log(response)
+    clear_error_messages()
+    if (response === true) {
+        // Handle success - maybe notify the user or load another match
+        cache.shift()
+        next_user()   
+    } else {
+        return response; // Parse JSON for error messages
+    } 
+}
 
-function send_invite() {
+function react_to_suggestion(endpoint, error_string){
     let form = document.querySelector("#invite-form")
     let data = new FormData(form)
-    fetch(invite_path, {
+    fetch(endpoint, {
         method: "POST",
         body: data,
     })
     .then(response => response.json())
-    .then(response => {
-        clear_error_messages()
-        if (response === true) {
-            // Handle success - maybe notify the user or load another match
-            cache.shift()
-            next_user()   
-        } else {
-            return response; // Parse JSON for error messages
-        }     
-        })
-        .then(display_errors)
-        .catch(error => {
-            console.error("Error during rejection:", error);
-        });
+    .then(handle_response_invite)
+    .then(display_errors)
+    .catch(error => {
+        console.error(error_string, error);
+    });
+}
+
+//event handlers
+
+const invite_path = $('#invite-path').data().path
+
+function send_invite() {
+    react_to_suggestion(invite_path, "Error at invite: ")
 }
 
 const reject_path = $('#reject-path').data().path
 
-
-
 function send_reject() {
-    let form = document.querySelector("#invite-form")
-    let data = new FormData(form)
-    clear_error_messages()
-    fetch(reject_path, {
-        method: "POST",
-        body : data,
-    })
-    .then(response => {
-        if (response.ok) {
-            // Handle success - maybe notify the user or load another match
-            cache.shift()
-            next_user()
-        } else {
-            return response.json(); // Parse JSON for error messages
-        }
-    })
-    .then(display_errors)
-    .catch(error => {
-        console.error("Error during rejection:", error);
-    });  
+    react_to_suggestion(reject_path, "Error at reject: ")
 }
+
+//call to initialize invite page logic
 
 function prepare_invite(){
     const invite_button = document.querySelector("#invite")
@@ -163,120 +153,59 @@ function next_invitation() {
     switch_invitation(cache[0])
 }
 
-const accept_path = $('#accept-path').data().path
+function handle_response_reply(response){
+    clear_error_messages()
+    if (response === true) {
+        // Handle success - maybe notify the user or load another match
+        cache.shift()
+        next_invitation()   
+    } else {
+        return response; // Parse JSON for error messages
+    }
+}
 
-function reply_accept() {
+function react_to_invitation(endpoint, error_string) {
     let form = document.querySelector("#invite-form")
     let data = new FormData(form)
-    fetch(accept_path, {
+    fetch(endpoint, {
         method: "POST",
         body: data,
     })
     .then(response => response.json())
-    .then(response => {
-        clear_error_messages()
-        if (response === true) {
-            // Handle success - maybe notify the user or load another match
-            cache.shift()
-            next_invitation()   
-        } else {
-            return response; // Parse JSON for error messages
-        }     
-        })
-        .then(display_errors)
-        .catch(error => {
-            console.error("Error during accepting:", error);
-        });
+    .then(handle_response_reply)
+    .then(display_errors)
+    .catch(error => {
+        console.error(error_string, error);
+    });
+}
+
+//event handlers
+
+const accept_path = $('#accept-path').data().path
+
+function reply_accept() {
+    react_to_invitation(accept_path, "Error at invitation accept: ")
 }
 
 const reject_invitation_path = $('#reject-invitation-path').data().path
 
 function reply_reject() {
-    let form = document.querySelector("#invite-form")
-    let data = new FormData(form)
-    fetch(reject_invitation_path, {
-        method: "POST",
-        body: data,
-    })
-    .then(response => response.json())
-    .then(response => {
-        clear_error_messages()
-        if (response === true) {
-            // Handle success - maybe notify the user or load another match
-            cache.shift()
-            next_invitation()   
-        } else {
-            return response; // Parse JSON for error messages
-        }
-        
-        })
-        .then(display_errors)
-        .catch(error => {
-            console.error("Error during rejecting:", error);
-        });
+    react_to_invitation(reject_invitation_path, "Error at invitation reject: ")
 }
 
 const ignore_path = $('#ignore-path').data().path
 
 function reply_ignore() {
-    let form = document.querySelector("#invite-form")
-    let data = new FormData(form)
-    fetch(ignore_path, {
-        method: "POST",
-        body: data,
-    })
-    .then(response => response.json())
-    .then(response => {
-        clear_error_messages()
-        if (response === true) {
-            // Handle success - maybe notify the user or load another match
-            cache.shift()
-            next_invitation()   
-        } else {
-            return response; // Parse JSON for error messages
-        }
-        
-        })
-        .then(display_errors)
-        .catch(error => {
-            console.error("Error during ignoring:", error);
-        });
+    react_to_invitation(ignore_path, "Error at invitation ignore: ")
 }
 
 const reschedule_path = $('#reschedule-path').data().path
 
 function reply_reschedule() {
-    let form = document.querySelector("#invite-form")
-    let data = new FormData(form)
-    fetch(reschedule_path, {
-        method: "POST",
-        body: data,
-    })
-    .then(response => response.json())
-    .then(response => {
-        clear_error_messages()
-        if (response === true) {
-            // Handle success - maybe notify the user or load another match
-            cache.shift()
-            next_invitation()   
-        } else {
-            return response; // Parse JSON for error messages
-        }
-        
-        })
-        .then(data => {
-            for (var key in data) {
-                let error_box = document.querySelector("#" + key + "-errors")
-                error_box.innerHTML = ""
-                for (let i = 0; i < data[key].length; i++) {
-                    error_box.innerHTML += "<li>" + data[key][i] + "</li>"
-                }
-            }
-        })
-        .catch(error => {
-            console.error("Error during rescheduling:", error);
-        });
+    react_to_invitation(reschedule_path, "Error at invitation reschedule: ")
 }
+
+//call to initialize answear page logic
 
 function prepare_answear(){
     const accept_button = document.querySelector("#accept");

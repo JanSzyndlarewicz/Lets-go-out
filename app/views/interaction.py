@@ -15,8 +15,7 @@ interaction_bp = Blueprint("interaction_bp", __name__)
 @confirmed_required
 def invite():
     form = DateRequestForm()
-    # we will also have to validate whether the date is in the future, and whether there are tables available
-    # we can probaby write custom wtf validators for that
+    # we will also have to validate whether there are tables available
     if form.validate_on_submit():
         db.get_or_404(User, form.id.data)
         proposal = DateProposal(
