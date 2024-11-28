@@ -79,3 +79,62 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    var slider = document.getElementById('range-slider');
+    var leftValue = document.getElementById('left-value');
+    var rightValue = document.getElementById('right-value');
+
+    // Ustawienia suwaka
+    noUiSlider.create(slider, {
+        start: [-5, 5], // początkowe wartości dla lewej i prawej granicy
+        connect: true,  // Łączenie suwaków
+        range: {
+            'min': -30,  // minimalna wartość
+            'max': 30    // maksymalna wartość
+        },
+        step: 1,  // Krok zmiany
+        format: {
+            to: function (value) {
+                return Math.round(value);  // Zaokrąglanie wartości
+            },
+            from: function (value) {
+                return Number(value);
+            }
+        }
+    });
+
+    // Aktualizacja wartości na suwaku oraz w ukrytych inputach
+    slider.noUiSlider.on('update', function(values, handle) {
+        var lower = values[0]; // Lewa granica
+        var upper = values[1]; // Prawa granica
+
+        // Ustawienie wartości lewej granicy
+        if (handle === 0) {
+            leftValue.innerText = lower;  // Zaktualizuj wyświetlaną wartość
+            // Ogranicz ruch lewego suwaka do zakresu [-50, 0]
+            if (lower > 0) {
+                slider.noUiSlider.set([0, upper]);
+            }
+        }
+
+        // Ustawienie wartości prawej granicy
+        if (handle === 1) {
+            rightValue.innerText = upper; // Zaktualizuj wyświetlaną wartość
+            // Ogranicz ruch prawego suwaka do zakresu [0, 50]
+            if (upper < 0) {
+                slider.noUiSlider.set([lower, 0]);
+            }
+        }
+
+        // Ustawienie wartości w ukrytych inputach
+        var lowerInput = document.getElementById('lower-difference');
+        var upperInput = document.getElementById('upper-difference');
+        if (lowerInput && upperInput) {
+            lowerInput.value = lower;
+            upperInput.value = upper;
+        }
+    });
+});
+

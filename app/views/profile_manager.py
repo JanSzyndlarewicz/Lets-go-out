@@ -29,7 +29,12 @@ def profile_manager():
         photo_url = None
         if current_user.profile.photo:
             photo_url = current_user.profile.photo.flask_photo_url
-        return render_template("profile_manager.html", form=form, photo_url=photo_url)
+        return render_template(
+            "profile_manager.html",
+            form=form,
+            photo_url=photo_url,
+            current_age=current_user.profile.age
+        )
 
     if form.validate_on_submit():
         name = form.name.data
