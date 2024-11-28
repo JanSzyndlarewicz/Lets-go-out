@@ -1,17 +1,23 @@
 from datetime import datetime
 
-from flask import Blueprint
 from flask import current_app as app
-from flask import render_template, request
+from flask import Blueprint, redirect, render_template, request, url_for
+
 from flask_login import current_user
 
 from app.forms import DateRequestForm
+from app.models import DateProposal, ProposalStatus
 from app.models.database import db
 from app.utils.algorithm import suggest_matches
 from app.views.auth import confirmed_required
 
 find_page_bp = Blueprint("find_page_bp", __name__)
 
+
+@find_page_bp.route("/find-page/")
+@confirmed_required
+def find_page():
+    return redirect(url_for("find_page_bp.find_page_invite"))
 
 @find_page_bp.route("/find-page/invite")
 @confirmed_required
@@ -28,6 +34,7 @@ def find_page_invite():
         date_request_data=date_request_data,
         form=date_request_form,
         is_requesting=is_requesting,
+        redirect_buttons_set_data=redirect_buttons_set_data(),
     )
 
 
@@ -55,16 +62,45 @@ def get_suggested_matches_data(limit: int, ignore_ids=[]) -> list[dict]:
 @find_page_bp.route("/find-page/answear")
 @confirmed_required
 def find_page_answear():
-    date_request_data = suggest_matches(db.session, current_user.id, 1)
-    if not date_request_data:
-        return render_template("main/find_page.html", date_request_data=None)
+    date_request_form = DateRequestForm()
 
-    date_request_form = DateRequestForm(given_date=datetime.now().date())
+    date_request_data = get_pending_invitations_data(current_user.id)
     is_requesting = False
-    date_request_data = date_request_data[0].profile
+
+    if not date_request_data:
+        date_request_data = None
+
     return render_template(
         "main/find_page.html",
         date_request_data=date_request_data,
         form=date_request_form,
         is_requesting=is_requesting,
+        redirect_buttons_set_data=redirect_buttons_set_data(),
     )
+
+def get_pending_invitations(user_id : int) -> list[DateProposal]:
+    query = (db.select(DateProposal)
+             .where(DateProposal.recipient_id == user_id)
+             .where(DateProposal.date >= datetime.now().date())
+             .where(DateProposal.status == ProposalStatus.proposed)
+             .where(~DateProposal.proposer_id.in_(current_user.blocking))
+            )
+    return db.session.execute(query).scalars().all()
+
+def get_pending_invitations_data(user_id):
+    invitations = get_pending_invitations(user_id)
+    result = []
+    for invitation in invitations:
+        result.append(
+            {
+                "id": invitation.id,
+                "name": invitation.proposer.profile.name,
+                "description": invitation.proposer.profile.description,
+                "message" : invitation.proposal_message, #"" if invitation.proposal_message is None else invitation.proposal_message,
+                "date" : invitation.date.strftime(r"%Y-%m-%d")
+            }
+        )
+    return result    
+
+def redirect_buttons_set_data():
+    return [{"url": url_for("find_page_bp.find_page_answear"), "text": "answear"}, {"url": url_for("find_page_bp.find_page_invite"), "text": "invite"}]

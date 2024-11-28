@@ -16,6 +16,7 @@ UPLOAD_FOLDER = "app/static/images"
 
 MAIN_PAGE_ROUTE = "find_page_bp.find_page_invite"
 UNCONFIRMED_PAGE_ROUTE = "auth_bp.unconfirmed"
+LOGIN_PAGE_ROUTE = "auth_bp.login"
 
 INITIAL_SUGGESTION_NUMBER = 15
 REFILL_SUGGESTION_NUMBER = 10

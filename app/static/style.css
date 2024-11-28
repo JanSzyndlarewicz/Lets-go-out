@@ -131,9 +131,11 @@ header ul li {
 }
 
 .find-page-content {
+    position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: center; 
     align-items: center;
+    width: 100%;
     height: calc(100vh - 130px);
 }
 
@@ -223,7 +225,69 @@ i {
     height: 200px;          
     border-radius: 50%;     /* Make it circular */
     object-fit: cover;      /* Ensure the image covers the entire circle */
-    border: 2px solid #ddd; /* Optional: border around the avatar */
+    border: 2px solid var(--background-color); /* Optional: border around the avatar */
 
 }
 
+.matches-page-content {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    /* align-items: center; */
+    height: calc(100vh - 130px);
+}
+
+.redirect-buttons-set {
+    /* margin-right: 100px; */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* gap: 15px; */
+    border-radius: 30px;
+    border: 1px solid var(--primary-color);
+    width: fit-content;
+}
+
+.redirect-buttons-set-button {
+    color: var(--text-color);
+    border-radius: 30px;
+    border: none;
+    padding: 10px;
+    /* padding-inline: 10px; */
+    text-align: center;
+    width: 150px;
+    font-size: larger;
+}
+
+main .redirect-buttons-set {
+    position: absolute;
+    top: 0px;
+    left: 20px;
+}
+
+.fadeOut {
+    animation: fadeOut 1s linear 1 forwards;
+}
+
+.fadeIn {
+    animation: fadeIn 2s ease-out 1 forwards;
+}
+
+@keyframes fadeOut {
+0% {
+    opacity: 1;
+}
+100% {
+    opacity: 0;
+}
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+    }
