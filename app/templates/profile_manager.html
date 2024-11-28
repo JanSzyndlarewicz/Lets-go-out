@@ -3,82 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+<div class="form-container">
+    <h1>Update Profile</h1>
     <form action="{{ url_for('profile_manager_bp.profile_manager') }}" method="POST" enctype="multipart/form-data">
-        
         {{ form.csrf_token }}
-        
+
+        <label>Profile Photo</label>
+        {% if photo_url %}
+        <img src="{{ photo_url }}" alt="Profile Photo" width="100" height="100">
+        {% endif %}
+        <input type="file" name="photo" accept="image/*">
+
         {% with input = form.name, val = current_user.profile.name %}
         {% include 'components/form_input.html' %}
         {% endwith %}
-        <br>
-        
-        {{ form.gender.label }}
+
+        <label>Gender</label>
         {% for name, value in form.gender.choices %}
-            <label>
-                <input type="radio" name="gender" value="{{ name }}" {{ "checked" if current_user.profile.gender.name == name }}>
-                {{ value }}
-            </label>
-        {% endfor %}
-        
-        {% if form.gender.errors %}
-            <ul class="errors">
-                {% for error in form.gender.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        <br>
-
-        {% with input = form.description %}
-        {% include 'components/form_input.html' %}
-        {% endwith %}
-        <br>
-
-        {% if form.gender_preferences.errors %}
-            {% for error in form.gender_preferences.errors %}
-                <span>{{ error }}</span>
-            {% endfor %}
-        {% endif %}
-        {% for name, value in form.gender_preferences.choices %}
-            <input type="checkbox" name="gender_preferences" value="{{ name }}" {{ "checked" if current_user.has_preference_for(name)}}>
+        <label>
+            <input type="radio" name="gender" value="{{ name }}" {{ "checked" if current_user.profile.gender.name ==
+            name }}>
             {{ value }}
+        </label>
         {% endfor %}
-        <br>
+        {% if form.gender.errors %}
+        <ul class="errors">
+            {% for error in form.gender.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
         {% with input = form.year_of_birth, val = current_user.profile.year_of_birth %}
         {% include 'components/form_input.html' %}
         {% endwith %}
-        <br>
 
-        <label>Profile Photo:</label>
-        {% if photo_url %}
-            <div>
-                <img src="{{ photo_url }}" alt="Profile Photo" width="100" height="100">
-            </div>
+        {% with input = form.description %}
+        {% include 'components/form_input.html' %}
+        {% endwith %}
+
+        <label>Gender Preferences</label>
+        {% for name, value in form.gender_preferences.choices %}
+        <label>
+            <input type="checkbox" name="gender_preferences" value="{{ name }}" {{ "checked" if
+            current_user.has_preference_for(name) }}>
+            {{ value }}
+        </label>
+        {% endfor %}
+
+        {% if form.gender_preferences.errors %}
+        <ul class="errors">
+            {% for error in form.gender_preferences.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
         {% endif %}
-        <br>
 
-        <input type="file" name="photo" accept="image/*">
-        <br>
-        <br>
 
-        <label>Age preferences:</label>
-        <br>
         {% with input = form.lower_difference, val=current_user.matching_preferences.lower_difference %}
         {% include 'components/form_input.html' %}
         {% endwith %}
-        <br>
-
         {% with input = form.upper_difference, val=current_user.matching_preferences.upper_difference %}
         {% include 'components/form_input.html' %}
         {% endwith %}
-        <br>
-        <br>
 
-        {{ form.submit() }}
-
+        <button type="submit">Save</button>
     </form>
+</div>
 </body>
 </html>

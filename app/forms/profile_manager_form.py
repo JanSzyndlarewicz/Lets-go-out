@@ -11,14 +11,14 @@ class ProfileManagerForm(FlaskForm):
     gender_preferences = SelectMultipleField("Gender preferences")
     year_of_birth = IntegerField("Year of birth", [InputRequired(message="Year of birth is required.")])
     lower_difference = IntegerField(
-        "Lower age difference",
+        "Lower Difference",
         [
             DataRequired(message="Age difference is required."),
             NumberRange(min=1, message="Age difference must be positive."),
         ],
     )
     upper_difference = IntegerField(
-        "Upper age difference",
+        "Upper Difference",
         [
             DataRequired(message="Age difference is required."),
             NumberRange(min=1, message="Age difference must be positive."),

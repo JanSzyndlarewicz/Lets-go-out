@@ -291,3 +291,77 @@ main .redirect-buttons-set {
         opacity: 1;
     }
     }
+
+
+/* Profile manager ongoing styling*/
+.form-container {
+    max-width: 500px;
+    margin: 5% auto;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
+}
+
+.form-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="file"],
+input[type="radio"],
+input[type="checkbox"],
+select,
+textarea {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    background-color: var(--scaffold-background-color);
+    color: var(--text-color);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.form-container .errors {
+    color: #ff4d4d;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+    background-color: #ff4d4d;
+}
+
+.form-container img {
+    display: block;
+    margin: 10px auto;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+}
