@@ -26,6 +26,12 @@
         </div>
 
         <div class="centered-column fill-width gap-15">
+            {% with input = profile_form.description %}
+            {% include 'components/form_input.html' %}
+            {% endwith %}
+        </div>
+
+        <div class="centered-column fill-width gap-15">
             <label for="gender" class="primary-color">Gender</label>
             <div class="row space-around fill-width">
                 {% for name, value in profile_form.gender.choices %}

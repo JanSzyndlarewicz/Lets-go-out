@@ -7,8 +7,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import IntegrityError
 
 from app import User, db
-from app.forms import LoginForm, RegisterForm
-from app.forms.user_data_fulfilment import ProfileDataFulfilment
+from app.forms import LoginForm, ProfileManagerForm, RegisterForm
 from app.models import Gender, Profile
 from app.utils import send_email
 
@@ -159,7 +158,7 @@ def index():
 
 
 def initialize_profile_form():
-    profile_form = ProfileDataFulfilment()
+    profile_form = ProfileManagerForm()
     profile_form.gender.choices = [(gender.name, gender.value) for gender in Gender]
     profile_form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
     return profile_form
@@ -178,7 +177,6 @@ def process_registration_form(form):
 
 def process_profile_form(profile_form):
     if profile_form.validate_on_submit() and "registration_data" in session:
-        print("validated")
         try:
             new_user = create_user_with_profile(session["registration_data"], profile_form)
             if app.config["ADVANCED_ACCESS_CONTROL"]:
@@ -202,6 +200,7 @@ def create_user_with_profile(registration_data, profile_form):
     new_user.profile = Profile(
         name=profile_form.name.data,
         gender=Gender[profile_form.gender.data],
+        description=profile_form.description.data,
         year_of_birth=profile_form.year_of_birth.data,
     )
 
