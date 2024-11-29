@@ -86,11 +86,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const leftValue = document.getElementById('left-value');
     const rightValue = document.getElementById('right-value');
 
-    const initialLower = document.getElementById('lower-difference').value;
-    const initialUpper = document.getElementById('upper-difference').value;
+    // Get initial values from the hidden input fields and ensure they are numbers
+    const initialLower = parseInt(document.getElementById('lower-difference').value) || 0;
+    const initialUpper = parseInt(document.getElementById('upper-difference').value) || 0;
 
+    // Initialize the slider with the correct values
     noUiSlider.create(slider, {
-        start: [-1*initialLower, initialUpper],
+        start: [-1*initialLower, initialUpper], // Use initialLower and initialUpper directly
         connect: true,
         range: {
             'min': -30,

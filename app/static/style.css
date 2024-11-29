@@ -133,7 +133,7 @@ header ul li {
 .find-page-content {
     position: relative;
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     width: 100%;
     height: calc(100vh - 130px);
@@ -221,8 +221,8 @@ i {
 }
 
 .circular-avatar-big {
-    width: 200px;          
-    height: 200px;          
+    width: 200px;
+    height: 200px;
     border-radius: 50%;     /* Make it circular */
     object-fit: cover;      /* Ensure the image covers the entire circle */
     border: 2px solid var(--background-color); /* Optional: border around the avatar */
@@ -367,24 +367,59 @@ input[type="checkbox"] {
 }
 
 
-/* Slider */
+/* Age preferences Slider */
 .slider {
     margin-top: 10px;
     margin-bottom: 20px;
     width: 100%;
 }
 
-.noUi-target,
-.noUi-lower,
-.noUi-upper {
-    background: var(--background-color);
-}
-
 .noUi-connect {
-    background: var(--primary-color);
+    background: #e74c3c;
 }
 
-.noUi-handle {
-    background: var(--text-color);
-    border: 1px solid var(--primary-color);
+.noUi-horizontal .noUi-handle,
+.noUi-vertical .noUi-handle {
+    background: #e74c3c;
+}
+
+#left-value, #right-value {
+    display: none;
+}
+
+#left-value, #right-value {
+    visibility: hidden;
+}
+
+.noUi-target.noUi-horizontal .noUi-tooltip {
+    background-color: #e74c3c;
+}
+
+
+.input-field {
+    margin-bottom: 30px; /* Ensure proper spacing between input fields */
+}
+
+/* Button styling */
+button[type="submit"] {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button[type="submit"]:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
+/* Red underline for the input field */
+.input-field input {
+    border-bottom: 2px solid #e74c3c; /* Red underline */
+}
+
+/* Optional: Focus state for the input field to maintain red underline when active */
+.input-field input:focus {
+    border-bottom: 2px solid #c0392b; /* Darker red on focus */
 }
