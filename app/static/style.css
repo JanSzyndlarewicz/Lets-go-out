@@ -419,7 +419,26 @@ button[type="submit"]:hover {
     border-bottom: 2px solid #e74c3c; /* Red underline */
 }
 
-/* Optional: Focus state for the input field to maintain red underline when active */
-.input-field input:focus {
-    border-bottom: 2px solid #c0392b; /* Darker red on focus */
+/* Red border when focused */
+.input-field input:focus,
+.input-field textarea:focus {
+    border: none !important; /* Remove default border styles */
+    box-shadow: none !important; /* Remove any box shadow effects */
+    outline: none !important;
+    border-bottom: 2px solid var(--primary-color) !important;
+}
+
+input[type="checkbox"]:checked + span:not(.lever)::before{
+    border:2px solid transparent;
+    border-bottom:2px solid #e74c3c;
+    border-right:2px solid #e74c3c;
+    background:transparent;
+}
+
+[type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:before, [type="radio"].with-gap:checked+label:after {
+border: 2px solid #e74c3c;
+}
+
+[type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:after {
+background-color: #e74c3c;
 }

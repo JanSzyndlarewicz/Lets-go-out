@@ -52,7 +52,7 @@
                 <label class="gender-label">Gender</label>
                 {% for name, value in form.gender.choices %}
                 <label>
-                    <input type="radio" name="gender" value="{{ name }}"
+                    <input type="radio" class="with-gap" name="gender" value="{{ name }}"
                            {% if current_user.profile.gender.name== name %}checked{% endif %}/>
                     <span>{{ value }}</span>
                 </label>
@@ -113,7 +113,7 @@
         {% endif %}
 
         <div class="gap-15">
-            <label>Age Preferences:</label>
+            <label>Age Preferences</label>
             <div id="range-slider"></div>
             <input type="hidden" id="lower-difference" name="lower_difference"
                    value="{{ current_user.matching_preferences.lower_difference }}">
