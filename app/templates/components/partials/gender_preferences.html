@@ -1,0 +1,14 @@
+<div class="input-field">
+    <p>
+        <label>Gender Preferences</label>
+        {% for name, value in form.gender_preferences.choices %}
+        <label>
+            <input type="checkbox"
+                   name="gender_preferences"
+                   value="{{ name }}"
+                   {% if current_user.has_preference_for(name) %}checked{% endif %}/>
+            <span>{{ value }}</span>
+        </label>
+        {% endfor %}
+    </p>
+</div>

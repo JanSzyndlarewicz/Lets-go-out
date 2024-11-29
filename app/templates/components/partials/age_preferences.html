@@ -1,0 +1,12 @@
+<div class="gap-15">
+    <label>Age Preferences</label>
+    <div id="range-slider"></div>
+    <input type="hidden" id="lower-difference" name="lower_difference"
+           value="{{ current_user.matching_preferences.lower_difference }}">
+    <input type="hidden" id="upper-difference" name="upper_difference"
+           value="{{ current_user.matching_preferences.upper_difference }}">
+    <div>
+        <span id="left-value">-30</span>
+        <span id="right-value">+30</span>
+    </div>
+</div>

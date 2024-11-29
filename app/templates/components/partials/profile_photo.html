@@ -1,0 +1,9 @@
+<div class="input-field">
+    <label for="photo" class="input-label">Profile Photo</label>
+    {% if current_user.profile.photo.flask_photo_url %}
+    <div class="image-preview">
+        <img src="{{ current_user.profile.photo.flask_photo_url }}" alt="Profile Photo" width="200" height="200">
+    </div>
+    {% endif %}
+    <input type="file" id="photo" name="photo" accept="image/*">
+</div>

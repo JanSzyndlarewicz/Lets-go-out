@@ -24,109 +24,28 @@
     <form action="{{ url_for('profile_manager_bp.profile_manager') }}" method="POST" enctype="multipart/form-data">
         {{ form.csrf_token }}
 
-        <div class="input-field">
-            <label for="photo" class="input-label">Profile Photo</label>
-            {% if current_user.profile.photo.flask_photo_url %}
-            <div class="image-preview">
-                <img src="{{ current_user.profile.photo.flask_photo_url }}" alt="Profile Photo" width="200" height="200">
-            </div>
-            {% endif %}
-            <input type="file" id="photo" name="photo" accept="image/*">
-            {% if form.photo.errors %}
-            <ul class="errors">
-                {% for error in form.photo.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
+        {% include "components/partials/profile_photo.html" %}
 
-        <div class="input-field">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" value="{{ current_user.profile.name }}">
-        </div>
+        {% with name="name", label="Name", value=current_user.profile.name%}
+        {% include 'components/partials/input_field.html' %}
+        {% endwith %}
 
+        {% include "components/partials/gender_options.html" %}
 
-        <div class="input-field">
-            <div class="gender-options">
-                <label class="gender-label">Gender</label>
-                {% for name, value in form.gender.choices %}
-                <label>
-                    <input type="radio" class="with-gap" name="gender" value="{{ name }}"
-                           {% if current_user.profile.gender.name== name %}checked{% endif %}/>
-                    <span>{{ value }}</span>
-                </label>
-                {% endfor %}
-            </div>
-        </div>
+        {% with name="name", label="Name", value=current_user.profile.name %}
+            {% include 'components/partials/input_field.html' %}
+        {% endwith %}
 
-        {% if form.gender.errors %}
-        <ul class="errors">
-            {% for error in form.gender.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+        {% with name="description", label="Profile Description", value=current_user.profile.description %}
+            {% include "components/partials/textarea_field.html" %}
+        {% endwith %}
 
+        {% include "components/partials/gender_preferences.html" %}
 
-        <div class="input-field">
-            <label for="year_of_birth">Year of birth</label>
-            <input type="number" id="year_of_birth" name="year_of_birth" value="{{ current_user.profile.year_of_birth }}">
-        </div>
+        {% include "components/partials/age_preferences.html" %}
 
-
-        <div class="input-field">
-            <label for="description">Profile Description</label>
-            <textarea id="description" name="description" class="materialize-textarea"
-                      maxlength="500">{{ current_user.profile.description }}</textarea>
-        </div>
-        {% if form.description.errors %}
-        <ul class="errors">
-            {% for error in form.description.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-
-
-        <div class="input-field">
-            <p>
-                <label>Gender Preferences</label>
-                {% for name, value in form.gender_preferences.choices %}
-                <label>
-                    <input type="checkbox"
-                           name="gender_preferences"
-                           value="{{ name }}"
-                           {% if current_user.has_preference_for(name) %}checked{% endif %}/>
-                    <span>{{ value }}</span>
-                </label>
-                {% endfor %}
-            </p>
-        </div>
-
-        {% if form.gender_preferences.errors %}
-        <ul class="errors">
-            {% for error in form.gender_preferences.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-
-        <div class="gap-15">
-            <label>Age Preferences</label>
-            <div id="range-slider"></div>
-            <input type="hidden" id="lower-difference" name="lower_difference"
-                   value="{{ current_user.matching_preferences.lower_difference }}">
-            <input type="hidden" id="upper-difference" name="upper_difference"
-                   value="{{ current_user.matching_preferences.upper_difference }}">
-            <div>
-                <span id="left-value">-30</span>
-                <span id="right-value">+30</span>
-            </div>
-            <br>
-        </div>
-
-        <button type="submit">Save</button>
+        <br>
+        <button type="submit" class="btn waves-effect waves-light">Save</button>
     </form>
 </div>
 <script src="{{ url_for('static', filename='scripts.js') }}"></script>
