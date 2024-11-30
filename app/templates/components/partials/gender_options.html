@@ -1,10 +1,10 @@
 <div class="input-field">
     <div class="gender-options">
         <label class="gender-label">Gender</label>
-        {% for name, value in form.gender.choices %}
+        {% for name, value in choices %}
         <label>
             <input type="radio" class="with-gap" name="gender" value="{{ name }}"
-                   {% if current_user.profile.gender.name == name %}checked{% endif %}/>
+                   {% if value_chosen == name %}checked{% endif %}/>
             <span>{{ value }}</span>
         </label>
         {% endfor %}
