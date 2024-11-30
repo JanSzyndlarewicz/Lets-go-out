@@ -1,0 +1,9 @@
+<div class="input-field">
+    <label for="photo" class="input-label">Profile Photo</label>
+    {% if value %}
+    <div class="image-preview">
+        <img src="{{ value }}" alt="Profile Photo" width="200" height="200">
+    </div>
+    {% endif %}
+    <input type="file" id="photo" name="photo" accept="image/*">
+</div>

@@ -133,7 +133,7 @@ header ul li {
 .find-page-content {
     position: relative;
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
     width: 100%;
     height: calc(100vh - 130px);
@@ -221,8 +221,8 @@ i {
 }
 
 .circular-avatar-big {
-    width: 200px;          
-    height: 200px;          
+    width: 200px;
+    height: 200px;
     border-radius: 50%;     /* Make it circular */
     object-fit: cover;      /* Ensure the image covers the entire circle */
     border: 2px solid var(--background-color); /* Optional: border around the avatar */
@@ -291,3 +291,154 @@ main .redirect-buttons-set {
         opacity: 1;
     }
     }
+
+
+/* Profile manager ongoing styling */
+.form-container {
+    max-width: 500px;
+    margin: 5% auto;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
+}
+
+.form-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="file"],
+input[type="radio"],
+input[type="checkbox"],
+select,
+textarea {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    background-color: var(--scaffold-background-color);
+    color: var(--text-color);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.form-container .errors {
+    color: #ff4d4d;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+    background-color: #ff4d4d;
+}
+
+.form-container img {
+    display: block;
+    margin: 10px auto;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+}
+
+
+/* Age preferences Slider */
+.slider {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.noUi-connect {
+    background: #e74c3c;
+}
+
+.noUi-horizontal .noUi-handle,
+.noUi-vertical .noUi-handle {
+    background: #e74c3c;
+}
+
+#left-value, #right-value {
+    display: none;
+}
+
+#left-value, #right-value {
+    visibility: hidden;
+}
+
+.noUi-target.noUi-horizontal .noUi-tooltip {
+    background-color: #e74c3c;
+}
+
+
+.input-field {
+    margin-bottom: 30px; /* Ensure proper spacing between input fields */
+}
+
+/* Button styling */
+button[type="submit"] {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button[type="submit"]:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
+/* Red underline for the input field */
+.input-field input {
+    border-bottom: 2px solid #e74c3c; /* Red underline */
+}
+
+/* Red border when focused */
+.input-field input:focus,
+.input-field textarea:focus {
+    border: none !important; /* Remove default border styles */
+    box-shadow: none !important; /* Remove any box shadow effects */
+    outline: none !important;
+    border-bottom: 2px solid var(--primary-color) !important;
+}
+
+input[type="checkbox"]:checked + span:not(.lever)::before{
+    border:2px solid transparent;
+    border-bottom:2px solid #e74c3c;
+    border-right:2px solid #e74c3c;
+    background:transparent;
+}
+
+[type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:before, [type="radio"].with-gap:checked+label:after {
+border: 2px solid #e74c3c;
+}
+
+[type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:after {
+background-color: #e74c3c;
+}
