@@ -30,7 +30,6 @@ def profile_manager():
             form=form,
         )
 
-    print(form.data)
     if form.validate_on_submit():
         name = form.name.data
         gender = Gender[form.gender.data]

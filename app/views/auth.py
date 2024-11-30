@@ -171,8 +171,6 @@ def initialize_profile_form():
     profile_form = ProfileManagerForm()
     profile_form.gender.choices = [(gender.name, gender.value) for gender in Gender]
     profile_form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
-    profile_form.upper_difference = 5
-    profile_form.lower_difference = 5
     profile_form.photo = app.config["DEFAULT_PHOTO"]
     return profile_form
 
@@ -218,8 +216,9 @@ def create_user_with_profile(registration_data, profile_form):
     )
 
     new_user.matching_preferences.gender_preferences = [Gender[gp] for gp in profile_form.gender_preferences.data]
-    new_user.matching_preferences.lower_difference = profile_form.lower_difference
-    new_user.matching_preferences.upper_difference = profile_form.upper_difference
+    print(profile_form.lower_difference.data)
+    new_user.matching_preferences.lower_difference = profile_form.lower_difference.data
+    new_user.matching_preferences.upper_difference = profile_form.upper_difference.data
 
     db.session.add(new_user)
     db.session.commit()
