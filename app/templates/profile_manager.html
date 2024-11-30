@@ -35,7 +35,10 @@
         {% include 'components/form_input.html' %}
         {% endwith %}
         <br>
-
+        {% with interests = form.interests %}
+        {% include 'components/interests_choosing.html' %}
+        {% endwith %}
+        <br>
         {% if form.gender_preferences.errors %}
             {% for error in form.gender_preferences.errors %}
                 <span>{{ error }}</span>

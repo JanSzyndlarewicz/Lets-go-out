@@ -23,6 +23,7 @@ def profile_manager():
 
     form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
     form.gender.choices = [(gender.name, gender.value) for gender in Gender]
+    form.interests = [{"id": interest.id, "name": interest.name}for interest in current_user.profile.interests]
 
     if request.method == "GET":
         form.description.data = current_user.profile.description

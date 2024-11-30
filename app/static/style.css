@@ -291,3 +291,38 @@ main .redirect-buttons-set {
         opacity: 1;
     }
     }
+
+.chosen-interests {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* justify-content: center; */
+    /* align-items: center; */
+    gap: 10px;
+    min-height: 30px;
+}
+
+.to-be-chosen-interests {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* justify-content: center; */
+    /* align-items: center; */
+    gap: 10px;
+}
+
+.interest-unselected-button {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--scaffold-background-color);
+    border-radius: 30px;
+    padding: 5px 10px;
+}
+
+.interest-selected-button {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 30px;
+    padding: 5px 10px;
+}

@@ -1,0 +1,46 @@
+<!-- 
+ IMPORTANT!!!!
+ pass the interests as with interests, you dont have to pass interests
+ if they are empty
+ -->
+
+{% block component %}
+<link rel="stylesheet"
+              href="{{ url_for('static', filename='style.css') }}">
+<meta id="interests-path" data-path="{{ url_for('common_bp.interests') }}">
+<div>
+    <div>
+        <i class="fas fa-arrow-left" onclick="cancel()"></i>
+        <i class="fas fa-check" onclick="acceptInterests()"></i>
+    </div>
+    <h3>Chosen: </h3>
+    <ul class="chosen-interests">
+    </ul>
+    <br>
+    <h3>Choose more: </h3>
+    <ul class="to-be-chosen-interests">
+    </ul>
+</div>
+<!-- TODO: remove after intergrating into some base-->
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
+<script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>  
+<script>
+    var selectedInterests = 
+        {% if interests is defined %}
+            JSON.parse('{{ interests | tojson | safe}}')
+        {% else %}
+            []
+        {% endif %}
+</script>
+<script src="{{ url_for('static', filename='interests_choosing.js')}}"></script>
+<script>
+    init()
+</script>
+
+
+
+{% endblock %}
+
