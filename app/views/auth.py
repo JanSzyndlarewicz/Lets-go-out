@@ -128,7 +128,7 @@ def complete_profile():
     if process_profile_form(profile_form):
         return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
 
-    return render_template("auth/complete_profile.html", profile_form=profile_form)
+    return render_template("auth/complete_profile.html", form=profile_form)
 
 
 @auth_bp.route("/confirm/<token>", methods=["GET", "POST"])
@@ -171,6 +171,7 @@ def initialize_profile_form():
     profile_form = ProfileManagerForm()
     profile_form.gender.choices = [(gender.name, gender.value) for gender in Gender]
     profile_form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
+    profile_form.photo = app.config["DEFAULT_PHOTO"]
     return profile_form
 
 
@@ -215,6 +216,7 @@ def create_user_with_profile(registration_data, profile_form):
     )
 
     new_user.matching_preferences.gender_preferences = [Gender[gp] for gp in profile_form.gender_preferences.data]
+    print(profile_form.lower_difference.data)
     new_user.matching_preferences.lower_difference = profile_form.lower_difference.data
     new_user.matching_preferences.upper_difference = profile_form.upper_difference.data
 

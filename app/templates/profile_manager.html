@@ -2,83 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Profile Manager</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/Dogfalo/materialize@master/extras/noUiSlider/nouislider.css">
+    <link rel="stylesheet"
+          href="https://gist.githubusercontent.com/alexventuraio/4d0c725c34941fa42361350dcb43731f/raw/9364364f491288ffa1c1efbe796a44e07c16908d/sponsor.matchxperience.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Dogfalo/materialize@master/extras/noUiSlider/nouislider.min.js"></script>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 <body>
+<div class="form-container">
+    <h1>Profile Manager</h1>
     <form action="{{ url_for('profile_manager_bp.profile_manager') }}" method="POST" enctype="multipart/form-data">
-        
         {{ form.csrf_token }}
-        
-        {% with input = form.name, val = current_user.profile.name %}
-        {% include 'components/form_input.html' %}
+
+        {% with value=current_user.profile.photo.flask_photo_url %}
+        {% include "components/partials/profile_photo.html" %}
         {% endwith %}
-        <br>
-        
-        {{ form.gender.label }}
-        {% for name, value in form.gender.choices %}
-            <label>
-                <input type="radio" name="gender" value="{{ name }}" {{ "checked" if current_user.profile.gender.name == name }}>
-                {{ value }}
-            </label>
-        {% endfor %}
-        
-        {% if form.gender.errors %}
-            <ul class="errors">
-                {% for error in form.gender.errors %}
-                    <li>{{ error }}</li>
+
+        {% with name="name", label="Name", value=current_user.profile.name%}
+        {% include 'components/partials/input_field.html' %}
+        {% endwith %}
+
+        {% with value_chosen=current_user.profile.gender.name, choices=form.gender.choices %}
+        {% include "components/partials/gender_options.html" %}
+        {% endwith %}
+
+        {% with name="year_of_birth", label="Year of Birth", value=current_user.profile.year_of_birth %}
+            {% include 'components/partials/input_field.html' %}
+        {% endwith %}
+
+        {% with name="description", label="Profile Description", value=current_user.profile.description %}
+            {% include "components/partials/textarea_field.html" %}
+        {% endwith %}
+
+        <div class="input-field">
+            <p>
+                <label>Gender Preferences</label>
+                {% for name, value in form.gender_preferences.choices %}
+                <label>
+                    <input type="checkbox"
+                           name="gender_preferences"
+                           value="{{ name }}"
+                           {% if current_user.has_preference_for(name) %}checked{% endif %}/>
+                    <span>{{ value }}</span>
+                </label>
                 {% endfor %}
-            </ul>
-        {% endif %}
-        <br>
+            </p>
+        </div>
 
-        {% with input = form.description %}
-        {% include 'components/form_input.html' %}
+        {% with lower_difference=current_user.matching_preferences.lower_difference , upper_difference=current_user.matching_preferences.upper_difference %}
+        {% include "components/partials/age_preferences.html" %}
         {% endwith %}
-        <br>
 
-        {% if form.gender_preferences.errors %}
-            {% for error in form.gender_preferences.errors %}
-                <span>{{ error }}</span>
-            {% endfor %}
-        {% endif %}
-        {% for name, value in form.gender_preferences.choices %}
-            <input type="checkbox" name="gender_preferences" value="{{ name }}" {{ "checked" if current_user.has_preference_for(name)}}>
-            {{ value }}
-        {% endfor %}
         <br>
-
-        {% with input = form.year_of_birth, val = current_user.profile.year_of_birth %}
-        {% include 'components/form_input.html' %}
-        {% endwith %}
-        <br>
-
-        <label>Profile Photo:</label>
-        {% if photo_url %}
-            <div>
-                <img src="{{ photo_url }}" alt="Profile Photo" width="100" height="100">
-            </div>
-        {% endif %}
-        <br>
-
-        <input type="file" name="photo" accept="image/*">
-        <br>
-        <br>
-
-        <label>Age preferences:</label>
-        <br>
-        {% with input = form.lower_difference, val=current_user.matching_preferences.lower_difference %}
-        {% include 'components/form_input.html' %}
-        {% endwith %}
-        <br>
-
-        {% with input = form.upper_difference, val=current_user.matching_preferences.upper_difference %}
-        {% include 'components/form_input.html' %}
-        {% endwith %}
-        <br>
-        <br>
-
-        {{ form.submit() }}
-
+        <button type="submit" >Save</button>
     </form>
+</div>
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>

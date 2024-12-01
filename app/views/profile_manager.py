@@ -25,11 +25,10 @@ def profile_manager():
     form.gender.choices = [(gender.name, gender.value) for gender in Gender]
 
     if request.method == "GET":
-        form.description.data = current_user.profile.description
-        photo_url = None
-        if current_user.profile.photo:
-            photo_url = current_user.profile.photo.flask_photo_url
-        return render_template("profile_manager.html", form=form, photo_url=photo_url)
+        return render_template(
+            "profile_manager.html",
+            form=form,
+        )
 
     if form.validate_on_submit():
         name = form.name.data

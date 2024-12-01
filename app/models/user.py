@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 
 from flask import current_app as app
@@ -126,3 +127,8 @@ class Profile(db.Model):
         secondary=ProfileInterestAssociation.__table__,
         back_populates="profiles",
     )
+
+    @property
+    def age(self):
+        today = date.today()
+        return today.year - self.year_of_birth
