@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <meta charset="UTF-8">
+    <meta id="like-path" data-path="{{ url_for('interaction_bp.like', user_id = user.id) }}">
+    <meta id="block-path" data-path="{{ url_for('interaction_bp.block', user_id = user.id) }}">
     <title>Login</title>
 </head>
 <body>
+    <input type="button" id="like-button" value="Like">
+    <input type="button" id="block-button" value="Block">
     <img src="{{url_for('static', filename='images/')}}{{user.profile.photo.id}}.{{user.profile.photo.file_extension}}">
     <span>{{user.profile.name}}</a></span>
 </body>
+<script src="{{ url_for('static', filename='profile_logic.js')}}"></script>
 </html>
