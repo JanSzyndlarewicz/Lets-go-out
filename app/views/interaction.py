@@ -75,9 +75,11 @@ def accept():
     form = DateRequestForm()
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
-        proposal.change_status(ProposalStatus.accepted, form.message.data)
-        db.session.commit()
-        return "", 200
+        if proposal.recipient_id == current_user.id:
+            proposal.change_status(ProposalStatus.accepted, form.message.data)
+            db.session.commit()
+            return "", 200
+        return "", 401
     return form.errors, 400
 
 @interaction_bp.route("/reject-invitation", methods=["POST"])
@@ -86,9 +88,11 @@ def reject_invitation():
     form = DateRequestForm()
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
-        proposal.change_status(ProposalStatus.rejected, form.message.data)
-        db.session.commit()
-        return "", 200
+        if proposal.recipient_id == current_user.id:
+            proposal.change_status(ProposalStatus.rejected, form.message.data)
+            db.session.commit()
+            return "", 200
+        return "", 401
     return form.errors, 400
 
 @interaction_bp.route("/ignore", methods=["POST"])
@@ -98,9 +102,11 @@ def ignore():
     del form.message
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
-        proposal.change_status(ProposalStatus.ignored)
-        db.session.commit()
-        return "", 200
+        if proposal.recipient_id == current_user.id:
+            proposal.change_status(ProposalStatus.ignored)
+            db.session.commit()
+            return "", 200
+        return "", 401
     return form.errors, 400
 
 @interaction_bp.route("/reschedule", methods=["POST"])
@@ -109,7 +115,9 @@ def reschedule():
     form = DateRequestForm()
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
-        proposal.change_status(ProposalStatus.reschedule, form.message.data)
-        db.session.commit()
-        return "", 200
+        if proposal.recipient_id == current_user.id:
+            proposal.change_status(ProposalStatus.reschedule, form.message.data)
+            db.session.commit()
+            return "", 200
+        return "", 401
     return form.errors, 400
