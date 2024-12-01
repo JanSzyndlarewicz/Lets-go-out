@@ -10,26 +10,32 @@ from app.views.auth import confirmed_required
 
 interaction_bp = Blueprint("interaction_bp", __name__)
 
-@interaction_bp.route("/like/<user_id>", methods=["POST"])
+@interaction_bp.route("/like/<int:user_id>", methods=["POST"])
 @confirmed_required
-def like(user_id : int):
-    user = db.get_or_404(User, user_id)
-    if current_user in user.likers:
-        user.likers.remove(current_user)
-        db.session.commit()
-    else:
-        user.likers.append(current_user)
-        db.session.commit()
+def like(user_id):
+    if user_id != current_user.id:
+        user = db.get_or_404(User, user_id)
+        if current_user in user.likers:
+            user.likers.remove(current_user)
+            db.session.commit()
+        else:
+            user.likers.append(current_user)
+            db.session.commit()
+        return "", 200
+    return "", 400
 
-@interaction_bp.route("/block/<user_id>", methods=["POST"])
+@interaction_bp.route("/block/<int:user_id>", methods=["POST"])
 @confirmed_required
-def block(user_id : int):
-    user = db.get_or_404(User, user_id)
-    if current_user in user.blockers:
-        user.likers.remove(current_user)
-    else:
-        user.likers.append(current_user)
-    db.session.commit()
+def block(user_id):
+    if user_id != current_user.id:
+        user = db.get_or_404(User, user_id)
+        if current_user in user.blockers:
+            user.blockers.remove(current_user)
+        else:
+            user.blockers.append(current_user)
+        db.session.commit()
+        return "", 200
+    return "", 400
 
 @interaction_bp.route("/invite", methods=["POST"])
 @confirmed_required
