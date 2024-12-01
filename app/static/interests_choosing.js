@@ -4,13 +4,12 @@ var unselectedInterests = []
 async function init() {
     unselectedInterests = await getInitUnselectedInterests()
     initButtons()
+    updateInterestsInput()
 }
 
 async function getAllInterests() {
     const response = await fetch(interestsPath) 
     const data = await response.json()
-    console.log(data)
-    console.log(data.interests)
     return data.interests
 }
 
@@ -18,7 +17,9 @@ async function getInitUnselectedInterests() {
     // selectedInterests is a global variable
     let interests = await getAllInterests()
     console.log(interests)
+    console.log("selektow",selectedInterests)
     interests = interests.filter(interest => !selectedInterests.some(selectedInterest => selectedInterest.id === interest.id))
+    console.log(interests)
     return interests
 }
 
@@ -41,6 +42,7 @@ function makeButton(interest, unselected) {
             removeButton(interest, false)
             makeButton(interest, true)
         }
+        updateInterestsInput()
     })
     parent = document.querySelector(unselected ? '.to-be-chosen-interests' : '.chosen-interests')
     parent.appendChild(tag)
@@ -66,4 +68,10 @@ function acceptInterests() {
 
 function cancel() {
     console.log("cancelled", selectedInterests)
+}
+
+function updateInterestsInput() {
+    const interestsInput = document.getElementById('interests')
+    console.log(selectedInterests)
+    interestsInput.value = JSON.stringify(selectedInterests)
 }

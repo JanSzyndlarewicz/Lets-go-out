@@ -9,7 +9,7 @@
     <p>at Malvarosa 4, Madrid</p>
     <form type="submit" class="centered-column fill-parent" id="invite-form">
         {{ form.csrf_token }}
-        <div class="gap-15"></div>
+        <div class="gap-top-15"></div>
             <div class="push-to-bottom centered-column fill-width">
                 {{form.id(id='id-hidden')}}
 
@@ -25,7 +25,7 @@
                 {{ form.date(id='date-input', readonly=(not is_requesting)) }}
                 <ul class="errors" id="date-errors">
                 </ul>
-                <div class="gap-15"></div>
+                <div class="gap-top-15"></div>
                 {% if is_requesting %}
                 <ul class="push-to-bottom row space-between fill-width">
                     <li>

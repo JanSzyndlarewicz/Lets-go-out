@@ -6,6 +6,7 @@ from app import create_app
 from app.models import Gender, Interest, MatchingPreferences, Photo, Profile, User
 from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
+from app.utils import constants
 
 app = create_app()
 
@@ -14,14 +15,7 @@ with app.app_context():
     db.create_all()
 
     # Adding default interests
-    default_interests = [
-        "Cooking",
-        "Sports",
-        "Music",
-        "Travel",
-        "Reading",
-        "Gaming",
-    ]
+    default_interests = constants.interests
     for interest_name in default_interests:
         if not Interest.query.filter_by(name=interest_name).first():
             new_interest = Interest(name=interest_name)
@@ -125,8 +119,7 @@ with app.app_context():
                     profile_id=profile.id,
                     interest_id=interests[i].id,
                 )
-                for i in range(len(default_interests))
-                if random.choice([True, False])
+                for i in random.sample(range(len(interests)), k=random.randint(0, 6))
             ]
 
             db.session.add_all(profile_interests)

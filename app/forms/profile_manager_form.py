@@ -27,4 +27,4 @@ class ProfileManagerForm(FlaskForm):
     )
     photo = FileField("Profile Photo", validators=[Optional()])
     submit = SubmitField("Change")
-    interests = None
+    interests = StringField("Interests", validators=[Optional()])

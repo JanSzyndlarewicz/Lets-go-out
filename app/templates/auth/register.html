@@ -14,32 +14,32 @@
         {{ form.csrf_token }}
 
         {% with input = form.username %}
-        <div class="gap-15 fill-width">
+        <div class="gap-top-15 fill-width">
             {% include 'components/form_input.html' %}
         </div>
         {% endwith %}
 
         {% with input = form.email %}
-        <div class="gap-15 fill-width">
+        <div class="gap-top-15 fill-width">
             {% include 'components/form_input.html' %}
         </div>
         {% endwith %}
 
         {% with input = form.password %}
-        <div class="gap-15 fill-width">
+        <div class="gap-top-15 fill-width">
             {% include 'components/form_input.html' %}
         </div>
         {% endwith %}
 
         {% with input = form.confirm %}
-        <div class="gap-15 fill-width">
+        <div class="gap-top-15 fill-width">
             {% include 'components/form_input.html' %}
         </div>
         {% endwith %}
 
         <input type="hidden" name="step" value="register">
 
-        <button type="submit" class="primary-background-color text-color shadow gap-30">Next</button>
+        <button type="submit" class="primary-background-color text-color shadow gap-top-30">Next</button>
     </form>
 </div>
 

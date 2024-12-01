@@ -69,13 +69,17 @@ a {
 
 /*END OF RESET CSS*/
 
+br {
+    color: var(--light-color);
+    
+}
 
 .shadow {
     box-shadow: 0 20px 10px rgba(0, 0, 0, 0.1);
 }
 
 .outline {
-    outline: 1px solid rgba(115, 115, 115, 0.5);
+    outline: 1px solid var(--light-color);
 }
 
 :root {
@@ -84,6 +88,7 @@ a {
     --header-color: #1A1A1A;
     --background-color: #383838;
     --text-color: #FFFFFF;
+    --light-color: rgba(115, 115, 115, 0.5);
 }
 
 .primary-color {
@@ -204,20 +209,28 @@ i {
     width: 80px;
 }
 
-.gap-15 {
+.gap-top-15 {
     margin-top: 15px;
 }
 
-.gap-30 {
+.gap-top-30 {
     margin-top: 30px;
 }
 
-.gap-45 {
+.gap-top-45 {
     margin-top: 45px;
 }
 
-.gap-60 {
+.gap-top-60 {
     margin-top: 60px;
+}
+
+.padding-all-15 {
+    padding: 15px;
+}
+
+.padding-all-30 {
+    padding: 30px;
 }
 
 .circular-avatar-big {
