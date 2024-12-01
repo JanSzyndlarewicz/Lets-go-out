@@ -44,6 +44,10 @@
             {% include "components/partials/textarea_field.html" %}
         {% endwith %}
 
+        {% with interests=current_user.profile.interests %}
+            {% include "components/interests_choosing.html" %}
+        {% endwith %}
+
         <div class="input-field">
             <p>
                 <label>Gender Preferences</label>
@@ -58,9 +62,9 @@
                 {% endfor %}
             </p>
         </div>
-
+        
         {% with lower_difference=current_user.matching_preferences.lower_difference , upper_difference=current_user.matching_preferences.upper_difference %}
-        {% include "components/partials/age_preferences.html" %}
+            {% include "components/partials/age_preferences.html" %}
         {% endwith %}
 
         <br>

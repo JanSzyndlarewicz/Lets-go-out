@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 
@@ -9,6 +10,7 @@ from werkzeug.utils import secure_filename
 from app import db
 from app.forms import ProfileManagerForm
 from app.models import Gender, Photo
+from app.models.interest import Interest
 from app.views.auth import confirmed_required
 
 logger = logging.getLogger(__name__)
@@ -38,7 +40,9 @@ def profile_manager():
         lower_difference = form.lower_difference.data
         upper_difference = form.upper_difference.data
         gender_preferences = [Gender[gp] for gp in form.gender_preferences.data]
-
+        interests = [db.get_or_404(Interest, int(single['id'])) for single in json.loads(form.interests.data)]
+        
+        
         if form.photo.data:
             photo = form.photo.data
             handle_photo_upload(photo, current_user)
@@ -50,6 +54,7 @@ def profile_manager():
         current_user.matching_preferences.gender_preferences = gender_preferences
         current_user.matching_preferences.lower_difference = lower_difference
         current_user.matching_preferences.upper_difference = upper_difference
+        current_user.profile.interests = interests
 
         try:
             db.session.commit()

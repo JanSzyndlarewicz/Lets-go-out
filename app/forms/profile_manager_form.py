@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
+from flask_wtf.form import _Auto
 from wtforms import IntegerField, RadioField, SelectMultipleField, StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, InputRequired, NumberRange, Optional
 
@@ -26,3 +27,4 @@ class ProfileManagerForm(FlaskForm):
     )
     photo = FileField("Profile Photo", validators=[Optional()])
     submit = SubmitField("Change")
+    interests = StringField("Interests", validators=[Optional()])

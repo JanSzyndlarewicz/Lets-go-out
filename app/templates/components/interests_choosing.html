@@ -1,0 +1,50 @@
+<!-- 
+ IMPORTANT!!!!
+ pass the interests as with interests, you dont have to pass interests
+ if they are empty
+ -->
+
+{% block component %}
+<link rel="stylesheet"
+              href="{{ url_for('static', filename='style.css') }}">
+<meta id="interests-path" data-path="{{ url_for('common_bp.interests') }}">
+
+<input id="interests" type="hidden" name="interests" value=""/>
+<label>Interests</label>
+<div  class="input-field outline">
+    <div class="padding-all-15">
+        <div>
+            <i class="fas fa-arrow-left" onclick="cancel()"></i>
+            <i class="fas fa-check" onclick="acceptInterests()"></i>
+        </div>
+        <h6>Chosen: </h6>
+        <ul class="chosen-interests gap-top-15">
+        </ul>
+        <br>
+        <h6>Choose more: </h6>
+        <ul class="to-be-chosen-interests gap-top-15">
+        </ul>
+    </div>
+</div>
+<!-- TODO: remove after intergrating into some base-->
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
+<script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>  
+<script>
+    var selectedInterests = []
+    {% for interest in interests %}
+        selectedInterests.push({'id': parseInt('{{ interest.id }}'), 'name': '{{ interest.name }}'})
+    {% endfor %}
+    
+</script>
+<script src="{{ url_for('static', filename='interests_choosing.js')}}"></script>
+<script>
+    init()
+</script>
+
+
+
+{% endblock %}
+
