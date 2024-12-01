@@ -32,15 +32,20 @@
 
     {% if is_requesting %}
     <script>
-        set_cache(JSON.parse('{{ date_request_data | tojson | safe}}'))
-        prepare_invite()
-        next_user()
+        $(function(){
+            set_cache(JSON.parse('{{ date_request_data | tojson | safe}}'))
+            prepare_invite()
+            next_user()
+        })     
     </script>
     {% else %}
     <script>
-        set_cache(JSON.parse('{{ date_request_data | tojson | safe}}'))
-        prepare_answear()
-        next_invitation()
+        $(function(){
+            set_cache(JSON.parse('{{ date_request_data | tojson | safe}}'))
+            prepare_answear()
+            next_invitation()
+        })
+        
     </script>
     {% endif %}
 
