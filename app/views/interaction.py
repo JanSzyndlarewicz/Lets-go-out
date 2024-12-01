@@ -10,6 +10,26 @@ from app.views.auth import confirmed_required
 
 interaction_bp = Blueprint("interaction_bp", __name__)
 
+@interaction_bp.route("/like/<user_id>", methods=["POST"])
+@confirmed_required
+def like(user_id : int):
+    user = db.get_or_404(User, user_id)
+    if current_user in user.likers:
+        user.likers.remove(current_user)
+        db.session.commit()
+    else:
+        user.likers.append(current_user)
+        db.session.commit()
+
+@interaction_bp.route("/block/<user_id>", methods=["POST"])
+@confirmed_required
+def block(user_id : int):
+    user = db.get_or_404(User, user_id)
+    if current_user in user.blockers:
+        user.likers.remove(current_user)
+    else:
+        user.likers.append(current_user)
+    db.session.commit()
 
 @interaction_bp.route("/invite", methods=["POST"])
 @confirmed_required
@@ -36,7 +56,7 @@ def reject():
     form = DateRequestForm()
     del form.message
     del form.date
-    if form.validate_on_submit():
+    if form.validate_on_submit():   
         user = db.get_or_404(User, form.id.data)
         current_user.rejected.append(user)
         db.session.commit()
