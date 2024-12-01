@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import Blueprint
+from flask import abort, Blueprint
 from flask import current_app as app
 from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
@@ -19,7 +19,9 @@ def login_redirect(func):
     def inner(*args, **kwargs):
         if current_user.is_authenticated:
             return func(*args, **kwargs)
-        return redirect(url_for(app.config["LOGIN_PAGE_ROUTE"]))
+        if request.method == "GET":
+            return redirect(url_for(app.config["LOGIN_PAGE_ROUTE"]))
+        abort(401)
     
     return inner
         
@@ -32,7 +34,9 @@ def confirmed_required(func):
         if not app.config["ADVANCED_ACCESS_CONTROL"]:
             return func(*args, **kwargs)
         if not current_user.confirmed:
-            return redirect(url_for(app.config["UNCONFIRMED_PAGE_ROUTE"]))
+            if request.method == "GET":
+                return redirect(url_for(app.config["UNCONFIRMED_PAGE_ROUTE"]))
+            abort(401)
         return func(*args, **kwargs)
 
     return inner
@@ -46,7 +50,9 @@ def unconfirmed_required(func):
         if not app.config["ADVANCED_ACCESS_CONTROL"]:
             return func(*args, **kwargs)
         if current_user.confirmed:
-            return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
+            if request.method == "GET":
+                return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
+            abort(401)
         return func(*args, **kwargs)
 
     return inner
@@ -59,7 +65,9 @@ def anonymous_required(func):
         if not app.config["ADVANCED_ACCESS_CONTROL"]:
             return func(*args, **kwargs)
         if not current_user.is_anonymous:
-            return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
+            if request.method == "GET":
+                return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
+            abort(401)
         return func(*args, **kwargs)
 
     return inner
