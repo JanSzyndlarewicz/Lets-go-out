@@ -63,12 +63,12 @@
             </p>
         </div>
 
-        {% with lower_difference=form.lower_difference, upper_difference=form.upper_difference %}
+        {% with lower_difference=5, upper_difference=5 %}
             {% include "components/partials/age_preferences.html" %}
         {% endwith %}
 
         <br>
-        <button type="submit" class="btn waves-effect waves-light">Save</button>
+        <button type="submit" >Save</button>
     </form>
 </div>
 

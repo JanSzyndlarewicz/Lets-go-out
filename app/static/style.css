@@ -84,6 +84,7 @@ br {
 
 :root {
     --primary-color: #FF7979;
+    --darker-primary-color: #c0392b;
     --scaffold-background-color: #2D2D2D;
     --header-color: #1A1A1A;
     --background-color: #383838;
@@ -386,7 +387,7 @@ input[type="checkbox"] {
 }
 
 .form-container .errors {
-    color: #ff4d4d;
+    color: var(--primary-color);
     font-size: 0.9em;
     margin-bottom: 15px;
 }
@@ -423,12 +424,12 @@ input[type="checkbox"] {
 }
 
 .noUi-connect {
-    background: #e74c3c;
+    background: var(--primary-color);
 }
 
 .noUi-horizontal .noUi-handle,
 .noUi-vertical .noUi-handle {
-    background: #e74c3c;
+    background: var(--primary-color);
 }
 
 #left-value, #right-value {
@@ -440,7 +441,7 @@ input[type="checkbox"] {
 }
 
 .noUi-target.noUi-horizontal .noUi-tooltip {
-    background-color: #e74c3c;
+    background-color: var(--primary-color);
 }
 
 
@@ -450,7 +451,7 @@ input[type="checkbox"] {
 
 /* Button styling */
 button[type="submit"] {
-    background-color: #e74c3c;
+    background-color: var(--primary-color);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -459,12 +460,12 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #c0392b; /* Darker red on hover */
+    background-color: var(--darker-primary-color); /* Darker red on hover */
 }
 
 /* Red underline for the input field */
 .input-field input {
-    border-bottom: 2px solid #e74c3c; /* Red underline */
+    border-bottom: 2px solid var(--primary-color); /* Red underline */
 }
 
 /* Red border when focused */
@@ -478,15 +479,15 @@ button[type="submit"]:hover {
 
 input[type="checkbox"]:checked + span:not(.lever)::before{
     border:2px solid transparent;
-    border-bottom:2px solid #e74c3c;
-    border-right:2px solid #e74c3c;
+    border-bottom:2px solid var(--primary-color);
+    border-right:2px solid var(--primary-color);
     background:transparent;
 }
 
 [type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:before, [type="radio"].with-gap:checked+label:after {
-border: 2px solid #e74c3c;
+border: 2px solid var(--primary-color);
 }
 
 [type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:after {
-background-color: #e74c3c;
+background-color: var(--primary-color);
 }
