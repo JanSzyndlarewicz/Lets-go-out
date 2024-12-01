@@ -52,8 +52,8 @@ def invite():
         )
         db.session.add(proposal)
         db.session.commit()
-        return "true"
-    return form.errors
+        return "", 200
+    return form.errors, 400
 
 
 @interaction_bp.route("/reject", methods=["POST"])
@@ -66,8 +66,8 @@ def reject():
         user = db.get_or_404(User, form.id.data)
         current_user.rejected.append(user)
         db.session.commit()
-        return "true"
-    return form.errors
+        return "", 200
+    return form.errors, 400
 
 @interaction_bp.route("/accept", methods=["POST"])
 @confirmed_required
@@ -77,8 +77,8 @@ def accept():
         proposal = db.get_or_404(DateProposal, form.id.data)
         proposal.change_status(ProposalStatus.accepted, form.message.data)
         db.session.commit()
-        return "true"
-    return form.errors
+        return "", 200
+    return form.errors, 400
 
 @interaction_bp.route("/reject-invitation", methods=["POST"])
 @confirmed_required
@@ -88,8 +88,8 @@ def reject_invitation():
         proposal = db.get_or_404(DateProposal, form.id.data)
         proposal.change_status(ProposalStatus.rejected, form.message.data)
         db.session.commit()
-        return "true"
-    return form.errors
+        return "", 200
+    return form.errors, 400
 
 @interaction_bp.route("/ignore", methods=["POST"])
 @confirmed_required
@@ -100,8 +100,8 @@ def ignore():
         proposal = db.get_or_404(DateProposal, form.id.data)
         proposal.change_status(ProposalStatus.ignored)
         db.session.commit()
-        return "true"
-    return form.errors
+        return "", 200
+    return form.errors, 400
 
 @interaction_bp.route("/reschedule", methods=["POST"])
 @confirmed_required
@@ -111,5 +111,5 @@ def reschedule():
         proposal = db.get_or_404(DateProposal, form.id.data)
         proposal.change_status(ProposalStatus.reschedule, form.message.data)
         db.session.commit()
-        return "true"
-    return form.errors
+        return "", 200
+    return form.errors, 400

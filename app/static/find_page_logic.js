@@ -76,12 +76,12 @@ function next_user() {
 function handle_response_invite(response) {
     console.log(response)
     clear_error_messages()
-    if (response === true) {
+    if (response.status == 200) {
         // Handle success - maybe notify the user or load another match
         cache.shift()
         next_user()   
     } else {
-        return response; // Parse JSON for error messages
+        return response.json(); // Parse JSON for error messages
     } 
 }
 
@@ -92,7 +92,6 @@ function react_to_suggestion(endpoint, error_string){
         method: "POST",
         body: data,
     })
-    .then(response => response.json())
     .then(handle_response_invite)
     .then(display_errors)
     .catch(error => {
@@ -171,12 +170,12 @@ function next_invitation() {
 
 function handle_response_reply(response){
     clear_error_messages()
-    if (response === true) {
+    if (response.status == 200) {
         // Handle success - maybe notify the user or load another match
         cache.shift()
         next_invitation()   
     } else {
-        return response; // Parse JSON for error messages
+        return response.json(); // Parse JSON for error messages
     }
 }
 
@@ -187,7 +186,6 @@ function react_to_invitation(endpoint, error_string) {
         method: "POST",
         body: data,
     })
-    .then(response => response.json())
     .then(handle_response_reply)
     .then(display_errors)
     .catch(error => {
