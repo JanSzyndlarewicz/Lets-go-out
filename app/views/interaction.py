@@ -43,13 +43,15 @@ def invite():
     form = DateRequestForm()
     # we will also have to validate whether there are tables available
     if form.validate_on_submit():
-        db.get_or_404(User, form.id.data)
+        user = db.get_or_404(User, form.id.data)
         proposal = DateProposal(
             proposer_id=current_user.id,
             recipient_id=form.id.data,
             date=form.date.data,
             proposal_message=form.message.data,
         )
+        if user in current_user.blockers:
+            proposal.status = ProposalStatus.ignored
         db.session.add(proposal)
         db.session.commit()
         return "", 200

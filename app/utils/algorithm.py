@@ -50,7 +50,6 @@ def suggest_matches(
                     Profile.year_of_birth + MatchingPreferences.upper_difference,
                 ),
                 User.id != user_id,
-                ~User.blocking.any(BlockingAssociation.blocked_id == user_id),
                 ~User.blockers.any(BlockingAssociation.blocker_id == user_id),
                 ~User.rejecters.any(RejectedAssociation.rejecter_id == user_id),
                 ~User.likers.any(LikingAssociation.liker_id == user_id),
