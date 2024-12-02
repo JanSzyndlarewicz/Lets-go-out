@@ -47,26 +47,20 @@ $(document).ready(function() {
         });
     }
 
-    // Handle click event for navigation links
     $(".nav-link").on("click", function() {
-        // Remove 'active' class from all nav links
-        $(".nav-link").each(function() {
-            $(this).removeClass('active');
-        });
+        // $(".nav-link").each(function() {
+        //     $(this).removeClass('active');
+        // });
 
-        // Add 'active' class to the clicked link
-        $(this).addClass('active');
+        // $(this).addClass('active');
 
-        // Store the clicked link's href in sessionStorage
         sessionStorage.setItem('activeNav', this.href);
 
-        // Redirect to the clicked link's href
         window.location.href = this.href;
     });
 });
 
 
-// Change color of buttons set on click
 document.addEventListener('DOMContentLoaded', function() {
     const links = document.querySelectorAll('.redirect-buttons-set-button');
     const root = document.documentElement;
@@ -84,11 +78,11 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function(event) {
             event.preventDefault();
 
-            // Reset color for all links
-            links.forEach(l => l.style.backgroundColor = '');
+            // // Reset color for all links
+            // links.forEach(l => l.style.backgroundColor = '');
 
-            // Set color for clicked link
-            this.style.backgroundColor = backgroundColor;
+            // // Set color for clicked link
+            // this.style.backgroundColor = backgroundColor;
 
             // Redirect to the link's href after the color change
             window.location.href = this.href;
