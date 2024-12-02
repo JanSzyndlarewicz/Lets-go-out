@@ -69,9 +69,8 @@ a {
 
 /*END OF RESET CSS*/
 
-br {
-    color: var(--light-color);
-    
+hr {
+    border-color: var(--light-color);
 }
 
 .shadow {
@@ -102,6 +101,14 @@ br {
 
 .scaffold-background-color {
     background-color: var(--scaffold-background-color);
+}
+
+.scaffold-color {
+    color: var(--scaffold-background-color);
+}
+
+.light-color {
+    color: var(--light-color);
 }
 
 .text-color {
@@ -234,6 +241,18 @@ i {
     padding: 30px;
 }
 
+.margin-all-5 {
+    margin: 5px;
+}
+
+.margin-all-15 {
+    margin: 15px;
+}
+
+.margin-all-30 {
+    margin: 30px;
+}
+
 .circular-avatar-big {
     width: 200px;
     height: 200px;
@@ -278,8 +297,8 @@ i {
     padding: 10px;
     /* padding-inline: 10px; */
     text-align: center;
-    width: 100px;
-    font-size: medium;
+    width: 150px;
+    font-size: larger;
 }
 
 main .redirect-buttons-set {
@@ -371,6 +390,7 @@ label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    font-size: small;
 }
 
 input[type="text"],
@@ -514,7 +534,7 @@ background-color: var(--primary-color);
 
 .profile-brief {
     gap: 10px;
-    padding: 20px;
+    /* padding: 20px; */
     width: 45vh;
     margin: 10px;
     margin-bottom: 0px;

@@ -14,7 +14,7 @@
                 img_url=proposal_data.recipient.profile.profile_picture_url_or_default,  
                 name=proposal_data.recipient.profile.name,
                 description=proposal_data.recipient.profile.description,
-                proposal_status=proposal_data.status
+                proposal=proposal_data
             %}
             {% include 'components/profile_brief.html' %}
             {% endwith %}
@@ -23,7 +23,7 @@
                 img_url=proposal_data.proposer.profile.profile_picture_url_or_default,  
                 name=proposal_data.proposer.profile.name,
                 description=proposal_data.proposer.profile.description,
-                proposal_status=proposal_data.status
+                proposal=proposal_data
             %}
             {% include 'components/profile_brief.html' %}
             {% endwith %}

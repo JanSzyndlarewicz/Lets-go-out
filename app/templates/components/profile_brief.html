@@ -1,11 +1,19 @@
 {% block content %}
 
-<div class="profile-brief centered-column">
+<div class="profile-brief centered-column outline">
     <img src="{{ img_url }}" class="profile-brief-photo"/>
     <h2>{{ name }}</h2>
     <p>{{ description }}</p>
-    {% if proposal_status is defined %}
-    <p>{{ proposal_status.name }}</p>
+    {% if proposal is defined %}
+    <div class="outline push-to-bottom fill-width scaffold-background-color gap-top-15">
+        <div style="gap: 10px" class="centered-column padding-all-15">
+            <p class="primary-color" >{{ proposal.just_date }}</p>
+            <hr class="fill-width"/>
+            <p>{{ proposal.proposal_message }}</p>
+            
+        </div>
+        <label class="padding-all-15 light-color">{{ proposal.status.name }}</label>
+    </div>
     {% endif %}
 </div>
 
