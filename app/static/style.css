@@ -301,6 +301,17 @@ i {
     font-size: larger;
 }
 
+.orange-button {
+    color: var(--text-color);
+    border-radius: 30px;
+    border: none;
+    padding: 10px;
+    /* padding-inline: 10px; */
+    text-align: center;
+    width: 150px;
+    font-size: larger;
+}
+
 main .redirect-buttons-set {
     position: absolute;
     top: 0px;
@@ -521,7 +532,7 @@ background-color: var(--primary-color);
 }
 
 .active {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
 }
 
 .profile-brief-photo {
