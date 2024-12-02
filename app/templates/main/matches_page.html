@@ -3,9 +3,8 @@
 {% block content %}
     <main class="matches-page-content">
         {% include 'components/set_of_redirect_buttons.html' %}
-        
-        {% if not proposal_data %}
-            {% include 'components/this_list_is_empty.html' %}
+        {% if not proposals_data %}
+            <div class="centered-height-with-nav">{% include 'components/this_list_is_empty.html' %}</div>
         {% else %}
 
         <div class="centered-column outline">

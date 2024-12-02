@@ -249,7 +249,14 @@ i {
     justify-content: center;
     /* align-items: center; */
     width: 100%;
-    height: 100vh;
+    /* height: 100vh; */
+    min-height: calc(100vh - 130px);
+}
+
+.centered-height-with-nav {
+    height: calc(100vh - 130px);
+    display: flex;
+    align-items: center;
 }
 
 .redirect-buttons-set {
