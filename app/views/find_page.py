@@ -28,7 +28,7 @@ def find_page_invite():
     date_request_data = get_suggested_matches_data(app.config["INITIAL_SUGGESTION_NUMBER"])
     if not date_request_data:
         date_request_data = None
-
+    
     return render_template(
         "main/find_page.html",
         date_request_data=date_request_data,

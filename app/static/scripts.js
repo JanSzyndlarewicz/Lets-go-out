@@ -96,6 +96,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function throwErrors(errors){
+    alert(errors)
+}
+
 // Slider for the age range preferences
 document.addEventListener("DOMContentLoaded", function() {
     const slider = document.getElementById('range-slider');

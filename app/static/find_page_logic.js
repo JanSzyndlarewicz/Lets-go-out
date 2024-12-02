@@ -15,10 +15,15 @@ function clear_error_messages(){
 
 function display_errors(data){
     for (var key in data) {
-        let error_box = document.querySelector("#" + key + "-errors")
-        error_box.innerHTML = ""
+        // let error_box = document.querySelector("#" + key + "-errors")
+        // error_box.innerHTML = ""
+        // for (let i = 0; i < data[key].length; i++) {
+        //     error_box.innerHTML += "<li>" + data[key][i] + "</li>"
+        // }
+
+        // code above breaks the layout
         for (let i = 0; i < data[key].length; i++) {
-            error_box.innerHTML += "<li>" + data[key][i] + "</li>"
+            alert(key +" error: "+ data[key][i])
         }
     }
 }

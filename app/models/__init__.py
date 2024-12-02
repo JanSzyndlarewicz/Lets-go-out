@@ -10,3 +10,4 @@ from app.models.interest import Interest
 from app.models.photo import Photo
 from app.models.preferences import MatchingPreferences, UserGenderPreference
 from app.models.user import Profile, User
+from app.models.tables_config import TablesConfig
