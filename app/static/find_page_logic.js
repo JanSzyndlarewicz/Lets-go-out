@@ -1,4 +1,5 @@
 //COMMON
+const REFILL_SUGGESTION_THRESHOLD = 5
 
 var cache
 
@@ -68,7 +69,7 @@ function next_user() {
         return
     }
     switch_profile(cache[0])
-    if (cache.length <= 5) {
+    if (cache.length <= REFILL_SUGGESTION_THRESHOLD) {
         load_new_suggestions()
     } 
 }
