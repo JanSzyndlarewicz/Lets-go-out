@@ -1,3 +1,4 @@
+import random
 from typing import Type
 
 from flask_login import current_user
@@ -55,15 +56,31 @@ def suggest_matches(
                 ~User.likers.any(LikingAssociation.liker_id == user_id),
                 ~User.sent_proposals.any(DateProposal.recipient_id == user_id),
                 ~User.received_proposals.any(DateProposal.proposer_id == user_id),
-                Profile.interests.any(
-                    ProfileInterestAssociation.interest_id.in_([interest.id for interest in user.profile.interests])
-                ),
                 ~(User.id.in_(ignore_ids)),
             )
         )
     )
-    if number:
-        potential_matches = potential_matches.limit(number).all()
-    else:
-        potential_matches = potential_matches.all()
+    potential_matches = potential_matches.all()
+    if number is not None and number < len(potential_matches):
+        weights = []
+        for potential_match in potential_matches:
+            weight = 2 ** len(set(current_user.profile.interests).intersection(potential_match.profile.interests))
+            #print(f"user {potential_match.id}: interests: {potential_match.profile.interests}, weight: {weight}")
+            weights.append(weight)
+        potential_matches = weighted_sample_without_replacement(potential_matches, weights, number)
+    
     return potential_matches
+
+def weighted_sample_without_replacement(elems, weights, k):
+    if k >= len(elems):
+        return elems
+    elems = list(elems)
+    weights = list(weights)
+    indices = range(len(elems))
+    picks = []
+    while len(picks) < k:
+        for i in random.choices(indices, weights=weights, k=k-len(picks)):
+            if weights[i]:
+                weights[i] = 0
+                picks.append(elems[i])
+    return picks

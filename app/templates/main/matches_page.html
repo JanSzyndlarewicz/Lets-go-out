@@ -2,9 +2,32 @@
 
 {% block content %}
     <main class="matches-page-content">
-        <div class="centered-column">
-            <h1>Matches</h1>
-            <p>Here you can see all your matches</p>
+        {% include 'components/set_of_redirect_buttons.html' %}
+        {% if not proposals_data %}
+            <div class="centered-height-with-nav">{% include 'components/this_list_is_empty.html' %}</div>
+        {% else %}
+
+        <div class="centered-column outline">
+            {% for proposal_data in proposals_data %}
+            {% if proposal_data.proposer_id == current_user.id %}
+            {% with 
+                user=proposal_data.recipient,
+                proposal=proposal_data
+            %}
+            {% include 'components/profile_brief.html' %}
+            {% endwith %}
+            {% else %}
+            {% with 
+                user=proposal_data.proposer, 
+                proposal=proposal_data
+            %}
+            {% include 'components/profile_brief.html' %}
+            {% endwith %}
+            {% endif %}
+            
+            {% endfor %}
         </div>
+
+        {% endif %}
     </main>
 {% endblock %}

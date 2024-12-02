@@ -37,3 +37,7 @@ class DateProposal(db.Model):
         self.response_timestamp = datetime.now()
         if message is not None:
             self.response_message = message
+
+    @property
+    def just_date(self):
+        return self.date.date()
