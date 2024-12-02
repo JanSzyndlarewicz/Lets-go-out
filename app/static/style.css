@@ -405,7 +405,7 @@ input[type="checkbox"] {
 }
 
 .form-container button:hover {
-    background-color: #ff4d4d;
+    background-color: var(--darker-primary-color);
 }
 
 .form-container img {
@@ -490,4 +490,8 @@ border: 2px solid var(--primary-color);
 
 [type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:after {
 background-color: var(--primary-color);
+}
+
+.active {
+    color: var(--primary-color);
 }
