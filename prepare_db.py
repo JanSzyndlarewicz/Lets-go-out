@@ -6,6 +6,7 @@ from app import create_app
 from app.models import Gender, Interest, MatchingPreferences, Photo, Profile, User
 from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
+from app.models.date_proposal import DateProposal
 from app.utils import constants
 
 app = create_app()
@@ -126,3 +127,13 @@ with app.app_context():
         db.session.commit()  # Commit associations
 
     print("DB prepared.")
+
+
+def add_invites():
+    users = User.query.all()
+    for user in users:
+        for i in range(1, 10):
+            invitee = random.choice(users)
+            if invitee != user:
+                date_proposals = [DateProposal(proposer=user, invitee=invitee,) for _ in range(1, 10)]
+    db.session.commit()

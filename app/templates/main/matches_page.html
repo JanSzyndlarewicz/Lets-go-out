@@ -2,9 +2,24 @@
 
 {% block content %}
     <main class="matches-page-content">
-        <div class="centered-column">
-            <h1>Matches</h1>
-            <p>Here you can see all your matches</p>
+        {% include 'components/set_of_redirect_buttons.html' %}
+        
+        {% if not proposal_data %}
+            {% include 'components/this_list_is_empty.html' %}
+        {% else %}
+
+        <div class="centered-column outline">
+            {% for proposal_data in proposals_data %}
+            {% with 
+                img_url=proposal_data.recipient.profile.profile_picture_url_or_default,  
+                name=proposal_data.recipient.profile.name,
+                description=proposal_data.recipient.profile.description 
+            %}
+            {% include 'components/profile_brief.html' %}
+            {% endwith %}
+            {% endfor %}
         </div>
+
+        {% endif %}
     </main>
 {% endblock %}

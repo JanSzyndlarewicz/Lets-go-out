@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional
 
-from flask import current_app as app
+from flask import current_app as app, url_for
 from flask_login import UserMixin
 from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String
@@ -10,6 +10,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
+from app.models.date_proposal import DateProposal
 from app.models.gender import Gender
 from app.models.interest import Interest
 from app.models.preferences import MatchingPreferences
@@ -132,3 +133,37 @@ class Profile(db.Model):
     def age(self):
         today = date.today()
         return today.year - self.year_of_birth
+    
+    @property
+    def profile_picture_url_or_default(self):
+        if self.photo is not None:
+            return self.photo.flask_photo_url
+        return url_for("static", filename="images/default-profile-picture.jpg")
+    
+    @property
+    def proposed_and_ignored_proposals_by_self(self):
+        return db.session.query(DateProposal).filter(
+            DateProposal.proposer_id == self.user_id,
+            DateProposal.status.in_(["ignored", "proposed"])
+        ).all()
+        
+    @property
+    def accepted_proposals_by_self(self):
+        return db.session.query(DateProposal).filter(
+            DateProposal.proposer_id == self.user_id,
+            DateProposal.status == "accepted"
+        ).all()
+        
+    @property
+    def rejected_proposals_by_self(self):
+        return db.session.query(DateProposal).filter(
+            DateProposal.proposer_id == self.user_id,
+            DateProposal.status == "rejected"
+        ).all()
+        
+    @property
+    def reschedule_proposals_by_self(self):
+        return db.session.query(DateProposal).filter(
+            DateProposal.proposer_id == self.user_id,
+            DateProposal.status == "reschedule"
+        ).all()
