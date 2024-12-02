@@ -2,33 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <!-- Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
-<body>
-    <h1>Login</h1>
+<body class="scaffold-background-color text-color">
+
+<div class="container form-container">
+    <h1 class="primary-color">Login</h1>
     <form method="post" action="{{ url_for('auth_bp.login') }}">
         {{ form.csrf_token }}
-
-        {% with input = form.username %}
-        {% include 'components/form_input.html' %}
-        {% endwith %}
-        <br>
-        
-        {% with input = form.password %}
-        {% include 'components/form_input.html' %}
-        {% endwith %}
-
-        <br>
-        {{ form.submit() }}
+        <div class="input-field">
+            {% with input = form.username %}
+                <i class="material-icons prefix">account_circle</i>
+                <input id="username" type="text" name="username" required>
+                <label for="username">Username</label>
+            {% endwith %}
+        </div>
+        <div class="input-field">
+            {% with input = form.password %}
+                <i class="material-icons prefix">lock</i>
+                <input id="password" type="password" name="password" required>
+                <label for="password">Password</label>
+            {% endwith %}
+        </div>
+        <button type="submit" class="btn primary-background-color">Login</button>
     </form>
-    
 
-    <!--THIS IS EXCLUSIVELY FOR TESTING AND MUST BE REMOVED IN THE FINAL VERSION-->
+
     <br>
     <form method="POST" action="{{ url_for('auth_bp.forced_entry') }}">
-        <input type="submit" value="Force entry">
+        <button type="submit" class="btn-flat white-text primary-color">Force Entry</button>
     </form>
 
+    <br>
+    <form method="GET" action="{{ url_for('auth_bp.register') }}">
+        <button type="submit" class="btn-flat white-text primary-color">Register</button>
+    </form>
+</div>
 
+<!-- Materialize JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>

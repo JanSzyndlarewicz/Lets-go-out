@@ -491,3 +491,13 @@ border: 2px solid var(--primary-color);
 [type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:after {
 background-color: var(--primary-color);
 }
+
+
+button, .btn, .btn-flat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: normal; /* Prevent Materialize default styles from misaligning text */
+    padding: 0.8em 1.5em; /* Adjust padding for better aesthetics */
+    height: auto; /* Let the height adjust based on content */
+}
