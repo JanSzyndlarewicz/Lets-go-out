@@ -88,7 +88,7 @@ hr {
     --header-color: #1A1A1A;
     --background-color: #383838;
     --text-color: #FFFFFF;
-    --light-color: rgba(115, 115, 115, 0.5);
+    --light-color: rgba(115, 115, 115, 1);
 }
 
 .primary-color {
@@ -391,6 +391,7 @@ label {
     margin-bottom: 5px;
     font-weight: bold;
     font-size: small;
+    color: var(--light-color);
 }
 
 input[type="text"],
