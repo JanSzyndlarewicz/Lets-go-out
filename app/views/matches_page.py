@@ -21,6 +21,16 @@ def matches_page_sent():
         proposals_data=sent_by_self, 
         redirect_buttons_set_data=redirect_buttons_set_data()
         )
+    
+@matches_page_bp.route("/matches-page/received")
+def matches_page_received():
+    proposals_considered_by_self = current_user.profile.proposals_considered_by_self
+    print(proposals_considered_by_self)
+    return render_template(
+        "main/matches_page.html", 
+        proposals_data=proposals_considered_by_self, 
+        redirect_buttons_set_data=redirect_buttons_set_data()
+        )
 
 @matches_page_bp.route("/matches-page/dates")
 @confirmed_required
@@ -35,5 +45,6 @@ def matches_page_dates():
 
 def redirect_buttons_set_data():
     return [{"url": url_for("matches_page_bp.matches_page_sent"), "text": "sent"}, 
+            {"url": url_for("matches_page_bp.matches_page_received"), "text": "received"},
             {"url": url_for("matches_page_bp.matches_page_dates"), "text": "dates"},]
     
