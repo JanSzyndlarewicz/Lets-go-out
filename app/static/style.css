@@ -520,6 +520,27 @@ border: 2px solid var(--primary-color);
 background-color: var(--primary-color);
 }
 
+
+button, .btn, .btn-flat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: normal; /* Prevent Materialize default styles from misaligning text */
+    padding: 0.8em 1.5em; /* Adjust padding for better aesthetics */
+    height: auto; /* Let the height adjust based on content */
+}
+
+.input-field input.valid {
+    border-bottom: 2px solid var(--primary-color) !important;
+    box-shadow: none !important;
+}
+
+/* Remove blue from invalid input fields */
+.input-field input.invalid {
+    border-bottom: 2px solid var(--primary-color) !important; /* Optional: Replace with custom error color */
+    box-shadow: none !important;
+}
+
 .active {
     color: var(--primary-color);
 }

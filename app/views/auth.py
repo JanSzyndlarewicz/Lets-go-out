@@ -97,7 +97,8 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
-        return "Invalid credentials", 401
+        flash("Invalid username or password. Please try again.", "error")
+        return redirect(url_for("auth_bp.login"))
 
     return render_template("auth/login.html", form=form)
 
