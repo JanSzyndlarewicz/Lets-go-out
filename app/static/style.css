@@ -501,3 +501,14 @@ button, .btn, .btn-flat {
     padding: 0.8em 1.5em; /* Adjust padding for better aesthetics */
     height: auto; /* Let the height adjust based on content */
 }
+
+.input-field input.valid {
+    border-bottom: 2px solid var(--primary-color) !important;
+    box-shadow: none !important;
+}
+
+/* Remove blue from invalid input fields */
+.input-field input.invalid {
+    border-bottom: 2px solid var(--primary-color) !important; /* Optional: Replace with custom error color */
+    box-shadow: none !important;
+}

@@ -9,12 +9,25 @@
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
 </head>
 <body class="scaffold-background-color text-color">
 
 <div class="container form-container">
     <h1 class="primary-color">Login</h1>
+
+    <!-- Flash messages section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="card-panel red lighten-3">
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <form method="post" action="{{ url_for('auth_bp.login') }}">
         {{ form.csrf_token }}
         <div class="input-field">
@@ -33,7 +46,6 @@
         </div>
         <button type="submit" class="btn primary-background-color">Login</button>
     </form>
-
 
     <br>
     <form method="POST" action="{{ url_for('auth_bp.forced_entry') }}">
