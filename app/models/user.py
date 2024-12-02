@@ -4,7 +4,7 @@ from typing import Optional
 from flask import current_app as app, url_for
 from flask_login import UserMixin
 from itsdangerous import URLSafeTimedSerializer
-from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String, or_
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -23,7 +23,9 @@ class User(db.Model, UserMixin):
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
     confirmed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="user")
+    profile: Mapped["Profile"] = relationship(
+        "Profile", uselist=False, back_populates="user"
+    )
     matching_preferences: Mapped["MatchingPreferences"] = relationship(
         "MatchingPreferences", uselist=False, back_populates="user"
     )
@@ -133,37 +135,75 @@ class Profile(db.Model):
     def age(self):
         today = date.today()
         return today.year - self.year_of_birth
-    
+
     @property
     def profile_picture_url_or_default(self):
         if self.photo is not None:
             return self.photo.flask_photo_url
         return url_for("static", filename="images/default-profile-picture.jpg")
-    
+
+    @property
+    def proposals_sent_by_self(self):
+        return (
+            db.session.query(DateProposal)
+            .filter(DateProposal.proposer_id == self.user_id)
+            .all()
+        )
+
+    @property
+    def accepted_proposals_by_either(self):
+        return (
+            db.session.query(DateProposal)
+            .filter(
+                or_(
+                    DateProposal.proposer_id == self.user_id,
+                    DateProposal.recipient_id == self.user_id,
+                ),
+                DateProposal.status == "accepted",
+            )
+            .all()
+        )
+
     @property
     def proposed_and_ignored_proposals_by_self(self):
-        return db.session.query(DateProposal).filter(
-            DateProposal.proposer_id == self.user_id,
-            DateProposal.status.in_(["ignored", "proposed"])
-        ).all()
-        
+        return (
+            db.session.query(DateProposal)
+            .filter(
+                DateProposal.proposer_id == self.user_id,
+                DateProposal.status.in_(["ignored", "proposed"]),
+            )
+            .all()
+        )
+
     @property
     def accepted_proposals_by_self(self):
-        return db.session.query(DateProposal).filter(
-            DateProposal.proposer_id == self.user_id,
-            DateProposal.status == "accepted"
-        ).all()
-        
+        return (
+            db.session.query(DateProposal)
+            .filter(
+                DateProposal.proposer_id == self.user_id,
+                DateProposal.status == "accepted",
+            )
+            .all()
+        )
+
     @property
     def rejected_proposals_by_self(self):
-        return db.session.query(DateProposal).filter(
-            DateProposal.proposer_id == self.user_id,
-            DateProposal.status == "rejected"
-        ).all()
-        
+        return (
+            db.session.query(DateProposal)
+            .filter(
+                DateProposal.proposer_id == self.user_id,
+                DateProposal.status == "rejected",
+            )
+            .all()
+        )
+
     @property
     def reschedule_proposals_by_self(self):
-        return db.session.query(DateProposal).filter(
-            DateProposal.proposer_id == self.user_id,
-            DateProposal.status == "reschedule"
-        ).all()
+        return (
+            db.session.query(DateProposal)
+            .filter(
+                DateProposal.proposer_id == self.user_id,
+                DateProposal.status == "reschedule",
+            )
+            .all()
+        )

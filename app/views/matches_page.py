@@ -10,55 +10,30 @@ matches_page_bp = Blueprint("matches_page_bp", __name__)
 @matches_page_bp.route("/matches-page")
 @confirmed_required
 def matches_page():
-    return redirect(url_for("matches_page_bp.matches_page_proposed"))
+    return redirect(url_for("matches_page_bp.matches_page_sent"))
 
-@matches_page_bp.route("/matches-page/proposed")
+@matches_page_bp.route("/matches-page/sent")
 @confirmed_required
-def matches_page_proposed():
-    proposed_and_ignored = current_user.profile.proposed_and_ignored_proposals_by_self
-    print(proposed_and_ignored)
+def matches_page_sent():
+    sent_by_self = current_user.profile.proposals_sent_by_self
     return render_template(
         "main/matches_page.html", 
-        proposals_data=proposed_and_ignored, 
+        proposals_data=sent_by_self, 
         redirect_buttons_set_data=redirect_buttons_set_data()
         )
 
-@matches_page_bp.route("/matches-page/accepted")
+@matches_page_bp.route("/matches-page/dates")
 @confirmed_required
-def matches_page_accepted():
-    proposed_and_ignored = current_user.profile.accepted_proposals_by_self
-    
+def matches_page_dates():
+    accepted_by_either = current_user.profile.accepted_proposals_by_either
     return render_template(
         "main/matches_page.html", 
-        proposals_data=proposed_and_ignored, 
+        proposals_data=accepted_by_either, 
         redirect_buttons_set_data=redirect_buttons_set_data()
         )
 
-@matches_page_bp.route("/matches-page/rejected")
-@confirmed_required
-def matches_page_rejected():
-    proposed_and_ignored = current_user.profile.rejected_proposals_by_self
-    
-    return render_template(
-        "main/matches_page.html", 
-        proposals_data=proposed_and_ignored, 
-        redirect_buttons_set_data=redirect_buttons_set_data()
-        )
-
-@matches_page_bp.route("/matches-page/reschedule")
-@confirmed_required
-def matches_page_reschedule():
-    proposed_and_ignored = current_user.profile.reschedule_proposals_by_self
-    
-    return render_template(
-        "main/matches_page.html", 
-        proposals_data=proposed_and_ignored, 
-        redirect_buttons_set_data=redirect_buttons_set_data()
-        )
 
 def redirect_buttons_set_data():
-    return [{"url": url_for("matches_page_bp.matches_page_proposed"), "text": "proposed"}, 
-            {"url": url_for("matches_page_bp.matches_page_accepted"), "text": "accepted"},
-            {"url": url_for("matches_page_bp.matches_page_rejected"), "text": "rejected"},
-            {"url": url_for("matches_page_bp.matches_page_reschedule"), "text": "reschedule"}]
+    return [{"url": url_for("matches_page_bp.matches_page_sent"), "text": "sent"}, 
+            {"url": url_for("matches_page_bp.matches_page_dates"), "text": "dates"},]
     

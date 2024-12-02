@@ -9,13 +9,26 @@
 
         <div class="centered-column outline">
             {% for proposal_data in proposals_data %}
+            {% if proposal_data.proposer_id == current_user.id %}
             {% with 
                 img_url=proposal_data.recipient.profile.profile_picture_url_or_default,  
                 name=proposal_data.recipient.profile.name,
-                description=proposal_data.recipient.profile.description 
+                description=proposal_data.recipient.profile.description,
+                proposal_status=proposal_data.status
             %}
             {% include 'components/profile_brief.html' %}
             {% endwith %}
+            {% else %}
+            {% with 
+                img_url=proposal_data.proposer.profile.profile_picture_url_or_default,  
+                name=proposal_data.proposer.profile.name,
+                description=proposal_data.proposer.profile.description,
+                proposal_status=proposal_data.status
+            %}
+            {% include 'components/profile_brief.html' %}
+            {% endwith %}
+            {% endif %}
+            
             {% endfor %}
         </div>
 

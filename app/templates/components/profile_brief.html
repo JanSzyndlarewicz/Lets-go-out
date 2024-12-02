@@ -4,6 +4,9 @@
     <img src="{{ img_url }}" class="profile-brief-photo"/>
     <h2>{{ name }}</h2>
     <p>{{ description }}</p>
+    {% if proposal_status is defined %}
+    <p>{{ proposal_status.name }}</p>
+    {% endif %}
 </div>
 
 {% endblock %}
