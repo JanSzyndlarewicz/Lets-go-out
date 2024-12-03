@@ -152,3 +152,30 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+
+// Handle any set of pull-buttons-sets by scoping
+$(document).ready(function() {
+    const buttons_sets = $('.pull-buttons-set');
+    buttons_sets.each(function() {
+        const buttons_set = $(this);
+        buttons_set.each(function() {
+            const button = $(this).find('.pull-buttons-set-button');
+           
+            button.on('click', function() {
+                set.toggleClass('active');
+            });
+
+            set.on('click', function() {
+                set.removeClass('active');
+            });
+        });
+
+        button.on('click', function() {
+            set.toggleClass('active');
+        });
+
+        set.on('click', function() {
+            set.removeClass('active');
+        });
+    });
+});
