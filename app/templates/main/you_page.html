@@ -1,6 +1,31 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-    <h2>You</h2>
-    <p>Find a place to go out</p>
+    <main class="row scrollable-panes-container solo-centered-column-under-top-bar">
+        <div class="centered-column outline scrollable-pane you-left-col" style="width: 400px">
+            <div class="save">{% include 'components/set_of_pull_buttons.html' %}</div>
+            {% if users == [] %}
+            {% include 'components/this_list_is_empty.html' %}
+            {% else %}
+            {% for user in users %}
+                {% include 'components/profile_brief.html' %}
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="centered-column outline scrollable-pane">
+        <div class="row space-between fill-width"><div style="display: hidden"></div>
+            <i id="edit-profile-icon" class="fas fa-edit fa-2x light-color"></i>
+        </div>
+            {% with user=current_user %}
+            {% include "components/full_profile_info.html" %}
+            {% endwith %}
+        </div>
+    </main>
+    <script>
+        const likedPath = "{{url_for('you_page_bp.sub_you_page_liked')}}";
+        const blockedPath = "{{url_for('you_page_bp.sub_you_page_blocked')}}";
+        const editProfilePath = "{{url_for('profile_manager_bp.profile_manager')}}";
+    </script>
+    <script src="{{ url_for('static', filename='you_page.js')}}"></script>
+                
 {% endblock %}

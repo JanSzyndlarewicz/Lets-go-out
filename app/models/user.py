@@ -2,7 +2,7 @@ from datetime import date
 from typing import Optional
 
 from flask import current_app as app, url_for
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String, or_
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -113,7 +113,18 @@ class User(db.Model, UserMixin):
         except:
             return False
 
-
+    @property
+    def blocked_by_main_user(self):
+        return current_user in self.blockers
+    
+    @property
+    def liked_by_main_user(self):
+        return current_user in self.likers
+    
+    @property
+    def repr_of_age_preferences(self):
+        return f"From {self.matching_preferences.lower_difference} below to {self.matching_preferences.upper_difference} above"
+    
 class Profile(db.Model):
     __tablename__ = "profile"
     id: Mapped[int] = mapped_column(primary_key=True)

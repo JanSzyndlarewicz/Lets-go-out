@@ -8,16 +8,20 @@
     {% with url=url_for('profile_bp.profile', user_id=user.id), text='See More', width='100px', font_size='medium' %}
     {% include 'components/button.html' %}
     {% endwith %}
-
+<div class="gap-top-15">    </div>
     {% if proposal is defined %}
-    <div class="outline push-to-bottom fill-width scaffold-background-color gap-top-15">
+    <div class="outline push-to-bottom fill-width scaffold-background-color ">
         <div style="gap: 10px" class="centered-column padding-all-15">
             <p class="primary-color" >{{ proposal.just_date }}</p>
             <hr class="fill-width"/>
             <p>{{ proposal.proposal_message }}</p>
             
         </div>
+        {% if proposal.proposer.id == current_user.id %}
+        <label class="padding-all-15 light-color">{{ proposal.ignored_safe_status }}</label>
+        {% else %}
         <label class="padding-all-15 light-color">{{ proposal.status.name }}</label>
+        {% endif %}
     </div>
     {% endif %}
 </div>

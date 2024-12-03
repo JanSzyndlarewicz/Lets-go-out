@@ -1,0 +1,17 @@
+{% block content %}
+    <div class="profile-field fill-width padding-all-15">
+        <label class="profile-field-label padding-all-5">{{ label }}</label>
+        {% if values is defined %}
+            <div class="outline fill-width padding-all-15 shadow keyword-soaps-layout">
+                {% for value in values %}
+                    <div class="keyword-soap">{{ value }}</div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="outline fill-width padding-all-15 shadow">
+                <p class="profile-field-value">{{ value }}</p>
+            </div>
+        {% endif %}
+        
+    </div>
+{% endblock %}

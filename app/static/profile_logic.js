@@ -31,11 +31,23 @@ function prepare_event_handlers(){
 }
 
 function change_like_button_appearance(){
-    console.log("Now I'm supposed to change the appearance of the like button.")
+    const like_button = document.querySelector('#like-button')
+    if (like_button.classList.contains('fas')) {
+        like_button.classList.remove('fas')
+        like_button.classList.add('far')
+    } else {
+        like_button.classList.remove('far')
+        like_button.classList.add('fas')
+    }
 }
 
 function change_block_button_appearance(){
-    console.log("Now I'm supposed to change the appearance of the block button.")
+    const block_button = document.querySelector('#block-button')
+    if (block_button.classList.contains('text-color')) {
+        block_button.classList.remove('text-color')
+    } else {
+        block_button.classList.add('text-color')
+    }
 }
 
 $(function(){
