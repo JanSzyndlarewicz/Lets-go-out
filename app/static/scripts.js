@@ -1,3 +1,21 @@
+// ON EVERY PAGE INIT
+initIfNav();
+
+function initIfNav() {
+    const nav = document.querySelector('.nav');
+    if (nav) {
+        const navLinks = nav.querySelectorAll('.nav-link');
+        const currentUrl = window.location.href;
+
+        navLinks.forEach(link => {
+            if (link.href === currentUrl) {
+                link.classList.add('active');
+            }
+        });
+    }
+}
+
+
 function getOnlyFirstDirIn(url = null) {
     url = url || window.location.href;
     const baseUrl = `${window.location.protocol}//${window.location.host}`;
@@ -6,47 +24,45 @@ function getOnlyFirstDirIn(url = null) {
     return fullPath;
 }
 
-// Change color of nav links when clicked
-document.addEventListener('DOMContentLoaded', function () {
-    const links = document.querySelectorAll('.nav-link');
-    const root = document.documentElement;
-    const mainColor = getComputedStyle(root).getPropertyValue('--primary-color').trim();
-    ;
+$(document).ready( function () {
+    const currentPage = window.location.href;
 
-    var redirectLink = null;
-    if (sessionStorage.getItem('clickedLink') !== null) {
-        redirectLink = sessionStorage.getItem('clickedLink');
+    const activeNavHref = sessionStorage.getItem('activeNav');
+;
+
+    if (activeNavHref) {
+        if (getOnlyFirstDirIn(currentPage) === getOnlyFirstDirIn(activeNavHref)) {
+            $(".nav-link").each(function() {
+                if (this.href === activeNavHref) {
+                    $(this).addClass('active');
+                }
+            });
+        } else {
+            sessionStorage.removeItem('activeNav');
+        }
     } else {
-        const fullPath = getOnlyFirstDirIn();
-        links.forEach(link => {
-            if (getOnlyFirstDirIn(link.href) === fullPath) {
-                redirectLink = fullPath;
+        $(".nav-link").each(function() {
+            if (getOnlyFirstDirIn(this.href) === getOnlyFirstDirIn(currentPage)) {
+                $(this).addClass('active');
             }
         });
     }
 
-    links.forEach(link => {
-        // If the link matches the saved one, apply the color
-        console.log("check", link.href, "redirect", redirectLink, 1);
-        if (getOnlyFirstDirIn(link.href) === redirectLink) {
-            link.style.color = mainColor;
-        }
-
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-
-            // Reset color for all links
-            links.forEach(l => l.style.color = '');
-
-            // Set color for clicked link
-            this.style.color = mainColor;
-
-            // Redirect to the link's href after the color change
-            window.location.href = this.href;
-
-            // Save the clicked link to localStorage
-            sessionStorage.setItem('clickedLink', this.href);
+    // Handle click event for navigation links
+    $(".nav-link").on("click", function() {
+        // Remove 'active' class from all nav links
+        $(".nav-link").each(function() {
+            $(this).removeClass('active');
         });
+
+        // Add 'active' class to the clicked link
+        $(this).addClass('active');
+
+        // Store the clicked link's href in sessionStorage
+        sessionStorage.setItem('activeNav', this.href);
+
+        // Redirect to the clicked link's href
+        window.location.href = this.href;
     });
 });
 
@@ -70,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
 
             // Reset color for all links
-            links.forEach(l => l.style.color = '');
+            links.forEach(l => l.style.backgroundColor = '');
 
             // Set color for clicked link
             this.style.backgroundColor = backgroundColor;

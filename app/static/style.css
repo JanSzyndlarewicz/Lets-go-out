@@ -69,9 +69,8 @@ a {
 
 /*END OF RESET CSS*/
 
-br {
-    color: var(--light-color);
-    
+hr {
+    border-color: var(--light-color);
 }
 
 .shadow {
@@ -102,6 +101,14 @@ br {
 
 .scaffold-background-color {
     background-color: var(--scaffold-background-color);
+}
+
+.scaffold-color {
+    color: var(--scaffold-background-color);
+}
+
+.light-color {
+    color: var(--light-color);
 }
 
 .text-color {
@@ -234,6 +241,18 @@ i {
     padding: 30px;
 }
 
+.margin-all-5 {
+    margin: 5px;
+}
+
+.margin-all-15 {
+    margin: 15px;
+}
+
+.margin-all-30 {
+    margin: 30px;
+}
+
 .circular-avatar-big {
     width: 200px;
     height: 200px;
@@ -244,11 +263,19 @@ i {
 }
 
 .matches-page-content {
+    position: relative;
     display: flex;
-    flex-direction: row;
-    /* justify-content: center; */
+    justify-content: center;
     /* align-items: center; */
+    width: 100%;
+    /* height: 100vh; */
+    min-height: calc(100vh - 130px);
+}
+
+.centered-height-with-nav {
     height: calc(100vh - 130px);
+    display: flex;
+    align-items: center;
 }
 
 .redirect-buttons-set {
@@ -312,7 +339,7 @@ main .redirect-buttons-set {
     flex-wrap: wrap;
     /* justify-content: center; */
     /* align-items: center; */
-    gap: 10px;
+    gap: 20px 10px;
     min-height: 30px;
 }
 
@@ -322,7 +349,7 @@ main .redirect-buttons-set {
     flex-wrap: wrap;
     /* justify-content: center; */
     /* align-items: center; */
-    gap: 10px;
+    gap: 20px 10px;
 }
 
 .interest-unselected-button {
@@ -363,6 +390,7 @@ label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    font-size: small;
 }
 
 input[type="text"],
@@ -405,7 +433,7 @@ input[type="checkbox"] {
 }
 
 .form-container button:hover {
-    background-color: #ff4d4d;
+    background-color: var(--darker-primary-color);
 }
 
 .form-container img {
@@ -500,4 +528,25 @@ button, .btn, .btn-flat {
     line-height: normal; /* Prevent Materialize default styles from misaligning text */
     padding: 0.8em 1.5em; /* Adjust padding for better aesthetics */
     height: auto; /* Let the height adjust based on content */
+}
+
+.active {
+    color: var(--primary-color);
+}
+
+.profile-brief-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--background-color);
+}
+
+.profile-brief {
+    gap: 10px;
+    /* padding: 20px; */
+    width: 45vh;
+    margin: 10px;
+    margin-bottom: 0px;
+    background-color: var(--background-color);
 }
