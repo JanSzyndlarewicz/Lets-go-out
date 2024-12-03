@@ -1,4 +1,4 @@
-function getOnlyFirstDirIn(url=null) {
+function getOnlyFirstDirIn(url = null) {
     url = url || window.location.href;
     const baseUrl = `${window.location.protocol}//${window.location.host}`;
     const firstDirectory = url.split('/')[3]; // Get the first directory
@@ -7,31 +7,32 @@ function getOnlyFirstDirIn(url=null) {
 }
 
 // Change color of nav links when clicked
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const links = document.querySelectorAll('.nav-link');
     const root = document.documentElement;
-    const mainColor = getComputedStyle(root).getPropertyValue('--primary-color').trim();;
-    
+    const mainColor = getComputedStyle(root).getPropertyValue('--primary-color').trim();
+    ;
+
     var redirectLink = null;
     if (sessionStorage.getItem('clickedLink') !== null) {
         redirectLink = sessionStorage.getItem('clickedLink');
     } else {
         const fullPath = getOnlyFirstDirIn();
-        links.forEach(link => {   
+        links.forEach(link => {
             if (getOnlyFirstDirIn(link.href) === fullPath) {
-                redirectLink = fullPath;            
+                redirectLink = fullPath;
             }
         });
     }
 
     links.forEach(link => {
         // If the link matches the saved one, apply the color
-        console.log("check",link.href,"redirect", redirectLink ,1);
+        console.log("check", link.href, "redirect", redirectLink, 1);
         if (getOnlyFirstDirIn(link.href) === redirectLink) {
             link.style.color = mainColor;
         }
 
-        link.addEventListener('click', function(event) {
+        link.addEventListener('click', function (event) {
             event.preventDefault();
 
             // Reset color for all links
@@ -51,10 +52,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Change color of buttons set on click
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const links = document.querySelectorAll('.redirect-buttons-set-button');
     const root = document.documentElement;
-    const backgroundColor = getComputedStyle(root).getPropertyValue('--primary-color').trim();;
+    const backgroundColor = getComputedStyle(root).getPropertyValue('--primary-color').trim();
 
     // Retrieve the saved clicked link from localStorage
     const savedLink = window.location.href;
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
             link.style.backgroundColor = backgroundColor;
         }
 
-        link.addEventListener('click', function(event) {
+        link.addEventListener('click', function (event) {
             event.preventDefault();
 
             // Reset color for all links
@@ -81,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Slider for the age range preferences
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const slider = document.getElementById('range-slider');
     const leftValue = document.getElementById('left-value');
     const rightValue = document.getElementById('right-value');
@@ -92,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Initialize the slider with the correct values
     noUiSlider.create(slider, {
-        start: [-1*initialLower, initialUpper], // Use initialLower and initialUpper directly
+        start: [-1 * initialLower, initialUpper], // Use initialLower and initialUpper directly
         connect: true,
         range: {
             'min': -30,
@@ -110,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Update the values on the slider
-    slider.noUiSlider.on('update', function(values, handle) {
+    slider.noUiSlider.on('update', function (values, handle) {
         const lower = values[0];
         const upper = values[1];
 
@@ -135,6 +136,14 @@ document.addEventListener("DOMContentLoaded", function() {
         if (lowerInput && upperInput) {
             lowerInput.value = Math.abs(lower);
             upperInput.value = upper;
+
+            if (lower > 0) {
+                slider.noUiSlider.set([0, upper]);
+            }
+
+            if (upper < 0) {
+                slider.noUiSlider.set([lower, 0]);
+            }
         }
     });
 });
