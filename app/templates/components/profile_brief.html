@@ -2,11 +2,11 @@
 
 <div class="profile-brief centered-column outline shadow">
     <img src="{{ user.profile.profile_picture_url_or_default }}" class="profile-brief-photo gap-top-15"/>
-    <h2>{{ user.profile.name }}</h2>
+    <h2 class="text-shadow">{{ user.profile.name }}</h2>
     <p>{{ user.profile.description }}</p>
     
     {% with url=url_for('profile_bp.profile', user_id=user.id), text='See More', width='100px', font_size='medium' %}
-    {% include 'components/profile_button.html' %}
+    {% include 'components/button.html' %}
     {% endwith %}
 
     {% if proposal is defined %}

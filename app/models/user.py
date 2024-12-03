@@ -207,3 +207,16 @@ class Profile(db.Model):
             )
             .all()
         )
+        
+    @property
+    def proposals_considered_by_self(self):
+        return (
+            db.session.query(DateProposal)
+            .filter(
+                DateProposal.recipient_id == self.user_id,
+                DateProposal.status.in_(
+                    [ProposalStatus.accepted, ProposalStatus.ignored, ProposalStatus.rejected, ProposalStatus.reschedule]
+                )
+            )
+            .all()
+        )

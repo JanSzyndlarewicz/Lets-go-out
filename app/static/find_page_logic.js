@@ -46,7 +46,7 @@ function switch_profile(user) {
     id_hidden_input.value = user.id
     //actually change images here once they exist
     img = document.querySelector("#profile-img")
-    img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();
+    img.src = user.image_url;
     block.offsetWidth
     block.classList.add("fadeIn")
 }

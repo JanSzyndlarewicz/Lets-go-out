@@ -54,6 +54,7 @@ def get_suggested_matches_data(limit: int, ignore_ids=[]) -> list[dict]:
                 "id": user.id,
                 "name": user.profile.name,
                 "description": user.profile.description,
+                "image_url": user.profile.profile_picture_url_or_default
             }
         )
     return result
