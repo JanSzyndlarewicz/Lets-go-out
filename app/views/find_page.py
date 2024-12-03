@@ -84,7 +84,7 @@ def get_pending_invitations(user_id : int) -> list[DateProposal]:
              .where(DateProposal.recipient_id == user_id)
              .where(DateProposal.date >= datetime.now().date())
              .where(DateProposal.status == ProposalStatus.proposed)
-             .where(~DateProposal.proposer_id.in_(current_user.blocking))
+             .where(~DateProposal.proposer_id.in_(user.id for user in current_user.blocking))
             )
     return db.session.execute(query).scalars().all()
 
