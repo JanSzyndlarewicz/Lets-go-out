@@ -1,5 +1,4 @@
 // ON EVERY PAGE INIT
-initIfNav();
 
 function initIfNav() {
     const nav = document.querySelector('.nav');
@@ -29,32 +28,32 @@ $(document).ready(function() {
 
     const activeNavHref = sessionStorage.getItem('activeNav');
 
-    if (activeNavHref) {
-        if (getOnlyFirstDirIn(currentPage) === getOnlyFirstDirIn(activeNavHref)) {
-            $(".nav-link").each(function() {
-                if (this.href === activeNavHref) {
-                    $(this).addClass('active');
-                }
-            });
-        } else {
-            sessionStorage.removeItem('activeNav');
-        }
-    } else {
-        $(".nav-link").each(function() {
-            if (getOnlyFirstDirIn(this.href) === getOnlyFirstDirIn(currentPage)) {
-                $(this).addClass('active');
-            }
-        });
-    }
+    // if (activeNavHref) {
+    //     if (getOnlyFirstDirIn(currentPage) === getOnlyFirstDirIn(activeNavHref)) {
+    //         $(".nav-link").each(function() {
+    //             if (this.href === activeNavHref) {
+    //                 $(this).addClass('active');
+    //             }
+    //         });
+    //     } else {
+    //         sessionStorage.removeItem('activeNav');
+    //     }
+    // } else {
+    //     $(".nav-link").each(function() {
+    //         if (getOnlyFirstDirIn(this.href) === getOnlyFirstDirIn(currentPage)) {
+    //             $(this).addClass('active');
+    //         }
+    //     });
+    // }
 
     $(".nav-link").on("click", function() {
-        // $(".nav-link").each(function() {
-        //     $(this).removeClass('active');
-        // });
+        $(".nav-link").each(function() {
+            $(this).removeClass('active');
+        });
 
-        // $(this).addClass('active');
+        $(this).addClass('active');
 
-        sessionStorage.setItem('activeNav', this.href);
+        // sessionStorage.setItem('activeNav', this.href);
 
         window.location.href = this.href;
     });

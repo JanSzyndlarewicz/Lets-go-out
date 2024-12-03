@@ -19,7 +19,8 @@ def matches_page_sent():
     return render_template(
         "main/matches_page.html", 
         proposals_data=sent_by_self, 
-        redirect_buttons_set_data=redirect_buttons_set_data()
+        redirect_buttons_set_data=redirect_buttons_set_data(),
+        active_nav="matches"
         )
     
 @matches_page_bp.route("/matches-page/received")
@@ -29,7 +30,8 @@ def matches_page_received():
     return render_template(
         "main/matches_page.html", 
         proposals_data=proposals_considered_by_self, 
-        redirect_buttons_set_data=redirect_buttons_set_data()
+        redirect_buttons_set_data=redirect_buttons_set_data(),
+        active_nav="matches"
         )
 
 @matches_page_bp.route("/matches-page/dates")
@@ -39,7 +41,8 @@ def matches_page_dates():
     return render_template(
         "main/matches_page.html", 
         proposals_data=accepted_by_either, 
-        redirect_buttons_set_data=redirect_buttons_set_data()
+        redirect_buttons_set_data=redirect_buttons_set_data(),
+        active_nav="matches"
         )
 
 

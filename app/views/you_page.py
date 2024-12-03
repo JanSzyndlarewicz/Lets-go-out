@@ -10,7 +10,7 @@ you_page_bp = Blueprint("you_page_bp", __name__)
 @confirmed_required
 def you_page():
     liked = current_user.liking
-    return render_template("main/you_page.html", users=liked, pull_buttons_set_data=pull_buttons_set_data())
+    return render_template("main/you_page.html", users=liked, pull_buttons_set_data=pull_buttons_set_data(), active_nav="you")
 
 @you_page_bp.route("/sub-you-page-liked")
 @confirmed_required

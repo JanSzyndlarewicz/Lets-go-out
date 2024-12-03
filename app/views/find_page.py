@@ -35,6 +35,7 @@ def find_page_invite():
         form=date_request_form,
         is_requesting=is_requesting,
         redirect_buttons_set_data=redirect_buttons_set_data(),
+        active_nav="find"
     )
 
 
@@ -77,6 +78,7 @@ def find_page_answear():
         form=date_request_form,
         is_requesting=is_requesting,
         redirect_buttons_set_data=redirect_buttons_set_data(),
+        active_nav="find"
     )
 
 def get_pending_invitations(user_id : int) -> list[DateProposal]:
