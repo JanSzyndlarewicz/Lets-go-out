@@ -3,9 +3,10 @@
 $(document).ready(function() {
     const likedButton = $('.switch-to-liked').first()
     const blockedButton = $('.switch-to-blocked').first()
+    console.log(likedButton)
+    console.log(blockedButton)
     likedButton.on('click', getLiked)
     blockedButton.on('click', getBlocked)
-
     const editProfileIcon = $('#edit-profile-icon')
     editProfileIcon.on('click', function() {
         window.location.href = editProfilePath
@@ -13,8 +14,9 @@ $(document).ready(function() {
 })
 
 function getBlocked() {
+    console.log('getBlocked')
     const blockedButton = $('.switch-to-blocked').first()
-    if (blockedButton.hasClass('active')) {
+    if (blockedButton.hasClass('active-background')) {
         return
     }
     call_endpoint(blockedPath, viewToBlocked)
@@ -22,7 +24,7 @@ function getBlocked() {
 
 function getLiked() {
     const likedButton = $('.switch-to-liked').first()
-    if (likedButton.hasClass('active')) {
+    if (likedButton.hasClass('active-background')) {
         return
     }
     call_endpoint(likedPath, viewToLiked)
