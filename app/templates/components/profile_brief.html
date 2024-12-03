@@ -17,7 +17,11 @@
             <p>{{ proposal.proposal_message }}</p>
             
         </div>
+        {% if proposal.proposer.id == current_user.id %}
+        <label class="padding-all-15 light-color">{{ proposal.ignored_safe_status }}</label>
+        {% else %}
         <label class="padding-all-15 light-color">{{ proposal.status.name }}</label>
+        {% endif %}
     </div>
     {% endif %}
 </div>
