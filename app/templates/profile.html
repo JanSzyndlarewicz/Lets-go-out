@@ -1,17 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <meta charset="UTF-8">
+{% extends 'main/base.html' %}
+{% block content %}
     <meta id="like-path" data-path="{{ url_for('interaction_bp.like', user_id = user.id) }}">
     <meta id="block-path" data-path="{{ url_for('interaction_bp.block', user_id = user.id) }}">
-    <title>Login</title>
-</head>
-<body>
-    <input type="button" id="like-button" value="Like">
-    <input type="button" id="block-button" value="Block">
-    <img src="{{url_for('static', filename='images/')}}{{user.profile.photo.id}}.{{user.profile.photo.file_extension}}">
-    <span>{{user.profile.name}}</a></span>
-</body>
-<script src="{{ url_for('static', filename='profile_logic.js')}}"></script>
-</html>
+    
+    <main class="solo-centered-column-under-top-bar">
+        <div class="centered-column outline" style="width: 400px">
+            <div class="row space-between fill-width">
+                {% if not user.liked_by_main_user %}
+                    <i class="far fa-star fa-2x" id="like-button" value="Like"></i>
+                {% else %}
+                    <i class="fas fa-star fa-2x" id="like-button" value="Like"></i>
+                {% endif %}
+                {% if not user.blocked_by_main_user %}
+                    <i class="fas fa-ban text-color fa-2x" id="block-button" value="Block"></i>
+                {% else %}
+                    <i class="fas fa-ban fa-2x" id="block-button" value="Block"></i>
+                {% endif %}
+            </div>
+            {% include 'components/full_profile_info.html' %}
+            
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='profile_logic.js')}}"></script>
+
+{% endblock %}

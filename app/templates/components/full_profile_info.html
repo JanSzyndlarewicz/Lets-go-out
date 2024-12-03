@@ -1,0 +1,25 @@
+{% block content %}
+
+<img src="{{user.profile.profile_picture_url_or_default}}"
+class="circular-avatar-big">
+<h1 class="gap-top-30">{{ user.profile.name }}, {{ user.profile.age }}</h1>
+{% with label="Description", value=user.profile.description %}
+    {% include 'components/profile_field.html' %}
+{% endwith %}
+{% with label="Gender", value=user.profile.gender.name | capitalize %}
+    {% include 'components/profile_field.html' %}
+{% endwith %}
+{% with label="Interests", values=user.profile.interests|map(attribute='name') %}
+    {% include 'components/profile_field.html' %}
+{% endwith %}
+
+{% if user.id == current_user.id %}
+{% with label="Gender preferences", values=user.matching_preferences.genders|map(attribute='gender')|map(attribute='name')|map('capitalize') %}
+    {% include 'components/profile_field.html' %}
+{% endwith %}
+{% with label="Age preferences", value=user.repr_of_age_preferences %}
+    {% include 'components/profile_field.html' %}
+{% endwith %}
+{% endif %}
+
+{% endblock %}

@@ -69,6 +69,61 @@ a {
 
 /*END OF RESET CSS*/
 
+html:has(.scrollable-pane),
+body:has(.scrollable-pane) {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* Prevent main scrollbar */
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%; /* Full viewport height */
+}
+
+.scrollable-pane {
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Dark scrollbar styles */
+.-webkit-scrollbar {
+    width: 12px;
+}
+
+.-webkit-scrollbar-track {
+    background: #2b2b2b;
+}
+
+.scrollable-pane::-webkit-scrollbar-thumb {
+    background: #505050;
+    border-radius: 6px;
+}
+
+.-webkit-scrollbar-thumb:hover {
+    background: #707070;
+}
+
+.scrollable-pane {
+    scrollbar-color: #505050 #2b2b2b;
+    scrollbar-width: thin;
+}
+
+.scrollable-pane {
+    overflow-y: scroll;
+    padding: 10px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.scrollable-panes-container {
+    width: 100%;
+    height: calc(100vh - 120px);
+}
+
+
 hr {
     border-color: var(--light-color);
 }
@@ -88,7 +143,7 @@ hr {
     --header-color: #1A1A1A;
     --background-color: #383838;
     --text-color: #FFFFFF;
-    --light-color: rgba(115, 115, 115, 0.5);
+    --light-color: rgba(115, 115, 115, 1);
 }
 
 .primary-color {
@@ -143,14 +198,8 @@ header ul li {
     max-height: none;
 }
 
-.find-page-content {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: calc(100vh - 130px);
-}
+
+
 
 .date-invitation-card {
     background-color: var(--background-color);
@@ -208,6 +257,7 @@ header ul li {
 
 i {
     color: var(--primary-color);
+    margin: 10px;
 }
 
 .labeled-icon {
@@ -262,7 +312,14 @@ i {
 
 }
 
-.matches-page-content {
+.about-us {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 200px;
+}
+
+.solo-centered-column-under-top-bar {
     position: relative;
     display: flex;
     justify-content: center;
@@ -301,10 +358,43 @@ i {
     font-size: larger;
 }
 
-main .redirect-buttons-set {
+.redirect-buttons-set {
     position: absolute;
     top: 0px;
     left: 20px;
+}
+
+.pull-buttons-set {
+    /* margin-right: 100px; */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* gap: 15px; */
+    border-radius: 30px;
+    border: 1px solid var(--primary-color);
+    width: fit-content;
+}
+
+.pull-buttons-set-button {
+    color: var(--text-color);
+    border-radius: 30px;
+    border: none;
+    padding: 10px;
+    /* padding-inline: 10px; */
+    text-align: center;
+    width: 150px;
+    font-size: larger;
+}
+
+.pull-buttons-set {
+    position: absolute;
+    top: 0px;
+    left: 20px;
+}
+
+.you-left-col {
+    flex: 3;
 }
 
 .fadeOut {
@@ -352,12 +442,30 @@ main .redirect-buttons-set {
     gap: 20px 10px;
 }
 
+.keyword-soaps-layout {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* justify-content: center; */
+    /* align-items: center; */
+    gap: 20px 10px;
+}
+
+.keyword-soap {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--scaffold-background-color);
+    border-radius: 30px;
+    padding: 5px 10px;
+}
+
 .interest-unselected-button {
     background-color: var(--background-color);
     color: var(--text-color);
     border: 1px solid var(--scaffold-background-color);
     border-radius: 30px;
     padding: 5px 10px;
+    cursor: pointer;
 }
 
 .interest-selected-button {
@@ -366,6 +474,7 @@ main .redirect-buttons-set {
     border: 1px solid var(--primary-color);
     border-radius: 30px;
     padding: 5px 10px;
+    cursor: pointer;
 }
 
 
@@ -391,6 +500,7 @@ label {
     margin-bottom: 5px;
     font-weight: bold;
     font-size: small;
+    color: var(--light-color) !important;
 }
 
 input[type="text"],
@@ -543,6 +653,10 @@ button, .btn, .btn-flat {
 
 .active {
     color: var(--primary-color);
+}
+
+.active-background {
+    background-color: var(--primary-color);
 }
 
 .profile-brief-photo {

@@ -1,0 +1,9 @@
+{% block content %}
+    <div class="pull-buttons-set">
+        {% for data in pull_buttons_set_data %}
+                <a class="pull-buttons-set-button {{ data.jsCallBackIndicator }} {% if loop.index == 1 %}active-background{% endif %}">
+                    {{ data.text }}
+                </a>
+        {% endfor %}
+    </div>
+{% endblock %}
