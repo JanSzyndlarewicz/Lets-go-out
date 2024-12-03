@@ -132,6 +132,14 @@ hr {
     box-shadow: 0 20px 10px rgba(0, 0, 0, 0.1);
 }
 
+.text-shadow {
+    text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.light-shadow {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
 .outline {
     outline: 1px solid var(--light-color);
 }
@@ -358,6 +366,17 @@ i {
     font-size: larger;
 }
 
+.orange-button {
+    color: var(--text-color);
+    border-radius: 30px;
+    border: none;
+    padding: 10px;
+    /* padding-inline: 10px; */
+    text-align: center;
+    width: 150px;
+    font-size: larger;
+}
+
 .redirect-buttons-set {
     position: absolute;
     top: 0px;
@@ -501,6 +520,7 @@ label {
     font-weight: bold;
     font-size: small;
     color: var(--light-color) !important;
+    
 }
 
 input[type="text"],
@@ -652,7 +672,7 @@ button, .btn, .btn-flat {
 }
 
 .active {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
 }
 
 .active-background {

@@ -1,13 +1,7 @@
 {% block content %}
-    <div class="redirect-buttons-set">
-        {% for data in redirect_buttons_set_data %}
-            {% if data.url is defined %}
-                <a href="{{ data.url }}" class="redirect-buttons-set-button">{{ data.text }}</a>
-            {% else %}
-                <a class="redirect-buttons-set-button {{ data.jsCallBackIndicator }} {% if loop.index == 1 %}active-background{% endif %}">
-                    {{ data.text }}
-                </a>
-            {% endif %}
-        {% endfor %}
+    <div class="redirect-buttons-set light-shadow">
+    {% for data in redirect_buttons_set_data %}
+        <a href="{{ data.url }}" class="redirect-buttons-set-button">{{ data.text }}</a>
+    {% endfor %}
     </div>
 {% endblock %}

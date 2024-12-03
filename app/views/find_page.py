@@ -28,7 +28,7 @@ def find_page_invite():
     date_request_data = get_suggested_matches_data(app.config["INITIAL_SUGGESTION_NUMBER"])
     if not date_request_data:
         date_request_data = None
-
+    
     return render_template(
         "main/find_page.html",
         date_request_data=date_request_data,
@@ -54,6 +54,7 @@ def get_suggested_matches_data(limit: int, ignore_ids=[]) -> list[dict]:
                 "id": user.id,
                 "name": user.profile.name,
                 "description": user.profile.description,
+                "image_url": user.profile.profile_picture_url_or_default
             }
         )
     return result

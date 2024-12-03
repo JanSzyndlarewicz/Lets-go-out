@@ -10,7 +10,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
-from app.models.date_proposal import DateProposal
+from app.models.date_proposal import DateProposal, ProposalStatus
 from app.models.gender import Gender
 from app.models.interest import Interest
 from app.models.preferences import MatchingPreferences
@@ -170,7 +170,7 @@ class Profile(db.Model):
                     DateProposal.proposer_id == self.user_id,
                     DateProposal.recipient_id == self.user_id,
                 ),
-                DateProposal.status == "accepted",
+                DateProposal.status == ProposalStatus.accepted,
             )
             .all()
         )
@@ -181,7 +181,7 @@ class Profile(db.Model):
             db.session.query(DateProposal)
             .filter(
                 DateProposal.proposer_id == self.user_id,
-                DateProposal.status.in_(["ignored", "proposed"]),
+                DateProposal.status.in_([ProposalStatus.ignored, ProposalStatus.proposed]),
             )
             .all()
         )
@@ -192,7 +192,7 @@ class Profile(db.Model):
             db.session.query(DateProposal)
             .filter(
                 DateProposal.proposer_id == self.user_id,
-                DateProposal.status == "accepted",
+                DateProposal.status == ProposalStatus.accepted,
             )
             .all()
         )
@@ -203,7 +203,7 @@ class Profile(db.Model):
             db.session.query(DateProposal)
             .filter(
                 DateProposal.proposer_id == self.user_id,
-                DateProposal.status == "rejected",
+                DateProposal.status == ProposalStatus.rejected,
             )
             .all()
         )
@@ -214,7 +214,20 @@ class Profile(db.Model):
             db.session.query(DateProposal)
             .filter(
                 DateProposal.proposer_id == self.user_id,
-                DateProposal.status == "reschedule",
+                DateProposal.status == ProposalStatus.reschedule,
+            )
+            .all()
+        )
+        
+    @property
+    def proposals_considered_by_self(self):
+        return (
+            db.session.query(DateProposal)
+            .filter(
+                DateProposal.recipient_id == self.user_id,
+                DateProposal.status.in_(
+                    [ProposalStatus.accepted, ProposalStatus.ignored, ProposalStatus.rejected, ProposalStatus.reschedule]
+                )
             )
             .all()
         )
