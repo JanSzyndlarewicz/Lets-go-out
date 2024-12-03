@@ -6,7 +6,7 @@ class="circular-avatar-big">
 {% with label="Description", value=user.profile.description %}
     {% include 'components/profile_field.html' %}
 {% endwith %}
-{% with label="Gender", value=user.profile.gender.name | capitalize %}
+{% with label="Gender", value=user.profile.gender.value | capitalize %}
     {% include 'components/profile_field.html' %}
 {% endwith %}
 {% with label="Interests", values=user.profile.interests|map(attribute='name') %}
