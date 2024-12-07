@@ -10,10 +10,11 @@
         <span id="left-value">-30</span>
         <span id="right-value">+30</span>
     </div>
-    {% for error in input1.errors %}
-        <span class="helper-text red-text">{{ error }}</span>
-    {% endfor %}
-    {% for error in input2.errors %}
-        <span class="helper-text red-text">{{ error }}</span>
-    {% endfor %}
+    {% with input = input1 %}
+    {% include "components/partials/error_list.html" %}
+    {% endwith %}
+    {% with input = input2 %}
+    {% include "components/partials/error_list.html" %}
+    {% endwith %}
+
 </div>

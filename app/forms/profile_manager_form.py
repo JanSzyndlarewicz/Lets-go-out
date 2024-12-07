@@ -16,15 +16,15 @@ class ProfileManagerForm(FlaskForm):
     lower_difference = IntegerField(
         "Lower Difference",
         [
-            DataRequired(message="Age difference is required."),
-            NumberRange(min=0, max=30, message="Age difference must be positive."),
+            InputRequired(message="Age difference is required."),
+            NumberRange(min=0, max=30, message="Age difference cannot be negative."),
         ],
     )
     upper_difference = IntegerField(
         "Upper Difference",
         [
-            DataRequired(message="Age difference is required."),
-            NumberRange(min=0, max=30, message="Age difference must be positive."),
+            InputRequired(message="Age difference is required."),
+            NumberRange(min=0, max=30, message="Age difference cannot be negative."),
         ],
     )
     photo = FileField("Profile Photo", validators=[Optional()])
