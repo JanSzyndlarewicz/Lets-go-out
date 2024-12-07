@@ -1,4 +1,5 @@
 from functools import wraps
+import json
 
 from flask import abort, Blueprint
 from flask import current_app as app
@@ -9,7 +10,7 @@ from werkzeug.utils import secure_filename
 
 from app import User, db
 from app.forms import LoginForm, ProfileManagerForm, RegisterForm
-from app.models import Gender, Photo, Profile
+from app.models import Gender, Interest, Photo, Profile
 from app.utils import send_email
 
 auth_bp = Blueprint("auth_bp", __name__)
@@ -223,7 +224,9 @@ def create_user_with_profile(registration_data, profile_form):
         gender=Gender[profile_form.gender.data],
         description=profile_form.description.data,
         year_of_birth=profile_form.year_of_birth.data,
+        interests = [db.get_or_404(Interest, int(single['id'])) for single in json.loads(profile_form.interests.data)]
     )
+    
 
     new_user.matching_preferences.gender_preferences = [Gender[gp] for gp in profile_form.gender_preferences.data]
     new_user.matching_preferences.lower_difference = profile_form.lower_difference.data
