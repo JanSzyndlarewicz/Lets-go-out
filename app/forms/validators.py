@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from wtforms.validators import ValidationError
 
@@ -24,3 +24,13 @@ def email_unique(form, field):
     user = User.query.filter_by(email=field.data).first()
     if user is not None:
         raise ValidationError("This email address is already taken.")
+    
+def age_limit(form, field):
+    yob = field.data
+    age = datetime.now().year - yob
+    if age < 0:
+        raise ValidationError("You cannot use this service if you haven't been born yet!")
+    if age < 18:
+        raise ValidationError("Apologies, you cannot use this service if you are underage.")
+    if age > 120:
+        raise ValidationError("Year of birth cannot be more than 120 years in the past.")
