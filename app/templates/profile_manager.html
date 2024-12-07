@@ -21,6 +21,9 @@
 <body>
 <div class="form-container">
     <h1>Profile Manager</h1>
+    <form action="{{ url_for('you_page_bp.you_page') }}" method="get" class="gap-top-15">
+        <button type="submit" class="primary-background-color text-color fill-width shadow">Return</button>
+    </form>
     <form action="{{ url_for('profile_manager_bp.profile_manager') }}" method="POST" enctype="multipart/form-data">
         {{ form.csrf_token }}
 
