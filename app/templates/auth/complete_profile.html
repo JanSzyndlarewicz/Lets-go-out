@@ -29,7 +29,7 @@
     <form action="{{ url_for('auth_bp.complete_profile') }}" method="POST" enctype="multipart/form-data">
         {{ form.csrf_token }}
 
-        {% with value=form.photo %}
+        {% with value=form.display_photo %}
             {% include "components/partials/profile_photo.html" %}
         {% endwith %}
 

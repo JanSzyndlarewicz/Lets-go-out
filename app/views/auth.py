@@ -5,10 +5,11 @@ from flask import current_app as app
 from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy.exc import IntegrityError
+from werkzeug.utils import secure_filename
 
 from app import User, db
 from app.forms import LoginForm, ProfileManagerForm, RegisterForm
-from app.models import Gender, Profile
+from app.models import Gender, Photo, Profile
 from app.utils import send_email
 
 auth_bp = Blueprint("auth_bp", __name__)
@@ -180,7 +181,7 @@ def initialize_profile_form():
     profile_form = ProfileManagerForm()
     profile_form.gender.choices = [(gender.name, gender.value) for gender in Gender]
     profile_form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
-    profile_form.photo = url_for("static", filename=app.config["DEFAULT_PHOTO"]) 
+    profile_form.display_photo = url_for("static", filename=app.config["DEFAULT_PHOTO"]) 
     return profile_form
 
 
@@ -225,12 +226,15 @@ def create_user_with_profile(registration_data, profile_form):
     )
 
     new_user.matching_preferences.gender_preferences = [Gender[gp] for gp in profile_form.gender_preferences.data]
-    print(profile_form.lower_difference.data)
     new_user.matching_preferences.lower_difference = profile_form.lower_difference.data
     new_user.matching_preferences.upper_difference = profile_form.upper_difference.data
 
     db.session.add(new_user)
     db.session.commit()
+
+    if profile_form.photo.data:
+        photo = profile_form.photo.data
+        handle_photo_upload(photo, new_user)
 
     return new_user
 
@@ -241,3 +245,17 @@ def send_confirmation_email(user):
     contents = render_template("components/confirmation_email.html", url=confirm_url)
     subject = "Email confirmation"
     send_email(user.email, subject, contents)
+
+def handle_photo_upload(photo, user) -> Photo:
+
+    extension = secure_filename(photo.filename).split(".")[-1]
+    new_photo = Photo(profile=user.profile, file_extension=extension)
+
+    db.session.add(new_photo)
+    db.session.commit()
+
+    photo.save(new_photo.os_photo_url)
+
+    user.profile.photo = new_photo
+
+    return new_photo
