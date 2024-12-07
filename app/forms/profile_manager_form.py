@@ -6,6 +6,7 @@ from wtforms.validators import DataRequired, InputRequired, NumberRange, Optiona
 
 from app.forms.validators import age_limit
 
+
 class ProfileManagerForm(FlaskForm):
     name = StringField("Name", [InputRequired(message="Name must not be empty.")])
     gender = RadioField("Gender")

@@ -1,14 +1,15 @@
 from flask_wtf import FlaskForm
 from wtforms import DateField, HiddenField, StringField
-from wtforms.validators import DataRequired, InputRequired
+from wtforms.validators import DataRequired, InputRequired, Length
 
 from app.forms.validators import is_not_past, is_any_table_available_for_date
-
+from app.config import MAXIMUM_MESSAGE_LENGTH
 
 class DateRequestForm(FlaskForm):
     id = HiddenField()
     message = StringField(
         "Optional text attached to accept/reject/reschedule",
+        validators=[Length(max=MAXIMUM_MESSAGE_LENGTH, message=f"Message may be at most {MAXIMUM_MESSAGE_LENGTH} characters long")]
     )
     date = DateField("Date", format="%Y-%m-%d", validators=[DataRequired(), is_not_past, is_any_table_available_for_date])
 

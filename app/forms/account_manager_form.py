@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import EmailField, PasswordField, SubmitField
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
+from app.config import MINIMUM_PASSWORD_LENGTH
 
 class AccountManagerForm(FlaskForm):
     email = EmailField(
@@ -19,7 +20,7 @@ class AccountManagerForm(FlaskForm):
         "New password",
         [
             InputRequired(message="Please input new password."),
-            Length(min=1, message="Password is too short!"),
+            Length(min=MINIMUM_PASSWORD_LENGTH, message="Password is too short!"),
         ],
     )
     new_confirm = PasswordField(

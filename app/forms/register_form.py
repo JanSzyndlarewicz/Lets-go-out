@@ -3,7 +3,7 @@ from wtforms import EmailField, PasswordField, StringField, SubmitField
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
 from app.forms.validators import email_unique,username_unique
-
+from app.config import MINIMUM_PASSWORD_LENGTH
 
 class RegisterForm(FlaskForm):
     username = StringField("User name", [InputRequired(message="Please input an username."), username_unique])
@@ -12,7 +12,7 @@ class RegisterForm(FlaskForm):
         "Password",
         [
             InputRequired(message="Please input the password."),
-            Length(min=1, message="Password is too short!"),
+            Length(min=MINIMUM_PASSWORD_LENGTH, message="Password is too short!"),
         ],
     )
     confirm = PasswordField(

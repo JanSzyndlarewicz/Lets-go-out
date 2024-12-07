@@ -61,7 +61,7 @@ def profile_manager():
         except IntegrityError as e:
             db.session.rollback()
             logger.error(e)
-        return redirect(url_for("profile_manager_bp.profile_manager"))
+        return redirect(url_for("you_page_bp.you_page"))
 
     return render_template("profile_manager.html", form=form)
 
