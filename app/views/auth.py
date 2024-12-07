@@ -180,7 +180,7 @@ def initialize_profile_form():
     profile_form = ProfileManagerForm()
     profile_form.gender.choices = [(gender.name, gender.value) for gender in Gender]
     profile_form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
-    profile_form.photo = app.config["DEFAULT_PHOTO"]
+    profile_form.photo = url_for("static", filename=app.config["DEFAULT_PHOTO"]) 
     return profile_form
 
 
