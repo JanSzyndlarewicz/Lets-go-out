@@ -37,15 +37,15 @@
             {% include 'components/partials/input_field.html' %}
         {% endwith %}
 
-        {% with choices=form.gender.choices, input=form.gender %}
+        {% with choices=form.gender.choices, input=form.gender, value_chosen = form.gender.data if form.gender.data %}
             {% include "components/partials/gender_options.html" %}
         {% endwith %}
 
-        {% with name="year_of_birth", label="Year of Birth", input=form.year_of_birth %}
+        {% with type="number", name="year_of_birth", label="Year of Birth", input=form.year_of_birth, value = form.year_of_birth.data if form.year_of_birth.data %}
             {% include 'components/partials/input_field.html' %}
         {% endwith %}
 
-        {% with name="description", label="Profile Description", input=form.description %}
+        {% with name="description", label="Profile Description", input=form.description, value = form.description.data if form.description.data %}
             {% include "components/partials/textarea_field.html" %}
         {% endwith %}
 
@@ -56,19 +56,18 @@
                     <label>
                         <input type="checkbox"
                                name="gender_preferences"
-                               value="{{ name }}"/>
+                               value="{{ name }}"
+                               {% if form.gender_preferences.data and name in form.gender_preferences.data %}checked{% endif %}/>
                         <span>{{ value }}</span>
                     </label>
                 {% endfor %}
             </p>
         </div>
         {% with input = form.gender_preferences %}
-        {% for error in input.errors %}
-        <span class="helper-text red-text">{{ error }}</span>
-        {% endfor %}
+        {% include "components/partials/error_list.html" %}
         {% endwith %}
 
-        {% with lower_difference=5, upper_difference=5, input1=form.lower_difference, input2=form.upper_difference %}
+        {% with input1=form.lower_difference, input2=form.upper_difference, lower_difference = form.lower_difference.data if form.lower_difference.data != None else 5, upper_difference = form.upper_difference.data if form.upper_difference.data != None else 5 %}
             {% include "components/partials/age_preferences.html" %}
         {% endwith %}
 
@@ -77,27 +76,7 @@
     </form>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const inputs = document.querySelectorAll("input");
 
-        inputs.forEach(input => {
-            const savedValue = localStorage.getItem(input.name);
-            if (savedValue) {
-                if (input.type === "radio" || input.type === "checkbox") {
-                    input.checked = savedValue === "true";
-                } else {
-                    input.value = savedValue;
-                }
-            }
-
-            input.addEventListener("input", () => {
-                const value = input.type === "radio" || input.type === "checkbox" ? input.checked : input.value;
-                localStorage.setItem(input.name, value);
-            });
-        });
-    });
-</script>
 <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>

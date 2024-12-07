@@ -51,8 +51,20 @@ document.addEventListener("DOMContentLoaded", function() {
         const upperInput = document.getElementById('upper-difference');
 
         if (lowerInput && upperInput) {
-            lowerInput.value = Math.abs(lower);
-            upperInput.value = upper;
+            if (lower > 0){
+              lowerInput.value = 0  
+            }
+            else{
+                lowerInput.value = Math.abs(lower);
+            }
+            
+            if (upper < 0){
+                upperInput.value = 0  
+            }
+            else{
+                upperInput.value = upper;
+            }
+            
         }
     });
 });
