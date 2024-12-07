@@ -23,7 +23,7 @@
 
         {% with input = form.username %}
             <div class="input-field fill-width">
-                <input id="username" name="username" type="text" value="{{ input.data }}" required>
+                <input id="username" name="username" type="text" value="{{ input.data if input.data }}" required>
                 <label for="username">{{ input.label.text }}</label>
                 {% for error in input.errors %}
                     <span class="helper-text red-text">{{ error }}</span>
@@ -33,7 +33,7 @@
 
         {% with input = form.email %}
             <div class="input-field fill-width">
-                <input id="email" name="email" type="email" value="{{ input.data }}" required>
+                <input id="email" name="email" type="email" value="{{ input.data if input.data }}" required>
                 <label for="email">{{ input.label.text }}</label>
                 {% for error in input.errors %}
                     <span class="helper-text red-text">{{ error }}</span>

@@ -9,4 +9,7 @@
         </label>
         {% endfor %}
     </div>
+    {% for error in input.errors %}
+        <span class="helper-text red-text">{{ error }}</span>
+    {% endfor %}
 </div>

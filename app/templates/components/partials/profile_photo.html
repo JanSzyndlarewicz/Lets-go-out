@@ -6,4 +6,7 @@
     </div>
     {% endif %}
     <input type="file" id="photo" name="photo" accept="image/*">
+    {% for error in input.errors %}
+        <span class="helper-text red-text">{{ error }}</span>
+    {% endfor %}
 </div>

@@ -29,23 +29,23 @@
     <form action="{{ url_for('auth_bp.complete_profile') }}" method="POST" enctype="multipart/form-data">
         {{ form.csrf_token }}
 
-        {% with value=form.display_photo %}
+        {% with value=form.display_photo, input=form.photo %}
             {% include "components/partials/profile_photo.html" %}
         {% endwith %}
 
-        {% with name="name", label="Name" %}
+        {% with name="name", label="Name", input=form.name, value = form.name.data if form.name.data %}
             {% include 'components/partials/input_field.html' %}
         {% endwith %}
 
-        {% with choices=form.gender.choices %}
+        {% with choices=form.gender.choices, input=form.gender %}
             {% include "components/partials/gender_options.html" %}
         {% endwith %}
 
-        {% with name="year_of_birth", label="Year of Birth" %}
+        {% with name="year_of_birth", label="Year of Birth", input=form.year_of_birth %}
             {% include 'components/partials/input_field.html' %}
         {% endwith %}
 
-        {% with name="description", label="Profile Description" %}
+        {% with name="description", label="Profile Description", input=form.description %}
             {% include "components/partials/textarea_field.html" %}
         {% endwith %}
 
@@ -62,8 +62,13 @@
                 {% endfor %}
             </p>
         </div>
+        {% with input = form.gender_preferences %}
+        {% for error in input.errors %}
+        <span class="helper-text red-text">{{ error }}</span>
+        {% endfor %}
+        {% endwith %}
 
-        {% with lower_difference=5, upper_difference=5 %}
+        {% with lower_difference=5, upper_difference=5, input1=form.lower_difference, input2=form.upper_difference %}
             {% include "components/partials/age_preferences.html" %}
         {% endwith %}
 
