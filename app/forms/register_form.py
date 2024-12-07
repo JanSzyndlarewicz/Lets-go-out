@@ -14,7 +14,7 @@ class RegisterForm(FlaskForm):
         ],
     )
     confirm = PasswordField(
-        "Password",
+        "Confirm password",
         [
             InputRequired(message="Please confirm the password."),
             EqualTo(

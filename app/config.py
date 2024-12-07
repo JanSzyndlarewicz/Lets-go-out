@@ -21,4 +21,4 @@ LOGIN_PAGE_ROUTE = "auth_bp.login"
 INITIAL_SUGGESTION_NUMBER = 15
 REFILL_SUGGESTION_NUMBER = 10
 
-DEFAULT_PHOTO = "/static/images/0.jpg"
+DEFAULT_PHOTO = "images/default-profile-picture.jpg"

@@ -151,7 +151,7 @@ class Profile(db.Model):
     def profile_picture_url_or_default(self):
         if self.photo is not None:
             return self.photo.flask_photo_url
-        return url_for("static", filename="images/default-profile-picture.jpg")
+        return url_for("static", filename=app.config["DEFAULT_PHOTO"])
 
     @property
     def proposals_sent_by_self(self):
