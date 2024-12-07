@@ -75,6 +75,7 @@ def reject():
 @confirmed_required
 def accept():
     form = DateRequestForm()
+    del form.date
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
         if proposal.recipient_id == current_user.id:
@@ -88,6 +89,7 @@ def accept():
 @confirmed_required
 def reject_invitation():
     form = DateRequestForm()
+    del form.date
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
         if proposal.recipient_id == current_user.id:
@@ -101,6 +103,7 @@ def reject_invitation():
 @confirmed_required
 def ignore():
     form = DateRequestForm()
+    del form.date
     del form.message
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
@@ -115,6 +118,7 @@ def ignore():
 @confirmed_required
 def reschedule():
     form = DateRequestForm()
+    del form.date
     if form.validate_on_submit():
         proposal = db.get_or_404(DateProposal, form.id.data)
         if proposal.recipient_id == current_user.id:
