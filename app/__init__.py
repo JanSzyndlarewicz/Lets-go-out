@@ -57,10 +57,6 @@ def create_app():
 
     app.register_blueprint(profile_bp)
 
-    from app.views.account_manager import account_manager_bp
-
-    app.register_blueprint(account_manager_bp)
-
     from app.views.interaction import interaction_bp
 
     app.register_blueprint(interaction_bp)

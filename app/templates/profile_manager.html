@@ -76,7 +76,17 @@
         <br>
         <button type="submit" >Save</button>
     </form>
+
+    <details class="gap-top-15" id="account_manager_tab" {% if account_change %} open {% endif %}>
+        <summary>Account manager</summary>
+        {% include "account_manager.html" %}
+    </details>    
 </div>
 <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+{% if account_change %}
+<script>
+    document.getElementById('account_manager_tab').scrollIntoView();
+</script>
+{% endif %}
 </body>
 </html>

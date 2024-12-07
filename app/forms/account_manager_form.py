@@ -3,6 +3,7 @@ from wtforms import EmailField, PasswordField, SubmitField
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
 from app.config import MINIMUM_PASSWORD_LENGTH
+from app.forms.validators import password_correct
 
 class AccountManagerForm(FlaskForm):
     email = EmailField(
@@ -14,7 +15,7 @@ class AccountManagerForm(FlaskForm):
     )
     old_password = PasswordField(
         "Current password:",
-        [InputRequired(message="Please input your current password.")],
+        [InputRequired(message="Please input your current password."), password_correct],
     )
     new_password = PasswordField(
         "New password",

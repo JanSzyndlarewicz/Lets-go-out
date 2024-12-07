@@ -1,5 +1,7 @@
 from datetime import date, datetime
 
+from flask_login import current_user
+
 from wtforms.validators import ValidationError
 
 from app.models.tables_config import TablesConfig
@@ -34,3 +36,7 @@ def age_limit(form, field):
         raise ValidationError("Apologies, you cannot use this service if you are underage.")
     if age > 120:
         raise ValidationError("Year of birth cannot be more than 120 years in the past.")
+    
+def password_correct(form, field):
+    if not current_user.check_password(field.data):
+        raise ValidationError("Password incorrect")
