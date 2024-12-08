@@ -279,6 +279,12 @@ i {
     flex-direction: column;
     align-items: center;
     width: 80px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.labeled-icon:hover {
+    transform: scale(1.1); /* Powiększenie elementu */
 }
 
 .gap-top-15 {
