@@ -65,11 +65,12 @@ def suggest_matches(
         weights = []
         for potential_match in potential_matches:
             weight = 2 ** len(set(current_user.profile.interests).intersection(potential_match.profile.interests))
-            #print(f"user {potential_match.id}: interests: {potential_match.profile.interests}, weight: {weight}")
+            # print(f"user {potential_match.id}: interests: {potential_match.profile.interests}, weight: {weight}")
             weights.append(weight)
         potential_matches = weighted_sample_without_replacement(potential_matches, weights, number)
-    
+
     return potential_matches
+
 
 def weighted_sample_without_replacement(elems, weights, k):
     if k >= len(elems):
@@ -79,7 +80,7 @@ def weighted_sample_without_replacement(elems, weights, k):
     indices = range(len(elems))
     picks = []
     while len(picks) < k:
-        for i in random.choices(indices, weights=weights, k=k-len(picks)):
+        for i in random.choices(indices, weights=weights, k=k - len(picks)):
             if weights[i]:
                 weights[i] = 0
                 picks.append(elems[i])

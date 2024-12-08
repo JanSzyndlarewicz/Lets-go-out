@@ -41,7 +41,7 @@ class DateProposal(db.Model):
     @property
     def just_date(self):
         return self.date.date()
-    
+
     @property
     def ignored_safe_status(self):
         if self.status.name == ProposalStatus.ignored.name:

@@ -1,15 +1,15 @@
 import datetime
 
-from app import create_app, db
-from app.models import RejectedAssociation
-
 from flask_apscheduler import APScheduler
 
+from app import create_app, db
+from app.models import RejectedAssociation
 
 app = create_app()
 app.scheduler = APScheduler()
 
-@app.scheduler.task('interval', id='my_job', days=1)
+
+@app.scheduler.task("interval", id="my_job", days=1)
 def delete_rejects():
     with app.app_context():
         current_date = datetime.datetime.today()
@@ -20,8 +20,8 @@ def delete_rejects():
             db.session.delete(reject)
         db.session.commit()
 
+
 if __name__ == "__main__":
     app.scheduler.init_app(app)
     app.scheduler.start()
     app.run(debug=True)
-

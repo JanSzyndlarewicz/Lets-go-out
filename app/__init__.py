@@ -48,9 +48,9 @@ def create_app():
     from app.views.profile_manager import profile_manager_bp
 
     app.register_blueprint(profile_manager_bp)
-    
+
     from app.views.common import common_bp
-    
+
     app.register_blueprint(common_bp)
 
     from app.views.profile import profile_bp
