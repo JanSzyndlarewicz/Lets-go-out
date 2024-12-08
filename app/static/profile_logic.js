@@ -23,7 +23,6 @@ function block(){
 
 function prepare_event_handlers(){
     const like_button = document.querySelector('#like-button')
-    console.log(like_button)
     like_button.addEventListener("click", like)
 
     const block_button = document.querySelector('#block-button')

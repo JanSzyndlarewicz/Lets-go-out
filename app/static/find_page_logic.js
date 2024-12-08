@@ -21,11 +21,6 @@ function display_errors(data){
         for (let i = 0; i < data[key].length; i++) {
             error_box.innerHTML += "<li>" + data[key][i] + "</li>"
         }
-
-        // code above breaks the layout
-        // for (let i = 0; i < data[key].length; i++) {
-        //     alert(key +" error: "+ data[key][i])
-        // }
     }
 }
 
@@ -80,7 +75,6 @@ function next_user() {
 }
 
 function handle_response_invite(response) {
-    console.log(response)
     clear_error_messages()
     if (response.status == 200) {
         // Handle success - maybe notify the user or load another match

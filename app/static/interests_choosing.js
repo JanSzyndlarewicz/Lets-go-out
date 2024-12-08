@@ -16,10 +16,7 @@ async function getAllInterests() {
 async function getInitUnselectedInterests() {
     // selectedInterests is a global variable
     let interests = await getAllInterests()
-    console.log(interests)
-    console.log("selektow",selectedInterests)
     interests = interests.filter(interest => !selectedInterests.some(selectedInterest => selectedInterest.id === interest.id))
-    console.log(interests)
     return interests
 }
 
@@ -30,7 +27,6 @@ function makeButton(interest, unselected) {
     tag.id = interest.id
     tag.innerHTML = tag_html
     tag.addEventListener('click', () => {
-        console.log('clicked')
         if (unselected && selectedInterests.length <= 4) {
             unselectedInterests = unselectedInterests.filter(i => i.id !== interest.id)
             selectedInterests = selectedInterests.concat(interest)
@@ -50,28 +46,15 @@ function makeButton(interest, unselected) {
 
 function removeButton(interest, unselected) {
     parent = document.querySelector(unselected ? '.to-be-chosen-interests' : '.chosen-interests')
-    console.log(document.getElementById(interest.id))
-    console.log(parent)
-    console.log(interest.id)
     parent.removeChild(document.getElementById(interest.id))
 }
 
 function initButtons() {
     unselectedInterests.forEach(interest => makeButton(interest, true))
     selectedInterests.forEach(interest => makeButton(interest, false))
-    console.log("init buttons")
-}
-
-function acceptInterests() {
-    console.log("accepted", selectedInterests)
-}
-
-function cancel() {
-    console.log("cancelled", selectedInterests)
 }
 
 function updateInterestsInput() {
     const interestsInput = document.getElementById('interests')
-    console.log(selectedInterests)
     interestsInput.value = JSON.stringify(selectedInterests)
 }
