@@ -10,4 +10,11 @@
         <span id="left-value">-30</span>
         <span id="right-value">+30</span>
     </div>
+    {% with input = input1 %}
+    {% include "components/partials/error_list.html" %}
+    {% endwith %}
+    {% with input = input2 %}
+    {% include "components/partials/error_list.html" %}
+    {% endwith %}
+
 </div>

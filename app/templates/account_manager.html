@@ -1,37 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
-    <form action="{{ url_for('account_manager_bp.account_manager') }}" method="POST">
+<div class="form-container">
+
+    <form action="{{ url_for('profile_manager_bp.account_manager') }}" method="POST">
         
-        {{ form.csrf_token }}
+        {{ account_form.csrf_token }}
 
-        {% with input = form.email, val = current_user.email %}
-        {% include 'components/form_input.html' %}
+        {% with type="email", name="email", label="Email", value=current_user.email, input=account_form.email%}
+        {% include 'components/partials/input_field.html' %}
         {% endwith %}
-        <br>
 
-        {% with input = form.old_password %}
-        {% include 'components/form_input.html' %}
+        {% with type="password", name="old_password", label="Current password", input=account_form.old_password %}
+        {% include 'components/partials/input_field.html' %}
         {% endwith %}
-        <br>
 
-        {% with input = form.new_password %}
-        {% include 'components/form_input.html' %}
+        {% with type="password", name="new_password", label="New password", input=account_form.new_password %}
+        {% include 'components/partials/input_field.html' %}
         {% endwith %}
-        <br>
-
-        {% with input = form.new_confirm %}
-        {% include 'components/form_input.html' %}
+    
+        {% with type="password", name="new_confirm", label="Confirm new password", input=account_form.new_confirm %}
+        {% include 'components/partials/input_field.html' %}
         {% endwith %}
-        <br>
         
         
-        {{ form.submit() }}
-
+        <button type="submit" >Change</button>
+    
     </form>
-</body>
-</html>
+
+</div>
