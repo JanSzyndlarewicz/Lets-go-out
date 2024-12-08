@@ -626,6 +626,14 @@ input[type="checkbox"] {
     margin-bottom: 30px; /* Ensure proper spacing between input fields */
 }
 
+#date-input {
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
 /* Button styling */
 button[type="submit"] {
     background-color: var(--primary-color);
