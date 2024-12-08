@@ -34,9 +34,11 @@ function change_like_button_appearance(){
     const like_button = document.querySelector('#like-button')
     if (like_button.classList.contains('fas')) {
         like_button.classList.remove('fas')
+        like_button.classList.add('text-color')
         like_button.classList.add('far')
     } else {
         like_button.classList.remove('far')
+        like_button.classList.remove('text-color')
         like_button.classList.add('fas')
     }
 }
