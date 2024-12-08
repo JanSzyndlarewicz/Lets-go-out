@@ -13,6 +13,7 @@ MAIL_DEFAULT_SENDER = "webapp2024madrid@gmail.com"
 
 ADVANCED_ACCESS_CONTROL = False
 
+#Set this to something reasonable like 8 for the final version
 MINIMUM_PASSWORD_LENGTH = 1
 MAXIMUM_MESSAGE_LENGTH = 512
 

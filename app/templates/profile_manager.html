@@ -27,7 +27,7 @@
     <form action="{{ url_for('profile_manager_bp.profile_manager') }}" method="POST" enctype="multipart/form-data">
         {{ form.csrf_token }}
 
-        {% with value=current_user.profile.photo.flask_photo_url, input=form.photo %}
+        {% with value=current_user.profile.profile_picture_url_or_default, input=form.photo %}
         {% include "components/partials/profile_photo.html" %}
         {% endwith %}
 

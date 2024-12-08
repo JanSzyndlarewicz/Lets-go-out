@@ -28,7 +28,6 @@ def matches_page_sent():
 @matches_page_bp.route("/matches-page/received")
 def matches_page_received():
     proposals_considered_by_self = current_user.profile.proposals_considered_by_self
-    print(proposals_considered_by_self)
     return render_template(
         "main/matches_page.html",
         proposals_data=proposals_considered_by_self,
