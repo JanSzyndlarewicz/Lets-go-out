@@ -1,5 +1,7 @@
 import random
 
+from faker import Faker
+
 from sqlalchemy.exc import IntegrityError
 
 from app import create_app
@@ -64,6 +66,7 @@ with app.app_context():
     else:
         print(f"User {username} already exists.")
 
+    f = Faker()
     # Adding 15 new users
     new_users = [
         {
@@ -71,7 +74,7 @@ with app.app_context():
             "username": f"user{i}",
             "password": "password",
             "profile": {
-                "name": f"User {i}",
+                "name": f.first_name_male() if i % 2 == 0 else f.first_name_female(),
                 "gender": Gender.MALE if i % 2 == 0 else Gender.FEMALE,
                 "year_of_birth": random.randint(1980, 2003),
                 "description": f"This is user {i}'s profile description.",
