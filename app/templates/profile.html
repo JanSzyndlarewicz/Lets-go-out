@@ -7,14 +7,14 @@
         <div class="centered-column outline" style="width: 400px">
             <div class="row space-between fill-width">
                 {% if not user.liked_by_main_user %}
-                    <i class="far fa-star text-color fa-2x" id="like-button" value="Like"></i>
+                    <i class="labeled-icon far fa-star text-color fa-2x" id="like-button" value="Like"></i>
                 {% else %}
-                    <i class="fas fa-star fa-2x" id="like-button" value="Like"></i>
+                    <i class="labeled-icon fas fa-star fa-2x" id="like-button" value="Like"></i>
                 {% endif %}
                 {% if not user.blocked_by_main_user %}
-                    <i class="fas fa-ban text-color fa-2x" id="block-button" value="Block"></i>
+                    <i class="labeled-icon fas fa-ban text-color fa-2x" id="block-button" value="Block"></i>
                 {% else %}
-                    <i class="fas fa-ban fa-2x" id="block-button" value="Block"></i>
+                    <i class="labeled-icon fas fa-ban fa-2x" id="block-button" value="Block"></i>
                 {% endif %}
             </div>
             {% include 'components/full_profile_info.html' %}
