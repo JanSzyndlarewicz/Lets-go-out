@@ -68,6 +68,11 @@ a {
     color: inherit;
 }
 
+.link {
+    text-decoration: underline;
+    color: blue;
+}
+
 /*END OF RESET CSS*/
 
 html:has(.scrollable-pane),
