@@ -135,5 +135,11 @@ def add_invites():
         for i in range(1, 10):
             invitee = random.choice(users)
             if invitee != user:
-                date_proposals = [DateProposal(proposer=user, invitee=invitee,) for _ in range(1, 10)]
+                date_proposals = [
+                    DateProposal(
+                        proposer=user,
+                        invitee=invitee,
+                    )
+                    for _ in range(1, 10)
+                ]
     db.session.commit()

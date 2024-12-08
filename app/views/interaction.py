@@ -10,6 +10,7 @@ from app.views.auth import confirmed_required
 
 interaction_bp = Blueprint("interaction_bp", __name__)
 
+
 @interaction_bp.route("/like/<int:user_id>", methods=["POST"])
 @confirmed_required
 def like(user_id):
@@ -24,6 +25,7 @@ def like(user_id):
         return "", 200
     return "", 400
 
+
 @interaction_bp.route("/block/<int:user_id>", methods=["POST"])
 @confirmed_required
 def block(user_id):
@@ -36,6 +38,7 @@ def block(user_id):
         db.session.commit()
         return "", 200
     return "", 400
+
 
 @interaction_bp.route("/invite", methods=["POST"])
 @confirmed_required
@@ -64,12 +67,13 @@ def reject():
     form = DateRequestForm()
     del form.message
     del form.date
-    if form.validate_on_submit():   
+    if form.validate_on_submit():
         user = db.get_or_404(User, form.id.data)
         current_user.rejected.append(user)
         db.session.commit()
         return "", 200
     return form.errors, 400
+
 
 @interaction_bp.route("/accept", methods=["POST"])
 @confirmed_required
@@ -85,6 +89,7 @@ def accept():
         return "", 401
     return form.errors, 400
 
+
 @interaction_bp.route("/reject-invitation", methods=["POST"])
 @confirmed_required
 def reject_invitation():
@@ -98,6 +103,7 @@ def reject_invitation():
             return "", 200
         return "", 401
     return form.errors, 400
+
 
 @interaction_bp.route("/ignore", methods=["POST"])
 @confirmed_required
@@ -113,6 +119,7 @@ def ignore():
             return "", 200
         return "", 401
     return form.errors, 400
+
 
 @interaction_bp.route("/reschedule", methods=["POST"])
 @confirmed_required

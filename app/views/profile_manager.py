@@ -28,13 +28,8 @@ def profile_manager():
     form.gender.choices = [(gender.name, gender.value) for gender in Gender]
 
     if request.method == "GET":
-        return render_template(
-            "profile_manager.html",
-            form=form,
-            account_form=account_form,
-            account_change=False
-        )
-    
+        return render_template("profile_manager.html", form=form, account_form=account_form, account_change=False)
+
     if form.validate_on_submit():
         name = form.name.data
         gender = Gender[form.gender.data]
@@ -43,9 +38,8 @@ def profile_manager():
         lower_difference = form.lower_difference.data
         upper_difference = form.upper_difference.data
         gender_preferences = [Gender[gp] for gp in form.gender_preferences.data]
-        interests = [db.get_or_404(Interest, int(single['id'])) for single in json.loads(form.interests.data)]
-        
-        
+        interests = [db.get_or_404(Interest, int(single["id"])) for single in json.loads(form.interests.data)]
+
         if form.photo.data:
             photo = form.photo.data
             handle_photo_upload(photo, current_user)
@@ -91,6 +85,7 @@ def handle_photo_upload(photo, user) -> Photo:
 
     return new_photo
 
+
 @profile_manager_bp.route("/account-manager", methods=["POST"])
 @confirmed_required
 def account_manager():
@@ -112,9 +107,4 @@ def account_manager():
     form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
     form.gender.choices = [(gender.name, gender.value) for gender in Gender]
 
-    return render_template(
-        "profile_manager.html",
-        form=form,
-        account_form=account_form,
-        account_change=True
-    )
+    return render_template("profile_manager.html", form=form, account_form=account_form, account_change=True)

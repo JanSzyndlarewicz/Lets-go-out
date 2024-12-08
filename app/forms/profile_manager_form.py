@@ -6,8 +6,8 @@ from flask_wtf.form import _Auto
 from wtforms import IntegerField, RadioField, SelectMultipleField, StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, InputRequired, NumberRange, Optional
 
-from app.forms.validators import age_limit
 from app import db
+from app.forms.validators import age_limit
 from app.models import Interest
 
 
@@ -37,4 +37,4 @@ class ProfileManagerForm(FlaskForm):
 
     @property
     def interests_as_list(self):
-        return [db.get_or_404(Interest, int(single['id'])) for single in json.loads(self.interests.data)]
+        return [db.get_or_404(Interest, int(single["id"])) for single in json.loads(self.interests.data)]
