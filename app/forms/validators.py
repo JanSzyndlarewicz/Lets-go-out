@@ -27,7 +27,11 @@ def email_unique(form, field):
     user = User.query.filter_by(email=field.data).first()
     if user is not None:
         raise ValidationError("This email address is already taken.")
-
+    
+def email_own_or_unique(form, field):
+    user = User.query.filter_by(email=field.data).first()
+    if user is not None and user != current_user:
+        raise ValidationError("This email address is already taken.")
 
 def age_limit(form, field):
     yob = field.data

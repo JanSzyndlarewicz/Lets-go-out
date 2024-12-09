@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(String(128), nullable=False)
+    password: Mapped[str] = mapped_column(String(512), nullable=False)
     confirmed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="user")
     matching_preferences: Mapped["MatchingPreferences"] = relationship(

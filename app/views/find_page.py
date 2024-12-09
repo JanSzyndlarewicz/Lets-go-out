@@ -105,6 +105,7 @@ def get_pending_invitations_data(user_id):
                 "description": invitation.proposer.profile.description,
                 "message": invitation.proposal_message,  # "" if invitation.proposal_message is None else invitation.proposal_message,
                 "date": invitation.date.strftime(r"%Y-%m-%d"),
+                "image_url" : invitation.proposer.profile.profile_picture_url_or_default
             }
         )
     return result

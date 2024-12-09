@@ -99,7 +99,6 @@ def account_manager():
             db.session.commit()
         except IntegrityError as e:
             db.session.rollback()
-            print(e)
         return redirect(url_for("you_page_bp.you_page"))
 
     form = ProfileManagerForm()
