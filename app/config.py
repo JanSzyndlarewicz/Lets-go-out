@@ -1,4 +1,5 @@
 SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
+
 #SQLALCHEMY_DATABASE_URI = "mysql+pymysql://25_webapp_074:WgkwuWNo@mysql.lab.it.uc3m.es/25_webapp_074b"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
