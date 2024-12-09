@@ -44,3 +44,7 @@ Custom CSS
 In addition to third-party libraries, extensive custom CSS style sheets have been created to customise the application's appearance.
 
 See style.css.
+
+Example user and possible matches
+
+Our understaing of how things are supposed to work (por ejemplo can you invite blocked users, should liked users that are no longer compatible show up in likes).
