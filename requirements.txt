@@ -28,3 +28,6 @@ itsdangerous~=2.2.0
 #Faker
 Faker==30.8.1
 typing_extensions==4.12.2
+
+#pymysql
+PyMySQL==1.1.1
