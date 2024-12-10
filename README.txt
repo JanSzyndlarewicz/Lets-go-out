@@ -45,6 +45,40 @@ In addition to third-party libraries, extensive custom CSS style sheets have bee
 
 See style.css.
 
-Example user and possible matches
 
-Our understaing of how things are supposed to work (por ejemplo can you invite blocked users, should liked users that are no longer compatible show up in likes).
+
+
+Note on users:
+The table of users was populated with 100 users with randomized properties, and a special user "admin" intended for testing. Some invitations, liking and blocking relationships have also been created.
+You can log in to the "admin" acocunt with account name "admin" and password "admin".
+Users compatible with admin that can be suggested by the matching algorithm are
+  id | username | name      |
++----+----------+-----------+
+|  2 | user1    | Jennifer  |
+|  4 | user3    | Maria     |
+|  6 | user5    | Ashley    |
+| 16 | user15   | Jodi      |
+| 36 | user35   | Courtney  |
+| 38 | user37   | Martha    |
+| 40 | user39   | Crystal   |
+| 46 | user45   | Linda     |
+| 48 | user47   | Michelle  |
+| 52 | user51   | Elizabeth |
+| 56 | user55   | Alyssa    |
+| 60 | user59   | Patricia  |
+| 62 | user61   | Molly     |
+| 68 | user67   | Stephanie |
+| 70 | user69   | Wanda     |
+| 74 | user73   | Regina    |
+| 76 | user75   | Julia     |
+| 86 | user85   | Kim       |
+| 90 | user89   | Sydney    |
+| 92 | user91   | Jeanette  |
+| 94 | user93   | Heidi     |
+Note that because the matching algorithm is randomised those users may be suggested in any order.
+You can also login to any of the randomly generated accounts using username "user[number]", for example "user51", and password "password".
+Note that by default admin is the only user with a profile picture. You can test that pictures work by creating a new account and uploading a photo at register, or accessing the profile manager from You page and adding a picture there.
+
+Decisions on uncertainties:
+We decided that liking and blocking is independent - a user that is both liked and blocked will not be suggested by the matching algorithm and their invitations will be automatically ignored, but can still be seen in the list of liked users.
+Blocking is not retractive, that is invitations that were received before the user was blocked will not be automaticalluy ignored. They can still be ignored or rejected manually. 
