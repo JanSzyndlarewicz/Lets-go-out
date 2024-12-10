@@ -419,6 +419,7 @@ i {
     text-align: center;
     width: 150px;
     font-size: larger;
+    cursor: pointer;
 }
 
 .pull-buttons-set {
