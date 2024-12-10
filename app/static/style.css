@@ -36,7 +36,8 @@ input, button, textarea, select {
 
 /* 7. Avoid text overflows */
 p, h1, h2, h3, h4, h5, h6 {
-    overflow-wrap: break-word;
+    
+    word-break: break-word;
 }
 
 /* 8. Improve line wrapping */
@@ -65,6 +66,11 @@ ul, ol {
 a {
     text-decoration: none;
     color: inherit;
+}
+
+.link {
+    text-decoration: underline;
+    color: blue;
 }
 
 /*END OF RESET CSS*/
@@ -273,6 +279,12 @@ i {
     flex-direction: column;
     align-items: center;
     width: 80px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.labeled-icon:hover {
+    transform: scale(1.1); /* Powiększenie elementu */
 }
 
 .gap-top-15 {
@@ -313,7 +325,7 @@ i {
 
 .circular-avatar-big {
     width: 200px;
-    height: 200px;
+    aspect-ratio: 1/1;
     border-radius: 50%;     /* Make it circular */
     object-fit: cover;      /* Ensure the image covers the entire circle */
     border: 2px solid var(--background-color); /* Optional: border around the avatar */
@@ -407,6 +419,7 @@ i {
     text-align: center;
     width: 150px;
     font-size: larger;
+    cursor: pointer;
 }
 
 .pull-buttons-set {
@@ -612,6 +625,14 @@ input[type="checkbox"] {
 
 .input-field {
     margin-bottom: 30px; /* Ensure proper spacing between input fields */
+}
+
+#date-input {
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
 }
 
 /* Button styling */

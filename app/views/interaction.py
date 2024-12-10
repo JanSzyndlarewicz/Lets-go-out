@@ -44,7 +44,6 @@ def block(user_id):
 @confirmed_required
 def invite():
     form = DateRequestForm()
-    # we will also have to validate whether there are tables available
     if form.validate_on_submit():
         user = db.get_or_404(User, form.id.data)
         proposal = DateProposal(

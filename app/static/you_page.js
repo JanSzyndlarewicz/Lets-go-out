@@ -3,8 +3,6 @@
 $(document).ready(function() {
     const likedButton = $('.switch-to-liked').first()
     const blockedButton = $('.switch-to-blocked').first()
-    console.log(likedButton)
-    console.log(blockedButton)
     likedButton.on('click', getLiked)
     blockedButton.on('click', getBlocked)
     const editProfileIcon = $('#edit-profile-icon')
@@ -14,7 +12,6 @@ $(document).ready(function() {
 })
 
 function getBlocked() {
-    console.log('getBlocked')
     const blockedButton = $('.switch-to-blocked').first()
     if (blockedButton.hasClass('active-background')) {
         return
@@ -64,7 +61,6 @@ function call_endpoint(endpoint, on_success){
     })
     .then( response => response.json())
     .then(data => {
-        console.log(data)
         on_success(data.html)
     })
     .catch(error => console.error('Error:', error));
