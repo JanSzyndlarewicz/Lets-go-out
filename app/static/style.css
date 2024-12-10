@@ -325,7 +325,7 @@ i {
 
 .circular-avatar-big {
     width: 200px;
-    height: 200px;
+    aspect-ratio: 1/1;
     border-radius: 50%;     /* Make it circular */
     object-fit: cover;      /* Ensure the image covers the entire circle */
     border: 2px solid var(--background-color); /* Optional: border around the avatar */
