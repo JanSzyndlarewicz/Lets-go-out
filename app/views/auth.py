@@ -75,17 +75,6 @@ def anonymous_required(func):
 
     return inner
 
-
-# THIS IS EXCLUSIVELY FOR TESTING AND MUST BE REMOVED IN THE FINAL VERSION
-@auth_bp.route("/forced-entry", methods=["POST"])
-def forced_entry():
-    user = User.query.first()
-    user.confirmed = True
-    db.session.commit()
-    login_user(user)
-    return redirect(url_for(app.config["MAIN_PAGE_ROUTE"]))
-
-
 @auth_bp.route("/login", methods=["GET", "POST"])
 @anonymous_required
 def login():
@@ -204,7 +193,7 @@ def process_profile_form(profile_form):
             new_user = create_user_with_profile(session["registration_data"], profile_form)
             if app.config["ADVANCED_ACCESS_CONTROL"]:
                 send_confirmation_email(new_user)
-            login_user(new_user)  # TODO: Only for development purposes
+            login_user(new_user)
             session.pop("registration_data", None)
             return True
         except IntegrityError:

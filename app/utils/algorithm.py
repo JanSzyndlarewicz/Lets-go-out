@@ -65,7 +65,6 @@ def suggest_matches(
         weights = []
         for potential_match in potential_matches:
             weight = 2 ** len(set(current_user.profile.interests).intersection(potential_match.profile.interests))
-            # print(f"user {potential_match.id}: interests: {potential_match.profile.interests}, weight: {weight}")
             weights.append(weight)
         potential_matches = weighted_sample_without_replacement(potential_matches, weights, number)
 

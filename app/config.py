@@ -1,6 +1,6 @@
-SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
+#SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
 
-#SQLALCHEMY_DATABASE_URI = "mysql+pymysql://25_webapp_074:WgkwuWNo@mysql.lab.it.uc3m.es/25_webapp_074b"
+SQLALCHEMY_DATABASE_URI = "mysql+pymysql://25_webapp_074:WgkwuWNo@mysql.lab.it.uc3m.es/25_webapp_074b"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 SECRET_KEY = "secret_key"
@@ -13,10 +13,9 @@ MAIL_USE_TLS = False
 MAIL_USE_SSL = True
 MAIL_DEFAULT_SENDER = "webapp2024madrid@gmail.com"
 
-ADVANCED_ACCESS_CONTROL = False
+ADVANCED_ACCESS_CONTROL = True
 
-#Set this to something reasonable like 8 for the final version
-MINIMUM_PASSWORD_LENGTH = 1
+MINIMUM_PASSWORD_LENGTH = 8
 MAXIMUM_MESSAGE_LENGTH = 512
 
 UPLOAD_FOLDER = "app/static/images"

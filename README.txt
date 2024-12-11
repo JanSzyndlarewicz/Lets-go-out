@@ -1,7 +1,7 @@
 Project team:
-Jan Szyndlarewicz
-Michał Włodarczyk
-Aleksander Woźniak
+Jan Szyndlarewicz (100546700)
+Michał Włodarczyk (100546775)
+Aleksander Woźniak (100546770)
 
 General structure of the application's interface:
  	-Find - allows you to see suggested matches, as well as respond to received invitations.
@@ -42,12 +42,15 @@ Forms are created and serviced using the flask-wtf module, which make it easy to
 
 See .py files inside forms directory for examples, and complete_profile.html for one example of usage in a jinja template, and profile_manager.py for an example of usage in a flask route. 
 
+Age preferences range slider
+Implemented with Materialize library and js dynamic slider for choosing the upper and lower age limit in registration and profile manager.
+
 Custom CSS
 In addition to third-party libraries, extensive custom CSS style sheets have been created to customise the application's appearance.
 
 See style.css.
 
-reusable template components
+Reusable template components.
 check templates/components
 
 
