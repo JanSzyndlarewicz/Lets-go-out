@@ -72,18 +72,21 @@ function invite(){
 }
 
 function hide_invite_form(){
-    const invite_form = document.querySelector('#invite-form')
-    invite_form.classList.add('hidden')
+    const invite_form = document.querySelector('#date-request-tile')
+    invite_form.innerHTML = "<h2 class='padding-all-15'>Invitation sent!</h2>"
+    console.log(invite_form)
 }
 
 function send_form(endpoint, error_string){
     let form = document.querySelector("#invite-form")
     let data = new FormData(form)
+    console.log(form)
+    console.log(data)
     fetch(endpoint, {
         method: "POST",
         body: data,
     })
-    .then(hide_invite_form)
+    .then(handle_response_reply)
     .then(display_errors)
     .catch(error => {
         console.error(error_string, error);
@@ -98,11 +101,21 @@ function clear_error_messages(){
 }
 
 function display_errors(data){
+    console.log(data)
     for (var key in data) {
         let error_box = document.querySelector("#" + key + "-errors")
         error_box.innerHTML = ""
         for (let i = 0; i < data[key].length; i++) {
             error_box.innerHTML += "<li>" + data[key][i] + "</li>"
         }
+    }
+}
+
+function handle_response_reply(response){
+    clear_error_messages()
+    if (response.status == 200) {
+        hide_invite_form()
+    } else {
+        return response.json(); 
     }
 }

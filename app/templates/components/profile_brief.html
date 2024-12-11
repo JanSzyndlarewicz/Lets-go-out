@@ -5,7 +5,7 @@
     <h2 class="text-shadow">{{ user.profile.name }}</h2>
     <p>{{ user.profile.description }}</p>
     
-    {% with url=url_for('profile_bp.profile', user_id=user.id, invite_only=True), text='See More', width='100px', font_size='medium' %}
+    {% with url=url_for('profile_bp.profile', user_id=user.id), text='See More', width='100px', font_size='medium' %}
     {% include 'components/button.html' %}
     {% endwith %}
 <div class="gap-top-15">    </div>

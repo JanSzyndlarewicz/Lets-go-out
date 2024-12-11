@@ -8,6 +8,7 @@ from flask_login import current_user
 from app.forms import DateRequestForm
 from app.models import DateProposal, ProposalStatus
 from app.models.database import db
+from app.models.user import User
 from app.utils.algorithm import suggest_matches
 from app.views.auth import confirmed_required
 
@@ -19,6 +20,15 @@ find_page_bp = Blueprint("find_page_bp", __name__)
 def find_page():
     return redirect(url_for("find_page_bp.find_page_invite"))
 
+@find_page_bp.route("/find-page/profile/<int:user_id>")
+@confirmed_required
+def find_page_profile(user_id):
+    date_request_form = DateRequestForm(message_label_text="Optional text attached to invite/reject")
+    user = db.get_or_404(User, user_id)
+    if user.id == current_user.id:
+        return redirect(url_for("you_page_bp.you_page"))
+        
+    return render_template("profile.html", user=user, form=date_request_form, invite_only=False)
 
 @find_page_bp.route("/find-page/invite")
 @confirmed_required

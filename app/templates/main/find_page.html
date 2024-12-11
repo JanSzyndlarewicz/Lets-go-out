@@ -19,7 +19,7 @@
                 <img src="{{date_request_data[0].image_url}}" alt="Profile picture" class="circular-avatar-big light-shadow" id="profile-img"> 
                 <h1 class="push-to-bottom gap-top-15 text-shadow" id="name">{{date_request_data[0].name}}</h1>
             </div>
-            {% with url=url_for('profile_bp.profile', user_id=date_request_data[0].user_id), text='See More', width='100px', font_size='medium', id='see-profile' %}
+            {% with url=url_for('find_page_bp.find_page_profile', user_id=date_request_data[0].user_id), text='See More', width='100px', font_size='medium', id='see-profile' %}
             {% include 'components/button.html' %}
             {% endwith %}
             <div class="gap-top-15"></div>

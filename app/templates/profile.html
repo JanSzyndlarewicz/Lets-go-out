@@ -26,6 +26,12 @@
         </div>
     </main>
     <script src="{{ url_for('static', filename='profile_logic.js')}}"></script>
-    
+    <script>
+        id_hidden_input = document.querySelector("#id-hidden")
+        id_hidden_input.value = '{{ user.id }}'
+        document.querySelector("#message-input").value = ""
+        document.querySelector("#date-input").value = ""
+        console.log(document.querySelector("#date-input").value, document.querySelector("#id-hidden").value)
+    </script>
 
 {% endblock %}

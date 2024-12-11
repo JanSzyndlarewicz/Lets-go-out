@@ -92,6 +92,8 @@ function handle_response_invite(response) {
 function react_to_suggestion(endpoint, error_string){
     let form = document.querySelector("#invite-form")
     let data = new FormData(form)
+    console.log(form)
+    console.log(data)
     fetch(endpoint, {
         method: "POST",
         body: data,
