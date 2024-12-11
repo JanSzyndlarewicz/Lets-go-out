@@ -203,6 +203,7 @@ header ul {
 header ul li {
     margin-left: 20px;
     margin-right: 20px;
+    min-width: 50px;
 }
 
 
@@ -324,7 +325,7 @@ i {
 }
 
 .circular-avatar-big {
-    width: 200px;
+    width: 150px;
     aspect-ratio: 1/1;
     border-radius: 50%;     /* Make it circular */
     object-fit: cover;      /* Ensure the image covers the entire circle */
@@ -350,7 +351,9 @@ i {
 }
 
 .centered-height-with-nav {
+    
     height: calc(100vh - 130px);
+    min-height: fit-content;
     display: flex;
     align-items: center;
 }

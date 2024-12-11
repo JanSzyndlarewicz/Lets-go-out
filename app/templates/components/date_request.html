@@ -2,6 +2,7 @@
 
 <div
         class="invitation-form-tile centered-column outline fill-width push-to-bottom"
+        id="date-request-tile"
 >
     <h2 class="primary-color">Date?</h2>
     <!--TODO: implement the date part here in js perhaps-->
@@ -27,13 +28,22 @@
                 </ul>
                 <div class="gap-top-15"></div>
                 {% if is_requesting %}
-                <ul class="push-to-bottom row space-between fill-width">
+                <ul class="push-to-bottom row space-between centered fill-width">
+                    {% if invite_only %}
+                    <div class="centered-column fill-width">
+                        <li>
+                            <div class="labeled-icon" id="invite"><i class="fas fa-heart"></i>Invite</div>
+                        </li>
+                    </div>
+                    {% else%}
                     <li>
                         <div class="labeled-icon" id="reject"><i class="fas fa-times"></i>Reject</div>
                     </li>
                     <li>
                         <div class="labeled-icon" id="invite"><i class="fas fa-heart"></i>Invite</div>
                     </li>
+                    {% endif %}
+                    
                 </ul>
                 {% else %}
                 <ul class="push-to-bottom row space-around fill-width">
@@ -54,5 +64,6 @@
             </div>
     </form>
 </div>
+
 
 {% endblock %}

@@ -8,6 +8,7 @@ from flask_login import current_user
 from app.forms import DateRequestForm
 from app.models import DateProposal, ProposalStatus
 from app.models.database import db
+from app.models.user import User
 from app.utils.algorithm import suggest_matches
 from app.views.auth import confirmed_required
 
@@ -19,6 +20,15 @@ find_page_bp = Blueprint("find_page_bp", __name__)
 def find_page():
     return redirect(url_for("find_page_bp.find_page_invite"))
 
+@find_page_bp.route("/find-page/profile/<int:user_id>")
+@confirmed_required
+def find_page_profile(user_id):
+    date_request_form = DateRequestForm(message_label_text="Optional text attached to invite/reject")
+    user = db.get_or_404(User, user_id)
+    if user.id == current_user.id:
+        return redirect(url_for("you_page_bp.you_page"))
+        
+    return render_template("profile.html", user=user, form=date_request_form, invite_only=True)
 
 @find_page_bp.route("/find-page/invite")
 @confirmed_required
@@ -57,6 +67,7 @@ def get_suggested_matches_data(limit: int, ignore_ids=[]) -> list[dict]:
                 "name": user.profile.name,
                 "description": user.profile.description,
                 "image_url": user.profile.profile_picture_url_or_default,
+                "user_id" : user.id
             }
         )
     return result
@@ -105,7 +116,8 @@ def get_pending_invitations_data(user_id):
                 "description": invitation.proposer.profile.description,
                 "message": invitation.proposal_message,  # "" if invitation.proposal_message is None else invitation.proposal_message,
                 "date": invitation.date.strftime(r"%Y-%m-%d"),
-                "image_url" : invitation.proposer.profile.profile_picture_url_or_default
+                "image_url" : invitation.proposer.profile.profile_picture_url_or_default,
+                "user_id" : invitation.proposer.id
             }
         )
     return result
@@ -114,5 +126,5 @@ def get_pending_invitations_data(user_id):
 def redirect_buttons_set_data():
     return [
         {"url": url_for("find_page_bp.find_page_answear"), "text": "answear"},
-        {"url": url_for("find_page_bp.find_page_invite"), "text": "invite"},
+        {"url": url_for("find_page_bp.find_page_invite"), "text": "matches"},
     ]

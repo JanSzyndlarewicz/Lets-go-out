@@ -13,12 +13,14 @@ Additional functionalities:
 
 Interests
 Profiles contain information about the user's interests, which can be selected from a predefined list at registation and then modified at any time. This information is taken into account by the matching algorithm, which makes it more likely to be matched with a person that shares your interests.
+It is also worth saying that the interests choosing is a self implemented feature on the front end
 
 See interests_choosing.html and interest_choosing.js for the widget handling interest selection.
 See algorithm.py for the way interests are incorporated in the matching algorithm.
 
 JS with fetch for better responsibility
 Many user actions that have an effect in the database like inviting, responding to invitation, liking or blocking are handled through JavaScript fetch mechanism, so that the entire page does not have to be reloaded.
+check you_page.js with "pull-buttons-set" and find_page_logic.js for mentioned feature
 
 See find_page_logic.js and profile_logic.js for examples; the corresponding jinja templates are find_page.html and profile.html, while most of flask routes used are defined in interaction.py.
 
@@ -45,6 +47,8 @@ In addition to third-party libraries, extensive custom CSS style sheets have bee
 
 See style.css.
 
+reusable template components
+check templates/components
 
 
 

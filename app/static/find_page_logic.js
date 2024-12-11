@@ -41,6 +41,9 @@ function switch_profile(user) {
     name_label.innerHTML = user.name
     id_hidden_input = document.querySelector("#id-hidden")
     id_hidden_input.value = user.id
+    
+    assign_new_href_to_see_profile_button(user.id)
+
     img = document.querySelector("#profile-img")
     img.src = user.image_url;
     block.offsetWidth
@@ -89,6 +92,8 @@ function handle_response_invite(response) {
 function react_to_suggestion(endpoint, error_string){
     let form = document.querySelector("#invite-form")
     let data = new FormData(form)
+    console.log(form)
+    console.log(data)
     fetch(endpoint, {
         method: "POST",
         body: data,
@@ -234,4 +239,11 @@ function prepare_answear(){
 
     const reschedule_button = document.querySelector("#reschedule");
     reschedule_button.addEventListener("click", reply_reschedule);
+}
+
+function assign_new_href_to_see_profile_button(id){
+    let href = document.querySelector("#see-profile").href
+    let parts = href.split('/');
+    parts[parts.length - 1] = id;
+    document.querySelector("#see-profile").href = parts.join('/')
 }

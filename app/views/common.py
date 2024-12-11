@@ -3,7 +3,6 @@ from flask import Blueprint, abort, jsonify
 from app.models.interest import Interest
 from app.views.auth import confirmed_required
 
-# from app.models.database import db
 
 common_bp = Blueprint("common_bp", __name__)
 

@@ -2,7 +2,9 @@
 {% block content %}
     <meta id="like-path" data-path="{{ url_for('interaction_bp.like', user_id = user.id) }}">
     <meta id="block-path" data-path="{{ url_for('interaction_bp.block', user_id = user.id) }}">
-    
+    <meta id="invite-path" data-path="{{ url_for('interaction_bp.invite') }}">
+    <meta id="reject-path" data-path="{{ url_for('interaction_bp.reject') }}">
+
     <main class="solo-centered-column-under-top-bar">
         <div class="centered-column outline" style="width: 400px">
             <div class="row space-between fill-width">
@@ -18,10 +20,17 @@
                 {% endif %}
             </div>
             {% include 'components/full_profile_info.html' %}
-            
+            {% with is_requesting = true %}
+            {% include 'components/date_request.html' %}
+            {% endwith %}
         </div>
     </main>
-
     <script src="{{ url_for('static', filename='profile_logic.js')}}"></script>
+    <script>
+        id_hidden_input = document.querySelector("#id-hidden")
+        id_hidden_input.value = '{{ user.id }}'
+        document.querySelector("#message-input").value = ""
+        document.querySelector("#date-input").value = ""
+    </script>
 
 {% endblock %}

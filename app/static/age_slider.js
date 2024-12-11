@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Initialize the slider with the correct values
     noUiSlider.create(slider, {
-        start: [-1*initialLower, initialUpper], // Use initialLower and initialUpper directly
+        start: [-1*initialLower, initialUpper], // Invert the lower value
         connect: true,
         range: {
             'min': -30,
