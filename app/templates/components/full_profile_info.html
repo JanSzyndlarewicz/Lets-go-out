@@ -1,7 +1,7 @@
 {% block content %}
 
 <img src="{{user.profile.profile_picture_url_or_default}}"
-class="circular-avatar-big">
+class="circular-avatar-big light-shadow">
 <h1 class="gap-top-30">{{ user.profile.name }}, {{ user.profile.age }}</h1>
 {% with label="Description", value=user.profile.description %}
     {% include 'components/profile_field.html' %}

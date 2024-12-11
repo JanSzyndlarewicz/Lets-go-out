@@ -25,7 +25,7 @@ class DateProposal(db.Model):
     status: Mapped["ProposalStatus"] = mapped_column(
         Enum(ProposalStatus), nullable=False, default=ProposalStatus.proposed
     )
-    proposal_message: Mapped[Optional[str]] = mapped_column(String(250))
+    proposal_message: Mapped[Optional[str]] = mapped_column(String(250), default="")
     response_message: Mapped[Optional[str]] = mapped_column(String(250))
     proposal_timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     response_timestamp: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
@@ -41,7 +41,7 @@ class DateProposal(db.Model):
     @property
     def just_date(self):
         return self.date.date()
-    
+
     @property
     def ignored_safe_status(self):
         if self.status.name == ProposalStatus.ignored.name:

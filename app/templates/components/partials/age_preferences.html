@@ -1,3 +1,4 @@
+<script src="{{ url_for('static', filename='age_slider.js') }}"></script>
 <div class="gap-top-15">
     <label>Age Preferences</label>
     <div id="range-slider"></div>
@@ -9,4 +10,11 @@
         <span id="left-value">-30</span>
         <span id="right-value">+30</span>
     </div>
+    {% with input = input1 %}
+    {% include "components/partials/error_list.html" %}
+    {% endwith %}
+    {% with input = input2 %}
+    {% include "components/partials/error_list.html" %}
+    {% endwith %}
+
 </div>

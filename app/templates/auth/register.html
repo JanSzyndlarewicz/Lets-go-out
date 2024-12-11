@@ -9,7 +9,7 @@
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 </head>
 <body class="scaffold-background-color">
-<div class="container form-container">
+<div class="form-container">
     <button
             type="button"
             class="btn primary-background-color text-color shadow gap-top-30"
@@ -23,21 +23,17 @@
 
         {% with input = form.username %}
             <div class="input-field fill-width">
-                <input id="username" name="username" type="text" value="{{ input.data }}" required>
+                <input id="username" name="username" type="text" value="{{ input.data if input.data }}" required>
                 <label for="username">{{ input.label.text }}</label>
-                {% for error in input.errors %}
-                    <span class="helper-text red-text">{{ error }}</span>
-                {% endfor %}
+                {% include "components/partials/error_list.html" %}
             </div>
         {% endwith %}
 
         {% with input = form.email %}
             <div class="input-field fill-width">
-                <input id="email" name="email" type="email" value="{{ input.data }}" required>
+                <input id="email" name="email" type="email" value="{{ input.data if input.data }}" required>
                 <label for="email">{{ input.label.text }}</label>
-                {% for error in input.errors %}
-                    <span class="helper-text red-text">{{ error }}</span>
-                {% endfor %}
+                {% include "components/partials/error_list.html" %}
             </div>
         {% endwith %}
 
@@ -45,9 +41,7 @@
             <div class="input-field fill-width">
                 <input id="password" name="password" type="password" required>
                 <label for="password">{{ input.label.text }}</label>
-                {% for error in input.errors %}
-                    <span class="helper-text red-text">{{ error }}</span>
-                {% endfor %}
+                {% include "components/partials/error_list.html" %}
             </div>
         {% endwith %}
 
@@ -55,9 +49,7 @@
             <div class="input-field fill-width">
                 <input id="confirm" name="confirm" type="password" required>
                 <label for="confirm">{{ input.label.text }}</label>
-                {% for error in input.errors %}
-                    <span class="helper-text red-text">{{ error }}</span>
-                {% endfor %}
+                {% include "components/partials/error_list.html" %}
             </div>
         {% endwith %}
 
@@ -70,19 +62,5 @@
 
 <!-- Materialize JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const inputs = document.querySelectorAll("input");
-
-        inputs.forEach(input => {
-            const savedValue = localStorage.getItem(input.name);
-            if (savedValue) input.value = savedValue;
-
-            input.addEventListener("input", () => {
-                localStorage.setItem(input.name, input.value);
-            });
-        });
-    });
-</script>
 </body>
 </html>

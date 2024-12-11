@@ -16,15 +16,10 @@ function clear_error_messages(){
 
 function display_errors(data){
     for (var key in data) {
-        // let error_box = document.querySelector("#" + key + "-errors")
-        // error_box.innerHTML = ""
-        // for (let i = 0; i < data[key].length; i++) {
-        //     error_box.innerHTML += "<li>" + data[key][i] + "</li>"
-        // }
-
-        // code above breaks the layout
+        let error_box = document.querySelector("#" + key + "-errors")
+        error_box.innerHTML = ""
         for (let i = 0; i < data[key].length; i++) {
-            alert(key +" error: "+ data[key][i])
+            error_box.innerHTML += "<li>" + data[key][i] + "</li>"
         }
     }
 }
@@ -32,6 +27,8 @@ function display_errors(data){
 //SUGGESTIONS
 
 function switch_profile(user) {
+    console.log(user)
+
     block = document.querySelector("#profile-block")
     block.classList.remove("fadeOut")
     block.classList.remove("fadeIn")
@@ -44,7 +41,6 @@ function switch_profile(user) {
     name_label.innerHTML = user.name
     id_hidden_input = document.querySelector("#id-hidden")
     id_hidden_input.value = user.id
-    //actually change images here once they exist
     img = document.querySelector("#profile-img")
     img.src = user.image_url;
     block.offsetWidth
@@ -80,7 +76,6 @@ function next_user() {
 }
 
 function handle_response_invite(response) {
-    console.log(response)
     clear_error_messages()
     if (response.status == 200) {
         // Handle success - maybe notify the user or load another match
@@ -133,6 +128,7 @@ function prepare_invite(){
 // REPLIES TO INVITATION
 
 function switch_invitation(invitation) {
+    console.log(invitation)
     block = document.querySelector("#profile-block")
     block.classList.remove("fadeOut")
     block.classList.remove("fadeIn")
@@ -157,9 +153,8 @@ function switch_invitation(invitation) {
     date_input = document.querySelector("#date-input")
     date_input.value=invitation.date
 
-    //actually change images here once they exist
     img = document.querySelector("#profile-img")
-    img.src = "https://thispersondoesnotexist.com?" + new Date().getTime();
+    img.src = invitation.image_url;
     
     block.offsetWidth
     block.classList.add("fadeIn")

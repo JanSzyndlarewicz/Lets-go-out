@@ -1,7 +1,8 @@
 from datetime import date
 from typing import Optional
 
-from flask import current_app as app, url_for
+from flask import current_app as app
+from flask import url_for
 from flask_login import UserMixin, current_user
 from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy import Boolean, Enum, ForeignKey, Integer, String, or_
@@ -21,11 +22,9 @@ class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(String(128), nullable=False)
+    password: Mapped[str] = mapped_column(String(512), nullable=False)
     confirmed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    profile: Mapped["Profile"] = relationship(
-        "Profile", uselist=False, back_populates="user"
-    )
+    profile: Mapped["Profile"] = relationship("Profile", uselist=False, back_populates="user")
     matching_preferences: Mapped["MatchingPreferences"] = relationship(
         "MatchingPreferences", uselist=False, back_populates="user"
     )
@@ -116,15 +115,16 @@ class User(db.Model, UserMixin):
     @property
     def blocked_by_main_user(self):
         return current_user in self.blockers
-    
+
     @property
     def liked_by_main_user(self):
         return current_user in self.likers
-    
+
     @property
     def repr_of_age_preferences(self):
         return f"From {self.matching_preferences.lower_difference} below to {self.matching_preferences.upper_difference} above"
-    
+
+
 class Profile(db.Model):
     __tablename__ = "profile"
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -151,15 +151,11 @@ class Profile(db.Model):
     def profile_picture_url_or_default(self):
         if self.photo is not None:
             return self.photo.flask_photo_url
-        return url_for("static", filename="images/default-profile-picture.jpg")
+        return url_for("static", filename=app.config["DEFAULT_PHOTO"])
 
     @property
     def proposals_sent_by_self(self):
-        return (
-            db.session.query(DateProposal)
-            .filter(DateProposal.proposer_id == self.user_id)
-            .all()
-        )
+        return db.session.query(DateProposal).filter(DateProposal.proposer_id == self.user_id).all()
 
     @property
     def accepted_proposals_by_either(self):
@@ -218,7 +214,7 @@ class Profile(db.Model):
             )
             .all()
         )
-        
+
     @property
     def proposals_considered_by_self(self):
         return (
@@ -226,8 +222,13 @@ class Profile(db.Model):
             .filter(
                 DateProposal.recipient_id == self.user_id,
                 DateProposal.status.in_(
-                    [ProposalStatus.accepted, ProposalStatus.ignored, ProposalStatus.rejected, ProposalStatus.reschedule]
-                )
+                    [
+                        ProposalStatus.accepted,
+                        ProposalStatus.ignored,
+                        ProposalStatus.rejected,
+                        ProposalStatus.reschedule,
+                    ]
+                ),
             )
             .all()
         )

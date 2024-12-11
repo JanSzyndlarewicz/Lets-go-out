@@ -1,9 +1,11 @@
 from flask import Flask
+from flask_apscheduler import APScheduler
 from flask_login import LoginManager
 from flask_mail import Mail
 
 from app.models import User
 from app.models.database import db
+from app.utils.jobs import delete_rejects
 
 
 def create_app():
@@ -23,6 +25,11 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+    
+    app.scheduler = APScheduler()
+    app.scheduler.init_app(app)
+    app.scheduler.add_job("delete_rejects", lambda : delete_rejects(app), trigger="interval", days=1)
+    app.scheduler.start()
 
     # Register blueprints
     from app.views.auth import auth_bp
@@ -48,21 +55,18 @@ def create_app():
     from app.views.profile_manager import profile_manager_bp
 
     app.register_blueprint(profile_manager_bp)
-    
+
     from app.views.common import common_bp
-    
+
     app.register_blueprint(common_bp)
 
     from app.views.profile import profile_bp
 
     app.register_blueprint(profile_bp)
 
-    from app.views.account_manager import account_manager_bp
-
-    app.register_blueprint(account_manager_bp)
-
     from app.views.interaction import interaction_bp
 
     app.register_blueprint(interaction_bp)
 
     return app
+

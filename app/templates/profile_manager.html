@@ -13,7 +13,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/Dogfalo/materialize@master/extras/noUiSlider/nouislider.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
@@ -21,26 +21,29 @@
 <body>
 <div class="form-container">
     <h1>Profile Manager</h1>
+    <form action="{{ url_for('you_page_bp.you_page') }}" method="get" class="gap-top-15">
+        <button type="submit" class="primary-background-color text-color fill-width shadow">Return</button>
+    </form>
     <form action="{{ url_for('profile_manager_bp.profile_manager') }}" method="POST" enctype="multipart/form-data">
         {{ form.csrf_token }}
 
-        {% with value=current_user.profile.photo.flask_photo_url %}
+        {% with value=current_user.profile.profile_picture_url_or_default, input=form.photo %}
         {% include "components/partials/profile_photo.html" %}
         {% endwith %}
 
-        {% with name="name", label="Name", value=current_user.profile.name%}
+        {% with name="name", label="Name", value=current_user.profile.name, input=form.name%}
         {% include 'components/partials/input_field.html' %}
         {% endwith %}
 
-        {% with value_chosen=current_user.profile.gender.name, choices=form.gender.choices %}
+        {% with value_chosen=current_user.profile.gender.name, choices=form.gender.choices, input=form.gender %}
         {% include "components/partials/gender_options.html" %}
         {% endwith %}
 
-        {% with name="year_of_birth", label="Year of Birth", value=current_user.profile.year_of_birth %}
+        {% with type="number", name="year_of_birth", label="Year of Birth", value=current_user.profile.year_of_birth, input=form.year_of_birth %}
             {% include 'components/partials/input_field.html' %}
         {% endwith %}
 
-        {% with name="description", label="Profile Description", value=current_user.profile.description %}
+        {% with name="description", label="Profile Description", value=current_user.profile.description, input=form.description %}
             {% include "components/partials/textarea_field.html" %}
         {% endwith %}
 
@@ -62,15 +65,28 @@
                 {% endfor %}
             </p>
         </div>
+        {% with input = form.gender_preferences %}
+        {% include "components/partials/error_list.html" %}
+        {% endwith %}
         
-        {% with lower_difference=current_user.matching_preferences.lower_difference , upper_difference=current_user.matching_preferences.upper_difference %}
+        {% with lower_difference=current_user.matching_preferences.lower_difference , upper_difference=current_user.matching_preferences.upper_difference, input1 = form.lower_difference, input2 = form.upper_difference %}
             {% include "components/partials/age_preferences.html" %}
         {% endwith %}
 
         <br>
         <button type="submit" >Save</button>
     </form>
+
+    <details class="gap-top-15" id="account_manager_tab" {% if account_change %} open {% endif %}>
+        <summary>Account manager</summary>
+        {% include "account_manager.html" %}
+    </details>    
 </div>
 <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+{% if account_change %}
+<script>
+    document.getElementById('account_manager_tab').scrollIntoView();
+</script>
+{% endif %}
 </body>
 </html>

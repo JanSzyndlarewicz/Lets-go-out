@@ -24,5 +24,5 @@ interests = [
     "Coffee Tasting",
     "Baking",
     "Yoga",
-    "Investing"
+    "Investing",
 ]

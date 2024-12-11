@@ -13,7 +13,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/Dogfalo/materialize@master/extras/noUiSlider/nouislider.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
@@ -29,25 +29,30 @@
     <form action="{{ url_for('auth_bp.complete_profile') }}" method="POST" enctype="multipart/form-data">
         {{ form.csrf_token }}
 
-        {% with value=form.photo %}
+        {% with value=form.display_photo, input=form.photo %}
             {% include "components/partials/profile_photo.html" %}
         {% endwith %}
 
-        {% with name="name", label="Name" %}
+        {% with name="name", label="Name", input=form.name, value = form.name.data if form.name.data %}
             {% include 'components/partials/input_field.html' %}
         {% endwith %}
 
-        {% with choices=form.gender.choices %}
+        {% with choices=form.gender.choices, input=form.gender, value_chosen = form.gender.data if form.gender.data %}
             {% include "components/partials/gender_options.html" %}
         {% endwith %}
 
-        {% with name="year_of_birth", label="Year of Birth" %}
+        {% with type="number", name="year_of_birth", label="Year of Birth", input=form.year_of_birth, value = form.year_of_birth.data if form.year_of_birth.data %}
             {% include 'components/partials/input_field.html' %}
         {% endwith %}
 
-        {% with name="description", label="Profile Description" %}
+        {% with name="description", label="Profile Description", input=form.description, value = form.description.data if form.description.data %}
             {% include "components/partials/textarea_field.html" %}
         {% endwith %}
+
+        {% with interests = form.interests_as_list if form.interests.data %}
+        {% include "components/interests_choosing.html" %}
+        {% endwith %}
+   
 
         <div class="input-field">
             <p>
@@ -56,14 +61,18 @@
                     <label>
                         <input type="checkbox"
                                name="gender_preferences"
-                               value="{{ name }}"/>
+                               value="{{ name }}"
+                               {% if form.gender_preferences.data and name in form.gender_preferences.data %}checked{% endif %}/>
                         <span>{{ value }}</span>
                     </label>
                 {% endfor %}
             </p>
         </div>
+        {% with input = form.gender_preferences %}
+        {% include "components/partials/error_list.html" %}
+        {% endwith %}
 
-        {% with lower_difference=5, upper_difference=5 %}
+        {% with input1=form.lower_difference, input2=form.upper_difference, lower_difference = form.lower_difference.data if form.lower_difference.data != None else 5, upper_difference = form.upper_difference.data if form.upper_difference.data != None else 5 %}
             {% include "components/partials/age_preferences.html" %}
         {% endwith %}
 
@@ -72,27 +81,7 @@
     </form>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const inputs = document.querySelectorAll("input");
 
-        inputs.forEach(input => {
-            const savedValue = localStorage.getItem(input.name);
-            if (savedValue) {
-                if (input.type === "radio" || input.type === "checkbox") {
-                    input.checked = savedValue === "true";
-                } else {
-                    input.value = savedValue;
-                }
-            }
-
-            input.addEventListener("input", () => {
-                const value = input.type === "radio" || input.type === "checkbox" ? input.checked : input.value;
-                localStorage.setItem(input.name, value);
-            });
-        });
-    });
-</script>
 <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>

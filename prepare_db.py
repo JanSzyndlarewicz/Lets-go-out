@@ -1,4 +1,7 @@
+import datetime
 import random
+
+from faker import Faker
 
 from sqlalchemy.exc import IntegrityError
 
@@ -8,6 +11,37 @@ from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
 from app.models.date_proposal import DateProposal
 from app.utils import constants
+
+def add_invites():
+    users = User.query.all()
+    for user in users:
+        for _ in range(3):
+            invitee = random.choice(users)
+            if invitee != user:
+                db.session.add(DateProposal(
+                    proposer = user,
+                    recipient = invitee,
+                    date = datetime.datetime.today() + datetime.timedelta(days=random.randint(1,7))
+                ))
+    db.session.commit()
+
+def add_likes():
+    users = User.query.all()
+    for user in users:
+        liked = random.choice(users)
+        if liked != user:
+            user.liking.append(liked)
+    db.session.commit()
+
+def add_blocks():
+    users = User.query.all()
+    for user in users:
+        if random.random() > 0.5:
+            blocked = random.choice(users)
+            if blocked != user:
+                user.blocking.append(blocked)
+    db.session.commit()
+
 
 app = create_app()
 
@@ -43,7 +77,7 @@ with app.app_context():
             interests=interests,
         )
         new_profile.photo = new_photo
-        new_user = User(username=username, password=password, email=email)
+        new_user = User(username=username, password=password, email=email, confirmed=True)
         new_user.profile = new_profile
         new_preferences = MatchingPreferences(
             user=new_user,
@@ -64,6 +98,7 @@ with app.app_context():
     else:
         print(f"User {username} already exists.")
 
+    f = Faker()
     # Adding 15 new users
     new_users = [
         {
@@ -71,7 +106,7 @@ with app.app_context():
             "username": f"user{i}",
             "password": "password",
             "profile": {
-                "name": f"User {i}",
+                "name": f.first_name_male() if i % 2 == 0 else f.first_name_female(),
                 "gender": Gender.MALE if i % 2 == 0 else Gender.FEMALE,
                 "year_of_birth": random.randint(1980, 2003),
                 "description": f"This is user {i}'s profile description.",
@@ -90,6 +125,7 @@ with app.app_context():
             email=user_data["email"],
             username=user_data["username"],
             password=user_data["password"],
+            confirmed=True
         )
         profile = Profile(
             name=user_data["profile"]["name"],
@@ -126,14 +162,10 @@ with app.app_context():
             db.session.add_all(profile_interests)
         db.session.commit()  # Commit associations
 
+    add_invites()
+    add_likes()
+    add_blocks()
+
     print("DB prepared.")
 
 
-def add_invites():
-    users = User.query.all()
-    for user in users:
-        for i in range(1, 10):
-            invitee = random.choice(users)
-            if invitee != user:
-                date_proposals = [DateProposal(proposer=user, invitee=invitee,) for _ in range(1, 10)]
-    db.session.commit()

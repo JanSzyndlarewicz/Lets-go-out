@@ -1,8 +1,8 @@
 from datetime import datetime
 
+from flask import Blueprint
 from flask import current_app as app
-from flask import Blueprint, redirect, render_template, request, url_for
-
+from flask import redirect, render_template, request, url_for
 from flask_login import current_user
 
 from app.forms import DateRequestForm
@@ -19,6 +19,7 @@ find_page_bp = Blueprint("find_page_bp", __name__)
 def find_page():
     return redirect(url_for("find_page_bp.find_page_invite"))
 
+
 @find_page_bp.route("/find-page/invite")
 @confirmed_required
 def find_page_invite():
@@ -28,14 +29,14 @@ def find_page_invite():
     date_request_data = get_suggested_matches_data(app.config["INITIAL_SUGGESTION_NUMBER"])
     if not date_request_data:
         date_request_data = None
-    
+
     return render_template(
         "main/find_page.html",
         date_request_data=date_request_data,
         form=date_request_form,
         is_requesting=is_requesting,
         redirect_buttons_set_data=redirect_buttons_set_data(),
-        active_nav="find"
+        active_nav="find",
     )
 
 
@@ -55,7 +56,7 @@ def get_suggested_matches_data(limit: int, ignore_ids=[]) -> list[dict]:
                 "id": user.id,
                 "name": user.profile.name,
                 "description": user.profile.description,
-                "image_url": user.profile.profile_picture_url_or_default
+                "image_url": user.profile.profile_picture_url_or_default,
             }
         )
     return result
@@ -78,17 +79,20 @@ def find_page_answear():
         form=date_request_form,
         is_requesting=is_requesting,
         redirect_buttons_set_data=redirect_buttons_set_data(),
-        active_nav="find"
+        active_nav="find",
     )
 
-def get_pending_invitations(user_id : int) -> list[DateProposal]:
-    query = (db.select(DateProposal)
-             .where(DateProposal.recipient_id == user_id)
-             .where(DateProposal.date >= datetime.now().date())
-             .where(DateProposal.status == ProposalStatus.proposed)
-             .where(~DateProposal.proposer_id.in_(user.id for user in current_user.blocking))
-            )
+
+def get_pending_invitations(user_id: int) -> list[DateProposal]:
+    query = (
+        db.select(DateProposal)
+        .where(DateProposal.recipient_id == user_id)
+        .where(DateProposal.date >= datetime.now().date())
+        .where(DateProposal.status == ProposalStatus.proposed)
+        .where(~DateProposal.proposer_id.in_(user.id for user in current_user.blocking))
+    )
     return db.session.execute(query).scalars().all()
+
 
 def get_pending_invitations_data(user_id):
     invitations = get_pending_invitations(user_id)
@@ -99,11 +103,16 @@ def get_pending_invitations_data(user_id):
                 "id": invitation.id,
                 "name": invitation.proposer.profile.name,
                 "description": invitation.proposer.profile.description,
-                "message" : invitation.proposal_message, #"" if invitation.proposal_message is None else invitation.proposal_message,
-                "date" : invitation.date.strftime(r"%Y-%m-%d")
+                "message": invitation.proposal_message,  # "" if invitation.proposal_message is None else invitation.proposal_message,
+                "date": invitation.date.strftime(r"%Y-%m-%d"),
+                "image_url" : invitation.proposer.profile.profile_picture_url_or_default
             }
         )
-    return result    
+    return result
+
 
 def redirect_buttons_set_data():
-    return [{"url": url_for("find_page_bp.find_page_answear"), "text": "answear"}, {"url": url_for("find_page_bp.find_page_invite"), "text": "invite"}]
+    return [
+        {"url": url_for("find_page_bp.find_page_answear"), "text": "answear"},
+        {"url": url_for("find_page_bp.find_page_invite"), "text": "invite"},
+    ]

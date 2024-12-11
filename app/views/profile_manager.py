@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 
 from app import db
-from app.forms import ProfileManagerForm
+from app.forms import AccountManagerForm, ProfileManagerForm
 from app.models import Gender, Photo
 from app.models.interest import Interest
 from app.views.auth import confirmed_required
@@ -22,15 +22,13 @@ profile_manager_bp = Blueprint("profile_manager_bp", __name__)
 @confirmed_required
 def profile_manager():
     form = ProfileManagerForm()
+    account_form = AccountManagerForm()
 
     form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
     form.gender.choices = [(gender.name, gender.value) for gender in Gender]
 
     if request.method == "GET":
-        return render_template(
-            "profile_manager.html",
-            form=form,
-        )
+        return render_template("profile_manager.html", form=form, account_form=account_form, account_change=False)
 
     if form.validate_on_submit():
         name = form.name.data
@@ -40,9 +38,8 @@ def profile_manager():
         lower_difference = form.lower_difference.data
         upper_difference = form.upper_difference.data
         gender_preferences = [Gender[gp] for gp in form.gender_preferences.data]
-        interests = [db.get_or_404(Interest, int(single['id'])) for single in json.loads(form.interests.data)]
-        
-        
+        interests = [db.get_or_404(Interest, int(single["id"])) for single in json.loads(form.interests.data)]
+
         if form.photo.data:
             photo = form.photo.data
             handle_photo_upload(photo, current_user)
@@ -61,9 +58,9 @@ def profile_manager():
         except IntegrityError as e:
             db.session.rollback()
             logger.error(e)
-        return redirect(url_for("profile_manager_bp.profile_manager"))
+        return redirect(url_for("you_page_bp.you_page"))
 
-    return render_template("profile_manager.html", form=form)
+    return render_template("profile_manager.html", form=form, account_form=account_form, account_change=False)
 
 
 def handle_photo_upload(photo, user) -> Photo:
@@ -87,3 +84,26 @@ def handle_photo_upload(photo, user) -> Photo:
     user.profile.photo = new_photo
 
     return new_photo
+
+
+@profile_manager_bp.route("/account-manager", methods=["POST"])
+@confirmed_required
+def account_manager():
+
+    account_form = AccountManagerForm()
+
+    if account_form.validate_on_submit():
+        current_user.set_password(account_form.new_password.data)
+        current_user.email = account_form.email.data
+        try:
+            db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+        return redirect(url_for("you_page_bp.you_page"))
+
+    form = ProfileManagerForm()
+
+    form.gender_preferences.choices = [(gender.name, gender.value) for gender in Gender]
+    form.gender.choices = [(gender.name, gender.value) for gender in Gender]
+
+    return render_template("profile_manager.html", form=form, account_form=account_form, account_change=True)

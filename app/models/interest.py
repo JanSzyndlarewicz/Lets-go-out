@@ -1,10 +1,11 @@
 import enum
+
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.associations import ProfileInterestAssociation
 from app.models.database import db
-    
+
 
 class Interest(db.Model):
     __tablename__ = "interest"
