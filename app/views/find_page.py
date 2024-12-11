@@ -28,7 +28,7 @@ def find_page_profile(user_id):
     if user.id == current_user.id:
         return redirect(url_for("you_page_bp.you_page"))
         
-    return render_template("profile.html", user=user, form=date_request_form, invite_only=False)
+    return render_template("profile.html", user=user, form=date_request_form, invite_only=True)
 
 @find_page_bp.route("/find-page/invite")
 @confirmed_required

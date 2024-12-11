@@ -34,7 +34,9 @@ function prepare_event_handlers(){
     accept_button.addEventListener("click", invite);
 
     const reject_invitation_button = document.querySelector("#reject");
-    reject_invitation_button.addEventListener("click", reject);
+    if (reject_invitation_button != null){
+        reject_invitation_button.addEventListener("click", reject);
+    }
 }
 
 function change_like_button_appearance(){
@@ -64,20 +66,20 @@ $(function(){
 })
 
 function reject(){
-    send_form(reject_path, "Error at reject: ")
+    send_form(reject_path, "Error at reject: ", is_invitation=false)
 }
 
 function invite(){
-    send_form(invite_path, "Error at invite: ")
+    send_form(invite_path, "Error at invite: ", is_invitation=true) 
 }
 
-function hide_invite_form(){
+function swap_invite_form(message){
     const invite_form = document.querySelector('#date-request-tile')
-    invite_form.innerHTML = "<h2 class='padding-all-15'>Invitation sent!</h2>"
+    invite_form.innerHTML = `<h2 class='padding-all-15'>${message}</h2>`
     console.log(invite_form)
 }
 
-function send_form(endpoint, error_string){
+function send_form(endpoint, error_string, is_invitation){
     let form = document.querySelector("#invite-form")
     let data = new FormData(form)
     console.log(form)
@@ -86,7 +88,7 @@ function send_form(endpoint, error_string){
         method: "POST",
         body: data,
     })
-    .then(handle_response_reply)
+    .then(is_invitation ? handle_response_invitation : handle_response_rejection)
     .then(display_errors)
     .catch(error => {
         console.error(error_string, error);
@@ -111,10 +113,21 @@ function display_errors(data){
     }
 }
 
-function handle_response_reply(response){
+function handle_response_invitation(response){
     clear_error_messages()
     if (response.status == 200) {
-        hide_invite_form()
+        swap_invite_form(message="Invitation sent!")
+    } else {
+        return response.json(); 
+    }
+}
+
+function handle_response_rejection(response){
+    clear_error_messages()
+    if (response.status == 200) {
+        swap_invite_form(message="Rejection sent!")
+        const navigate = useNavigate();
+        navigate(-1);
     } else {
         return response.json(); 
     }
