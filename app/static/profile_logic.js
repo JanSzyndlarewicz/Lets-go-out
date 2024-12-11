@@ -76,14 +76,11 @@ function invite(){
 function swap_invite_form(message){
     const invite_form = document.querySelector('#date-request-tile')
     invite_form.innerHTML = `<h2 class='padding-all-15'>${message}</h2>`
-    console.log(invite_form)
 }
 
 function send_form(endpoint, error_string, is_invitation){
     let form = document.querySelector("#invite-form")
     let data = new FormData(form)
-    console.log(form)
-    console.log(data)
     fetch(endpoint, {
         method: "POST",
         body: data,
@@ -103,7 +100,6 @@ function clear_error_messages(){
 }
 
 function display_errors(data){
-    console.log(data)
     for (var key in data) {
         let error_box = document.querySelector("#" + key + "-errors")
         error_box.innerHTML = ""

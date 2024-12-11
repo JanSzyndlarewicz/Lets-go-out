@@ -27,7 +27,6 @@ function display_errors(data){
 //SUGGESTIONS
 
 function switch_profile(user) {
-    console.log(user)
 
     block = document.querySelector("#profile-block")
     block.classList.remove("fadeOut")
@@ -92,8 +91,6 @@ function handle_response_invite(response) {
 function react_to_suggestion(endpoint, error_string){
     let form = document.querySelector("#invite-form")
     let data = new FormData(form)
-    console.log(form)
-    console.log(data)
     fetch(endpoint, {
         method: "POST",
         body: data,
@@ -133,7 +130,6 @@ function prepare_invite(){
 // REPLIES TO INVITATION
 
 function switch_invitation(invitation) {
-    console.log(invitation)
     block = document.querySelector("#profile-block")
     block.classList.remove("fadeOut")
     block.classList.remove("fadeIn")

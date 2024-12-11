@@ -44,10 +44,6 @@ def block(user_id):
 @confirmed_required
 def invite():
     form = DateRequestForm()
-    print(form.message)
-    print(form.date)
-    print(form.id)
-    print(form.errors)
     if form.validate_on_submit():
         user = db.get_or_404(User, form.id.data)
         proposal = DateProposal(
@@ -61,7 +57,6 @@ def invite():
         db.session.add(proposal)
         db.session.commit()
         return "", 200
-    print(form.errors)
     return form.errors, 400
 
 
