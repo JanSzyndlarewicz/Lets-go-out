@@ -1,5 +1,7 @@
 const like_path = $('#like-path').data().path
 const block_path = $('#block-path').data().path
+const invite_path = $('#invite-path').data().path
+const reject_path = $('#reject-path').data().path
 
 function call_endpoint(endpoint, on_success){
     fetch(endpoint, {
@@ -27,6 +29,12 @@ function prepare_event_handlers(){
 
     const block_button = document.querySelector('#block-button')
     block_button.addEventListener("click", block)
+
+    const accept_button = document.querySelector("#invite");
+    accept_button.addEventListener("click", invite);
+
+    const reject_invitation_button = document.querySelector("#reject");
+    reject_invitation_button.addEventListener("click", reject);
 }
 
 function change_like_button_appearance(){
@@ -54,3 +62,47 @@ function change_block_button_appearance(){
 $(function(){
     prepare_event_handlers()
 })
+
+function reject(){
+    send_form(reject_path, "Error at reject: ")
+}
+
+function invite(){
+    send_form(invite_path, "Error at invite: ")
+}
+
+function hide_invite_form(){
+    const invite_form = document.querySelector('#invite-form')
+    invite_form.classList.add('hidden')
+}
+
+function send_form(endpoint, error_string){
+    let form = document.querySelector("#invite-form")
+    let data = new FormData(form)
+    fetch(endpoint, {
+        method: "POST",
+        body: data,
+    })
+    .then(hide_invite_form)
+    .then(display_errors)
+    .catch(error => {
+        console.error(error_string, error);
+    });
+}
+
+function clear_error_messages(){
+    let error_box = document.querySelector("#date-errors")
+    error_box.innerHTML = ""
+    error_box = document.querySelector("#message-errors")
+    error_box.innerHTML = ""
+}
+
+function display_errors(data){
+    for (var key in data) {
+        let error_box = document.querySelector("#" + key + "-errors")
+        error_box.innerHTML = ""
+        for (let i = 0; i < data[key].length; i++) {
+            error_box.innerHTML += "<li>" + data[key][i] + "</li>"
+        }
+    }
+}
