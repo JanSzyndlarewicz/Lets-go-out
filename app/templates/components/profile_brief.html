@@ -15,7 +15,10 @@
             <p class="primary-color" >{{ proposal.just_date }}</p>
             <hr class="fill-width"/>
             <p>{{ proposal.proposal_message }}</p>
-            
+            {% if proposal.response_message %}
+            <hr class="fill-width"/>
+            <p>{{proposal.response_message}}</p>
+            {% endif %}
         </div>
         {% if proposal.proposer.id == current_user.id %}
         <label class="padding-all-15 light-color">{{ proposal.ignored_safe_status }}</label>

@@ -126,5 +126,5 @@ def get_pending_invitations_data(user_id):
 def redirect_buttons_set_data():
     return [
         {"url": url_for("find_page_bp.find_page_answear"), "text": "answear"},
-        {"url": url_for("find_page_bp.find_page_invite"), "text": "invite"},
+        {"url": url_for("find_page_bp.find_page_invite"), "text": "matches"},
     ]
