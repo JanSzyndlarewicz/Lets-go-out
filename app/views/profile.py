@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import current_user
 
 from app import User, db
@@ -12,9 +12,9 @@ profile_bp = Blueprint("profile_bp", __name__)
 @confirmed_required
 def profile(user_id):
     date_request_form = DateRequestForm(message_label_text="Optional text attached to invite/reject")
+    invite_only = request.args.get('invite_only', default=False)
     user = db.get_or_404(User, user_id)
     if user.id == current_user.id:
         return redirect(url_for("you_page_bp.you_page"))
-    # if date_request_form.validate_on_submit():
         
-    return render_template("profile.html", user=user, form=date_request_form)
+    return render_template("profile.html", user=user, form=date_request_form, invite_only=invite_only)

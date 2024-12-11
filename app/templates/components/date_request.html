@@ -28,9 +28,11 @@
                 <div class="gap-top-15"></div>
                 {% if is_requesting %}
                 <ul class="push-to-bottom row space-between fill-width">
+                    {% if not invite_only %}
                     <li>
                         <div class="labeled-icon" id="reject"><i class="fas fa-times"></i>Reject</div>
                     </li>
+                    {% endif %}
                     <li>
                         <div class="labeled-icon" id="invite"><i class="fas fa-heart"></i>Invite</div>
                     </li>
@@ -54,5 +56,6 @@
             </div>
     </form>
 </div>
+
 
 {% endblock %}

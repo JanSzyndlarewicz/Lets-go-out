@@ -6,7 +6,7 @@
         {% if not proposals_data %}
             <div class="centered-height-with-nav">{% include 'components/this_list_is_empty.html' %}</div>
         {% else %}
-
+        
         <div class="centered-column outline">
             {% for proposal_data in proposals_data %}
             {% if proposal_data.proposer_id == current_user.id %}
