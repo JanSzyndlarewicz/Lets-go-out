@@ -8,6 +8,8 @@
   background-color: var(--primary-color);
   padding: 5px;
   "
+  {% if id is defined%} id="{{ id }}" {% endif %}
+  
 >
   {{ text }}</a
 >

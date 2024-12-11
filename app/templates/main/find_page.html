@@ -13,18 +13,20 @@
         {% include 'components/set_of_redirect_buttons.html' %}
         
 
-
+        {% if date_request_data != None %}
         <div class="date-invitation-card outline"  id="profile-block" {% if not date_request_data %} style="display: none" {% endif %}>
             <div class="fill-width centered-column gap-top-45">
-                <!-- TODO: maybe improve first profile pic load -->
-                <img src="" alt="Profile picture" class="circular-avatar-big light-shadow" id="profile-img"> 
-                <h1 class="push-to-bottom gap-top-15 text-shadow" id="name"></h1>
+                <img src="{{date_request_data[0].image_url}}" alt="Profile picture" class="circular-avatar-big light-shadow" id="profile-img"> 
+                <h1 class="push-to-bottom gap-top-15 text-shadow" id="name">{{date_request_data[0].name}}</h1>
             </div>
-
+            {% with url=url_for('profile_bp.profile', user_id=date_request_data[0].user_id), text='See More', width='100px', font_size='medium', id='see-profile' %}
+            {% include 'components/button.html' %}
+            {% endwith %}
+            <div class="gap-top-15"></div>
             {% include 'components/date_request.html' %}
             
         </div>
-
+        {% endif %}
         <div class="centered-column" id="empty-block" {% if date_request_data %} style="display: none" {% endif %}>
             {% include 'components/no_matches_found.html' %}
         </div>
