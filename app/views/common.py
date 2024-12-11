@@ -7,9 +7,7 @@ from app.views.auth import confirmed_required
 
 common_bp = Blueprint("common_bp", __name__)
 
-
-@common_bp.route("/interests")
-@confirmed_required
+@common_bp.route('/interests')
 def interests():
     interests = Interest.query.all()
     if not interests:

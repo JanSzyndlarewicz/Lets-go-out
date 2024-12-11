@@ -25,7 +25,7 @@ class DateProposal(db.Model):
     status: Mapped["ProposalStatus"] = mapped_column(
         Enum(ProposalStatus), nullable=False, default=ProposalStatus.proposed
     )
-    proposal_message: Mapped[Optional[str]] = mapped_column(String(250))
+    proposal_message: Mapped[Optional[str]] = mapped_column(String(250), default="")
     response_message: Mapped[Optional[str]] = mapped_column(String(250))
     proposal_timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
     response_timestamp: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
